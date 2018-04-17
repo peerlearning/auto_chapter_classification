@@ -4,7 +4,7 @@ output: html_notebook
 ---
 ## Reading data from CMS
 
-```{r echo = FALSE, message=FALSE, warning=FALSE, results='asis'}
+```{r message=FALSE, warning=FALSE, results='asis'}
 library('tidyverse')
 library('e1071')
 library('SparseM')
@@ -21,7 +21,7 @@ knitr::kable(head(Qs))
 
 ### Cleaning and adding Grade, Subject, Curriculum and Chapter No 
 
-```{r echo = FALSE, results='asis'}
+```{r results='asis'}
 # Need to clean the overflow of text
 Qs_clean <- Qs  %>%
   dplyr::select(1:10) %>%                    # Keeping only the first 10 columns
@@ -38,19 +38,19 @@ knitr::kable(head(Qs_clean))
 
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
-```{r echo=FALSE}
-Qs_math <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "CHM")
+```{r}
+Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "CHM")
 
-Qs_math %>% group_by(Chapter) %>% summarize(count_qs =n())
+Qs_test %>% group_by(Chapter) %>% summarize(count_qs =n())
 
 ```
 
 
 ### Picking 3 chapters for classification
 
-```{r echo = FALSE, eval= TRUE}
+```{r eval= TRUE}
 
-multi <-  filter(Qs_math, Chapter %in% c("Aldehydes and Ketones", "Coordination Compounds", "Biomolecules, Polymers and Chemistry in Everyday life", "Electrochemistry", "Amines")) 
+multi <-  filter(Qs_test, Chapter %in% c("Aldehydes and Ketones", "Coordination Compounds", "Biomolecules, Polymers and Chemistry in Everyday life", "Electrochemistry", "Amines")) 
 # Using chapter names for filtering gave the error message :
 # longer object length is not a multiple of shorter object length
 
@@ -63,21 +63,21 @@ multi %>% group_by(Chapter) %>% summarize(count_qs =n())
 ### Changing Chapter labels to factors
 
 The Chapter variable is currently a character vector. Since this is a categorical variable, it would be better to convert it to a factor.
-```{r echo=FALSE}
+```{r}
 multi$Chapter <- factor(multi$Chapter)
 str(multi$Chapter)
 ```
 
 ## Create text corpus
 
-```{r echo=FALSE}
+```{r}
 text_corpus <- VCorpus(VectorSource(multi$Text)) 
 ##include both and test and training set to build the corpus
 #inspect (text_corpus)
 ```
 
 ### Let's view some Qs
-```{r echo=FALSE}
+```{r}
 lapply(text_corpus[2:4], as.character)       # Multiple docs
 ```
 
@@ -87,7 +87,7 @@ Converting to lower case
 Stemming words - learned, learning, and learns are transformed into the base form, learn
 Removing additional white spaces
 
-```{r echo=FALSE}
+```{r}
 # Source : [2] Removing non-UTF8 characters
 text_corpus_clean <- tm_map(text_corpus, content_transformer(gsub), pattern ="[^[:alnum:]]" , replacement = " ")
 text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(gsub), pattern ="[\u0080-\uffff]" , replacement = " ")
@@ -105,12 +105,12 @@ text_corpus_clean <- tm_map(text_corpus_clean, stripWhitespace)
 ```
 
 ### Let's view some cleaned Qs
-```{r echo=FALSE}
+```{r}
 lapply(text_corpus_clean[2:4], as.character)       
 ```
 
 ## Bag of words - Tokenization
-```{r echo=FALSE}
+```{r}
 text_dtm <- DocumentTermMatrix(text_corpus_clean)
 text_dtm
 
@@ -119,7 +119,7 @@ text_dtm
 
 ## Data preparation - Creating training and test datasets
 
-```{r echo=FALSE}
+```{r}
 text_dtm_train <- text_dtm[multi$Difficulty == '2', ]
 
 text_dtm_test <- text_dtm[multi$Difficulty != '2', ]
@@ -132,17 +132,17 @@ prop.table(table(text_train_labels))
 ```
 
 ### Distribution of labels in test set
-```{r echo=FALSE}
+```{r}
 prop.table(table(text_test_labels))
 ```
 
 ## Visualizing text data - word clouds
-```{r  echo=FALSE}
+```{r}
 wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
 ```
 
 ### Word Cloud from chapter - Applications of Derivatives
-```{r  echo=FALSE}
+```{r}
 wordcloud(text_corpus_clean[multi$Chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
 ```
 
@@ -151,13 +151,13 @@ wordcloud(text_corpus_clean[multi$Chapter == "Applications of Derivatives"], max
 wordcloud(text_corpus_clean[multi$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
 ```
 ### Word cloud from Chapter 3
-```{r echo=FALSE, eval=TRUE}
+```{r eval=TRUE}
 wordcloud(text_corpus_clean[multi$Chapter == "Conic Sections - I"], max.words = 40, scale = c(3, 0.5))
 ```
 
 Words appearing at least a specified number of times.Filter our DTM to include only the terms appearing in a specified vector.
 
-```{r  echo=FALSE}
+```{r}
 text_freq_words <- findFreqTerms(text_dtm, 25)
 
 # tf-idf ?
@@ -169,7 +169,7 @@ text_dtm_freq_test <- text_dtm_test[ , text_freq_words]
 
 The Naive Bayes classifier is typically trained on data with categorical features. This poses a problem, since the cells in the sparse matrix are numeric and measure the number of times a word appears in a message. We need to change this to a categorical variable that simply indicates yes or no depending on whether the word appears at all. Train matrix :
 
-```{r echo=FALSE}
+```{r}
 convert_counts <- function(x) {
 x <- ifelse(x > 0, "Yes", "No")
 }
@@ -181,20 +181,20 @@ str(text_train)
 ```
 
 Test matrix :
-```{r echo=FALSE}
+```{r}
 str(text_test)
 ```
 
 
 ## TRAIN NAIVE BAYES MODEL 
-```{r echo=FALSE}
+```{r}
 text_classifier <- naiveBayes(text_train, text_train_labels, laplace = 1)
 
 # Laplace - This allows words that did not appear earlier to have an indisputable say in the classification process. Just because the word "ringtone" only appeared in the spam messages in the training data, it does not mean that every message with this word should be classified as spam
 ```
 
 ## PREDICTION
-```{r echo=FALSE}
+```{r}
 #results <- predict(text_classifier,as.matrix(text_dtm_test))
 results <- predict(text_classifier,text_test)
 
