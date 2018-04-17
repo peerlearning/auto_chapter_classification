@@ -1,0 +1,221 @@
+---
+title: "Auto Tagging Chapters on CMS"
+author: "Pritesh Shrivastava"
+date: "March 3, 2018"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Reading data from CMS
+
+```{r echo = FALSE, message=FALSE, warning=FALSE, results='asis'}
+library('tidyverse')
+library('e1071')
+library('SparseM')
+library('tm')
+library('caret')
+library('SnowballC')
+library('wordcloud')
+
+# Reading entire Qs repo
+Qs <- read_tsv("qs_topicwise_dump.tsv")
+
+knitr::kable(head(Qs))
+```
+
+### Cleaning and adding Grade, Subject, Curriculum and Chapter No 
+
+```{r echo = FALSE, results='asis'}
+# Need to clean the overflow of text
+Qs_clean <- Qs  %>%
+  dplyr::select(1:10) %>%                    # Keeping only the first 10 columns
+  dplyr::filter(!is.na(Difficulty))  %>%           # Cleaning overflow
+  dplyr::mutate(Grade = str_sub(Topic_Code, 5, 6), Subject = str_sub(Topic_Code, 1, 3), Curriculum = str_sub(Topic_Code, 8, 10), Ch_No = str_sub(Topic_Code, 12, 13))
+
+# Removing non-UTF characters
+Qs_clean$Text <- lapply(Qs_clean$Text,gsub, pattern = "[^[:alnum:]]", replacement = " ")
+Qs_clean$Text <- lapply(Qs_clean$Text,gsub, pattern = "<.*?>", replacement= " ")
+
+knitr::kable(head(Qs_clean))
+
+```
+
+### Summarizing Chapter wise # Qs in the entire JEE dataset
+
+```{r echo=FALSE}
+Qs_math <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "MTH")
+
+Qs_math %>% group_by(Chapter) %>% summarize(count_qs =n())
+
+```
+
+
+### Picking 2 chapters for classification
+
+```{r echo = FALSE, eval= TRUE}
+
+binary <-  filter(Qs_math, Chapter %in% c("Applications of Derivatives", "Fundamentals of Mathematics")) 
+# Using chapter names for filtering gave the error message :
+# longer object length is not a multiple of shorter object length
+
+#binary <- arrange(binary, Code)      ## To rearrange and randomize chapters by row no
+
+binary %>% group_by(Chapter) %>% summarize(count_qs =n())
+
+```
+
+### Changing Chapter labels to factors
+
+The Chapter variable is currently a character vector. Since this is a categorical variable, it would be better to convert it to a factor.
+```{r echo=FALSE}
+binary$Chapter <- factor(binary$Chapter)
+str(binary$Chapter)
+```
+
+## Create text corpus
+
+```{r echo=FALSE}
+text_corpus <- VCorpus(VectorSource(binary$Text)) 
+##include both and test and training set to build the corpus
+#inspect (text_corpus)
+```
+
+### Let's view some Qs
+```{r echo=FALSE}
+lapply(text_corpus[2:4], as.character)       # Multiple docs
+```
+
+## Cleaning text 
+Removing punctuations, numbers and stop words
+Converting to lower case
+Stemming words - learned, learning, and learns are transformed into the base form, learn
+Removing additional white spaces
+
+```{r echo=FALSE}
+# Source : [2] Removing non-UTF8 characters
+text_corpus_clean <- tm_map(text_corpus, content_transformer(gsub), pattern ="[^[:alnum:]]" , replacement = " ")
+text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(gsub), pattern ="[\u0080-\uffff]" , replacement = " ")
+
+## Now non-UTF characters are removed. We can do regular tasks on the clean corpus.
+
+text_corpus_clean <- tm_map(text_corpus_clean, removeNumbers)
+text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(tolower))
+
+## Add stopwords like left, right (frac ?)
+text_corpus_clean <- tm_map(text_corpus_clean, removeWords, c(stopwords(), "left","right"))
+text_corpus_clean <- tm_map(text_corpus_clean, removePunctuation)
+text_corpus_clean <- tm_map(text_corpus_clean, stemDocument)
+text_corpus_clean <- tm_map(text_corpus_clean, stripWhitespace)
+```
+
+### Let's view some cleaned Qs
+```{r echo=FALSE}
+lapply(text_corpus_clean[2:4], as.character)       
+```
+
+## Bag of words - Tokenization
+```{r echo=FALSE}
+text_dtm <- DocumentTermMatrix(text_corpus_clean)
+text_dtm
+
+# Add a dictionary to DTM ?
+```
+
+## Data preparation - Creating training and test datasets
+
+```{r echo=FALSE}
+text_dtm_train <- text_dtm[binary$Difficulty == '2', ]
+
+text_dtm_test <- text_dtm[binary$Difficulty != '2', ]
+
+
+text_train_labels <- binary[binary$Difficulty == '2', ]$Chapter
+text_test_labels <- binary[binary$Difficulty != '2', ]$Chapter 
+
+prop.table(table(text_train_labels))
+```
+
+### Distribution of labels in test set
+```{r echo=FALSE}
+prop.table(table(text_test_labels))
+```
+
+## Visualizing text data - word clouds
+```{r  echo=FALSE}
+wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
+```
+
+### Word Cloud from chapter - Applications of Derivatives
+```{r  echo=FALSE}
+wordcloud(text_corpus_clean[binary$Chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
+```
+
+### Word cloud from the chapter - Fundamentals of Mathematics
+```{r echo=FALSE, eval=TRUE}
+wordcloud(text_corpus_clean[binary$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
+```
+
+Words appearing at least a specified number of times.Filter our DTM to include only the terms appearing in a specified vector.
+
+```{r  echo=FALSE}
+text_freq_words <- findFreqTerms(text_dtm, 25)
+
+# tf-idf ?
+# Useful to remove words which maybe in training set but not in test set leading to an out of bounds error
+
+text_dtm_freq_train <- text_dtm_train[ , text_freq_words]
+text_dtm_freq_test <- text_dtm_test[ , text_freq_words]
+```
+
+The Naive Bayes classifier is typically trained on data with categorical features. This poses a problem, since the cells in the sparse matrix are numeric and measure the number of times a word appears in a message. We need to change this to a categorical variable that simply indicates yes or no depending on whether the word appears at all. Train matrix :
+
+```{r echo=FALSE}
+convert_counts <- function(x) {
+x <- ifelse(x > 0, "Yes", "No")
+}
+
+# MARGIN = 1 is used for rows
+text_train <- apply(text_dtm_freq_train, MARGIN = 2, convert_counts)
+text_test <- apply(text_dtm_freq_test, MARGIN = 2, convert_counts)
+str(text_train)
+```
+
+Test matrix :
+```{r echo=FALSE}
+str(text_test)
+```
+
+
+## TRAIN NAIVE BAYES MODEL 
+```{r echo=FALSE}
+text_classifier <- naiveBayes(text_train, text_train_labels, laplace = 1)
+
+# Laplace - This allows words that did not appear earlier to have an indisputable say in the classification process. Just because the word "ringtone" only appeared in the spam messages in the training data, it does not mean that every message with this word should be classified as spam
+```
+
+## PREDICTION
+```{r echo=FALSE}
+#results <- predict(text_classifier,as.matrix(text_dtm_test))
+results <- predict(text_classifier,text_test)
+
+confusionMatrix(results, text_test_labels)
+
+#View(results)
+```
+
+Notes :
+
+Naive Bayes constructs tables of probabilities that are used to estimate the likelihood that new examples belong to various classes. The probabilities are calculated using a formula known as Bayes' theorem, which specifies how dependent events are related.
+
+Although Bayes' theorem can be computationally expensive, a simplified version that makes so-called "naive" assumptions about the independence of features is capable of handling extremely large datasets.
+
+The Naive Bayes classifier is often used for text classification. To illustrate its effectiveness, we employed Naive Bayes on a classification task involving spam SMS messages. Preparing the text data for analysis required the use of specialized R packages for text processing and visualization.
+
+Sources: 
+
+[1] tm, e1071 - http://blog.thedigitalgroup.com/rajendras/2015/05/28/supervised-learning-for-text-classification/
+
+[2] tm, e1071, wordcloud - https://rstudio-pubs-static.s3.amazonaws.com/194717_4639802819a342eaa274067c9dbb657e.html
+
+[3] Python - http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html
