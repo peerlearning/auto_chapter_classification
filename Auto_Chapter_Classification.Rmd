@@ -74,6 +74,8 @@ str(multi$chapter)
 ## Create text corpus
 
 ```{r}
+
+yourData<-yourData[sample(nrow(yourData)),]
 text_corpus <- VCorpus(VectorSource(multi$question_text)) 
 ##include both and test and training set to build the corpus
 #inspect (text_corpus)
@@ -123,13 +125,17 @@ text_dtm
 ## Data preparation - Creating training and test datasets
 
 ```{r}
-text_dtm_train <- text_dtm[multi$difficulty == '2', ]
 
-text_dtm_test <- text_dtm[multi$difficulty != '2', ]
+folds <- cut(seq(1,nrow(multi)),breaks=5,labels=FALSE)
+test_indices = which(folds==1, arr.ind=TRUE)
+
+text_dtm_train <- text_dtm[-test_indices,  ]
+
+text_dtm_test <- text_dtm[test_indices,  ]
 
 
-text_train_labels <- multi[multi$difficulty == '2', ]$chapter
-text_test_labels <- multi[multi$difficulty != '2', ]$chapter 
+text_train_labels <- multi[-test_indices,  ]$chapter
+text_test_labels <- multi[test_indices,  ]$chapter 
 
 prop.table(table(text_train_labels))
 ```
