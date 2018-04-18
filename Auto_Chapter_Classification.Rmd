@@ -44,6 +44,9 @@ knitr::kable(head(Qs_clean))
 ```{r}
 Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "CHM")
 
+
+Qs_test <- Qs_test %>% filter(!chapter %in%  c('Selection Test', 'Repository'))
+
 Qs_test %>% group_by(chapter) %>% summarize(count_qs =n())
 
 ```
@@ -147,7 +150,7 @@ prop.table(table(text_test_labels))
 
 ## Visualizing text data - word clouds
 ```{r}
-wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
+# wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
 ```
 
 ### Word Cloud from chapter - Applications of Derivatives
