@@ -12,11 +12,13 @@ library('tm')
 library('caret')
 library('SnowballC')
 library('wordcloud')
+library('jsonlite')
 
-# Reading entire Qs repo
-Qs <- read_tsv("qs_topicwise_dump.tsv")
+Qs <- jsonlite::fromJSON('qs_topicwise.json')
 
-knitr::kable(head(Qs))
+#Qs <- read_tsv("qs_topicwise_dump.tsv")
+
+head(Qs)
 ```
 
 ### Cleaning and adding Grade, Subject, Curriculum and Chapter No 
@@ -24,7 +26,7 @@ knitr::kable(head(Qs))
 ```{r results='asis'}
 # Need to clean the overflow of text
 Qs_clean <- Qs  %>%
-  dplyr::select(1:10) %>%                    # Keeping only the first 10 columns
+  dplyr::select(1:12) %>%                    # Keeping only the first 12 columns
   dplyr::filter(!is.na(Difficulty))  %>%           # Cleaning overflow
   dplyr::mutate(Grade = str_sub(Topic_Code, 5, 6), Subject = str_sub(Topic_Code, 1, 3), Curriculum = str_sub(Topic_Code, 8, 10), Ch_No = str_sub(Topic_Code, 12, 13))
 
