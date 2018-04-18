@@ -123,13 +123,13 @@ text_dtm
 ## Data preparation - Creating training and test datasets
 
 ```{r}
-text_dtm_train <- text_dtm[multi$Difficulty == '2', ]
+text_dtm_train <- text_dtm[multi$difficulty == '2', ]
 
-text_dtm_test <- text_dtm[multi$Difficulty != '2', ]
+text_dtm_test <- text_dtm[multi$difficulty != '2', ]
 
 
-text_train_labels <- multi[multi$Difficulty == '2', ]$Chapter
-text_test_labels <- multi[multi$Difficulty != '2', ]$Chapter 
+text_train_labels <- multi[multi$difficulty == '2', ]$chapter
+text_test_labels <- multi[multi$difficulty != '2', ]$chapter 
 
 prop.table(table(text_train_labels))
 ```
@@ -146,16 +146,16 @@ wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
 
 ### Word Cloud from chapter - Applications of Derivatives
 ```{r}
-wordcloud(text_corpus_clean[multi$Chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
+# wordcloud(text_corpus_clean[multi$chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
 ```
 
 ### Word cloud from the chapter - Fundamentals of Mathematics
 ```{r echo=FALSE, eval=TRUE}
-wordcloud(text_corpus_clean[multi$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
+# wordcloud(text_corpus_clean[multi$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
 ```
 ### Word cloud from Chapter 3
 ```{r eval=TRUE}
-wordcloud(text_corpus_clean[multi$Chapter == "Conic Sections - I"], max.words = 40, scale = c(3, 0.5))
+# wordcloud(text_corpus_clean[multi$Chapter == "Conic Sections - I"], max.words = 40, scale = c(3, 0.5))
 ```
 
 Words appearing at least a specified number of times.Filter our DTM to include only the terms appearing in a specified vector.
