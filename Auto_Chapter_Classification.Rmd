@@ -53,10 +53,10 @@ Qs_test %>% group_by(chapter) %>% summarize(count_qs =n())
 
 ```{r eval= TRUE}
 
-multi <-  filter(Qs_test, chapter %in% c("Aldehydes and Ketones", "Coordination Compounds", "Biomolecules, Polymers and Chemistry in Everyday life", "Electrochemistry", "Amines")) 
+# multi <-  filter(Qs_test, chapter %in% c("Aldehydes and Ketones", "Coordination Compounds", "Biomolecules, Polymers and Chemistry in Everyday life", "Electrochemistry", "Amines")) 
 # Using chapter names for filtering gave the error message :
 # longer object length is not a multiple of shorter object length
-
+multi <- Qs_test
 #multi <- arrange(multi, Code)      ## To rearrange and randomize chapters by row no
 
 multi %>% group_by(chapter) %>% summarize(count_qs =n())
@@ -75,7 +75,7 @@ str(multi$chapter)
 
 ```{r}
 
-yourData<-yourData[sample(nrow(yourData)),]
+multi<-multi[sample(nrow(multi)),]
 text_corpus <- VCorpus(VectorSource(multi$question_text)) 
 ##include both and test and training set to build the corpus
 #inspect (text_corpus)
