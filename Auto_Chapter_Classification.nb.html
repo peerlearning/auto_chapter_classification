@@ -177,7 +177,7 @@ $(document).ready(function () {
 <h2>Reading data from CMS</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSgndGlkeXZlcnNlJylcbmxpYnJhcnkoJ2UxMDcxJylcbmxpYnJhcnkoJ1NwYXJzZU0nKVxubGlicmFyeSgndG0nKVxubGlicmFyeSgnY2FyZXQnKVxubGlicmFyeSgnU25vd2JhbGxDJylcbmxpYnJhcnkoJ3dvcmRjbG91ZCcpXG5saWJyYXJ5KCdqc29ubGl0ZScpXG5RcyA8LSBqc29ubGl0ZTo6ZnJvbUpTT04oJ3FzX3RvcGljd2lzZS5qc29uJylcbiNRcyA8LSByZWFkX3RzdihcInFzX3RvcGljd2lzZV9kdW1wLnRzdlwiKVxuaGVhZChRcylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSgndGlkeXZlcnNlJylcbmxpYnJhcnkoJ2UxMDcxJylcbmxpYnJhcnkoJ1NwYXJzZU0nKVxubGlicmFyeSgndG0nKVxubGlicmFyeSgnY2FyZXQnKVxubGlicmFyeSgnU25vd2JhbGxDJylcbmxpYnJhcnkoJ3dvcmRjbG91ZCcpXG5saWJyYXJ5KCdqc29ubGl0ZScpXG5RcyA8LSBqc29ubGl0ZTo6ZnJvbUpTT04oJ3FzX3RvcGljd2lzZS5qc29uJylcblFzIDwtIGZsYXR0ZW4oUXMpXG4jUXMgPC0gcmVhZF90c3YoXCJxc190b3BpY3dpc2VfZHVtcC50c3ZcIilcbmhlYWQoUXMpXG5gYGAifQ== -->
 <pre class="r"><code>library('tidyverse')
 library('e1071')
 library('SparseM')
@@ -187,13 +187,14 @@ library('SnowballC')
 library('wordcloud')
 library('jsonlite')
 Qs &lt;- jsonlite::fromJSON('qs_topicwise.json')
+Qs &lt;- flatten(Qs)
 #Qs &lt;- read_tsv(&quot;qs_topicwise_dump.tsv&quot;)
 head(Qs)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6MTIsIm5yb3ciOjZ9LCJyZGYiOiJINHNJQUFBQUFBQUFCczFXM1lyYlJoU1d2VC9lbU4xbTIxRG9SUy9tb2hTYlhTM1M2TWMyWlNFWERXUURLYUhzUlM3RUxtTnBaSXZJR3E4MHpzb1lRZG9uYVI0aHI5QUh5RVAwUVpLY2tUUmFTZDZGUXFHdHdYak96NXp6elhkbXp2R3ZQNy9HL2RkOVJWRzZ5czV1VitudXdCSitGYVdqN0NxUHhHK3FLRHRQWUhFSTMyUDQ3cGVHNDVlWHoxVWRxeStlUFZQMXNhcHAvNW0raWV2YmkrZ3RqUk9LTHVOZ3hpSzJvRHhlby8rZnNZbjY4Q0xpTWZOV0xnOVk5Sy9vbXZrN3Vsd1lmME9EVzd0N3J6VE5NQzJqSVk0bU5kSFNzRmtYZFZPcmlUWWU0NlpvdERMcytVRkV3bjh1RkhlNTA0cituV1Via3luV2lUMFphZGl6ZE4vWE5GMmIyalU3MFN4YmE5anh4TDJ6aitob1BDbnRKdlU4c0k4bnhwMTliRko3YXRidDJMZG9aUjlwUHJhTWlXSFoySnZvdm1WcTRERDFHblo3U3B0MjEydzkxcjJJTEdoU0hrNHFkMzlnZ2RkeWZCU3oyelBwZkNTZS96c2wvK3kzSTdvaFNkb1IreDdoNU15UFlUOUlueW95bFhjNVdHZmdjQkpkNFlFREx1N200NGRzZzdPaE15enRqNTJCYWlJbkNjRGw0d2RRRjBHZmdMcllZRGpMSU51WVdXWDYyaWxENVFaOFo5aHpCbHBkTUVTU0xUQXU0dytDZ2RBU3kxKy92YS9CK1VibTNFTFRBOHN5cUR1cU5YUkdBNTIxQmFoZnNGUExCRzdtUTlGcWFiOFhib0xYamFwblRraDlEdEdobzh6NThBR2lhbEQybllHdTE3QVUycU5mV0VRUjh4R2YwNFNXQUkrZEFjNFpBVDdxOVduR3JnRWJsUFcrdzFYNDJWYTIwUzA3YTRPc21NWDNFRGJaSXV6M3NvSWkvTUJKYm1LK0FUbUJRZzVQcXJ3TkE4cUc1Nmt6UEVXM2N4cFRCUHRKdUp3VFo0aUNCQ1hRZnhHSnB3R1BDYlJobDBVSkJPR25nb05JK01MSlVWcjQwcHNWQ1JGbkpaSlhGejdLd1NSNXpsU3Rsdmw1MEJxZkM3NnFVR1o2aFZVelhhTUMxc242Q3Q4YjkvbmxuS0psSEVSdXNBVDlXeEt1UkZYKy9HT2JXQ0NpNE02c3JxVmtGd0tYOFJZWCtWNi8ySk9XSHVlNENwYWU1RGUrWFRDY1FzRk9BTFFNZW9yU0gyZjhKNzEySm45Z0RWdUhLR3IzdEFaMmsxY0RHWm5heXJNcGI1QXdHK0loeWt6bjFZTjhLY2lRRkNEWlN1QXVRbVdvbThjU0Z4TkI4Zk4zblZzNFRma0dTS1p1Vm1SRGhtUkVkTFB1NS9KT0hjb0d4dGt5Y0s5ZDVza08zSFBuWk1scExHOWk3bEMxdThEM0EzY1Y4cldjcE11WVRVTzZxRWY0U3VyZ1B2RlZJdit0U08yQ1JUTjJIY2lPZnNDV1lncGZrNVk4YmNsdVM1YjdqMjVXTk1rMTR1ekZNWGMrMzkvTWQrWHhIK3pmalpiZksxSUJkMTB4S3c5YW16dHhTL0Y0RllsSjRxbnVmQlc5VVhXUm9KeXhTbnNVa1VUVXBHR1g2MDRKdmxNQXI5YUhyUm9leUpaR28xa1FTZmIzUWpLbGN0YjNZSzRsWkZiVk5xWUpGRStXcEhkTDRpaUlackp1TUFyelNYZ21uaUNYRklFMk9lT01WMzhnK2k0THBhWVllcCsrQU1vTk1ISStDd0FBIn0= -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6MTIsIm5yb3ciOjZ9LCJyZGYiOiJINHNJQUFBQUFBQUFCczFXM1lyYlJoU1d2VC9lbU4xbTJ4RElSUy9tb2hTYlhSbHA5R09ic05DTEJyS0ZsRkQySWhkaWw3RTBza1ZreVN1TnN6SkdrUFpKMmtmSUsvUUI4aEI5a0xSbkpJMTJKR2VoVUdockVKNXp2alBuZlBPZDBZeCsrdjRON3IvcEs0clNWZmIydTBwM0Q0YndyeWdkWlY5NXhQOHpSZGw3QW9OamVFN2hPYXlBMDFkWEwxVWRxeis4ZUtIcUUxWFQvak4vazlmVHkrZ2RUVktLcnBKZ0hrZnhrckprZy81L1lKUDE4V1hFa3RoYnV5eUlvMy9GMTZ6ZjBjWEErQnNlM0pyZGU2MXBobWtaRFhNOGxVeEx3NlpzNnFZbW1UYWU0S1pwdENvYytFRkV3bjl1aUt6S2UrNTg1Z3djUnFKclBIRDhoTGpiangveUxjNkh6ckRDSHpzRDFVUk9Ha0RJeHcvZ0xuTTlBWGM1d1hCV1FiNDE4eHI2MHFsU0ZRQytCdzZjZ1NZYkJpK3lROGFOMllOa0lMWGc4c2ZQdjBsMHZoSTFkOWowQUZrRmNxQXFzVE1hN0t3ZFF2MVNIYWtTaEprUFpaUEtmczNEdUs1YlZjK2RrUG9Nc3NQbVg3RGhBMEpKVkE2ZGdhNUxYRXJ2eVk5eFJGSHNJN2FnS2EwSW5qb0RYQ2dDZXNqOWFlYVdpQTJxZnQvekt1TnNLOS9xbHAyM1NkYks0czhJTnQwUjdKZXFneno5d0VsdkU3WUZPNFZHRHMvcXVnMEE1Y09MekJtZW83c0ZUU2lDK1NSY0xZZ3pSRUdLVWpncUVFbG1BVXNJbkJodUhLV1FoSjF6RFNJZUN5dEhXUmxMYjlja1JDeXVtTHkrOUZGQkppMXFabW85TE5hRE52aUM2MVduTXJOcnJKclpCcFcwempiWCtMTjVYMTR0S0ZvbFFlUUdLL0MvSStHYWQrWDNYM2VGQlNGSzdjeDZXd3AxSVhHVmIzbFp6UFhMT1ZrVmNZSHJaTmxac2VQYkRjTVpOT3dNU0l1azV5ajdkczZlNjlLYS9JRTFiQzJpN04xM0V0bHQwUTFrNUdxcnpyYmFRUncyK0lzb0tsM1VMK1FyTG9hUUFJbWpCUFlpZElhNlJTNitNUkUwdjNpdkM0VFJqRzFCWk9ybVpUVmtDRVVhRy82WlpSdlRHZGFKUFIxcjJMTjAzOWMwWFp2WkVrNDB5OVlhT0o2NjkvaVlqaWZUQ2plcDV3RSttUnIzK01TazlzeVVjZXhidE1iSG1vOHRZMnBZTnZhbXVtK1pHZ1RNdkFadXoyZ1RkODNXOThOQlJKWlVMTzY0Y3ZaWnZBcmNHemYyUkxtZXV5QXJSaE14cXdnUTBWN2crNEc3RHRsRzNHU3JKSjZGZENsbitFTDQ0Q1ZoNjdUeUhzVXJmdHZka0pZOWE5bHV5eGJMUExsZDA3VHc4TWFKRzEyVVdzYlJQTDRKdk5FM2NlQzFGdjRvaWU5R1l2RW44SFRmSzhYdnNLMlFHNUpVS05TcDEwd1lHY0VXWE1KaHAzeHFUZW1WTEdGU2wzK2FIYlVtZDVLVzQvRTY0a3c4MVYyc283Y3F2Nzc3QlZ6KzVOQjlraFo3VWNiRnVGT3RwRk91b2g0ZmwvUzZmMWE1anNSUlRxTjVFSWtHSFlSa1JzVjEzQU5kVWpLdjI1L1FGUG9ydXRhN0kwa1VSSFBSV3BDeVVITEVqeDdSaFQ1NDB4R0xXWDNIOTkwNEZKNUNOT1hUWCs5cFNyN2hDZ0FBIn0= -->
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["topic_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["chapter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["topic"],"name":[3],"type":["chr"],"align":["left"]},{"label":["difficulty"],"name":[4],"type":["chr"],"align":["left"]},{"label":["problem_code"],"name":[5],"type":["chr"],"align":["left"]},{"label":["problem_status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["problem_mongo_id"],"name":[7],"type":["data.frame"],"align":["right"]},{"label":["option_a"],"name":[8],"type":["chr"],"align":["left"]},{"label":["option_b"],"name":[9],"type":["chr"],"align":["left"]},{"label":["option_c"],"name":[10],"type":["chr"],"align":["left"]},{"label":["option_d"],"name":[11],"type":["chr"],"align":["left"]},{"label":["question_text"],"name":[12],"type":["chr"],"align":["left"]}],"data":[{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"1","5":"P003453","6":"final","7":"<data.frame [6 × 1]>","8":"\\\\(\\\\tan^2(\\\\frac{a}{2})\\\\)","9":"\\\\(\\\\cot^2(\\\\frac{a}{2})\\\\)","10":"\\\\(\\\\tana\\\\)","11":"None of these","12":"\\\\(\\\\cot^{-1}(\\\\sqrt{\\\\cosa})+\\\\tan^{-1}(\\\\sqrt{\\\\cosa })=x\\\\), where \\\\(\\\\alpha\\\\) is some arbitrary constant, then \\\\(\\\\sin x\\\\) is equal to","_rn_":"1"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"3","5":"P003479","6":"final","7":"<data.frame [6 × 1]>","8":"\\\\(-4 \\\\sin^2a\\\\)","9":"\\\\(4 \\\\sin^2<U+2061>a\\\\)","10":"\\\\(4\\\\)","11":"\\\\(2 \\\\sin<U+2061>2a\\\\)","12":"If \\\\(\\\\cos^{-1}x-\\\\cos^{-1}\\\\frac y2=a\\\\), then \\\\(4x^2-4xy \\\\cosa+y^2\\\\) is equal to","_rn_":"2"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"1","5":"P005024","6":"final","7":"<data.frame [6 × 1]>","8":"\\\\(-\\\\frac{3\\\\pi}{4}\\\\)","9":"\\\\(\\\\frac{3\\\\pi}{4}\\\\)","10":"\\\\(-\\\\frac{\\\\pi}{4}\\\\)","11":"\\\\(\\\\frac{\\\\pi}{4}\\\\)","12":"The principal value of \\\\(\\\\tan^{-1}\\\\left(\\\\cot\\\\frac{43\\\\pi}{4}\\\\right)\\\\) is","_rn_":"3"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"3","5":"P005140","6":"final","7":"<data.frame [6 × 1]>","8":"\\\\(\\\\frac{\\\\pi}{2}\\\\)","9":"\\\\(\\\\pi\\\\)","10":"\\\\(4\\\\tan^{-1}\\\\left(5\\\\right)\\\\)","11":"\\\\(\\\\tan^{-1}\\\\left(\\\\frac{65}{156}\\\\right)\\\\)","12":"If \\\\(f\\\\left(x\\\\right)=2\\\\tan^{-1}x+\\\\sin^{-1}\\\\left(\\\\frac{2x}{1+x^2}\\\\right), x&gt;1\\\\), then \\\\(f(5)\\\\) is equal to","_rn_":"4"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"1","5":"P006282","6":"final","7":"<data.frame [6 × 1]>","8":"\\\\(0\\\\)","9":"\\\\(-\\\\frac{\\\\pi}{3}\\\\)","10":"\\\\(\\\\frac{\\\\pi}{3}\\\\)","11":"\\\\(\\\\frac{2\\\\pi}{3}\\\\)","12":"\\\\(\\\\tan^{-1}{\\\\sqrt 3}-\\\\sin^{-1}\\\\left({\\\\frac{\\\\sqrt3}{2}}\\\\right)=\\\\)","_rn_":"5"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"2","5":"P006283","6":"final","7":"<data.frame [6 × 1]>","8":"\\\\(3\\\\)","9":"\\\\(5\\\\)","10":"\\\\(11\\\\)","11":"\\\\(9\\\\)","12":"The value of \\\\(\\\\tan^2<U+2061>(\\\\sec^{-1}<U+2061>2 )+\\\\cot^2<U+2061>(\\\\text{cosec}^{-1}\\\\ 3)\\\\) is","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[12]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["topic_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["chapter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["topic"],"name":[3],"type":["chr"],"align":["left"]},{"label":["difficulty"],"name":[4],"type":["chr"],"align":["left"]},{"label":["problem_code"],"name":[5],"type":["chr"],"align":["left"]},{"label":["problem_status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["option_a"],"name":[7],"type":["chr"],"align":["left"]},{"label":["option_b"],"name":[8],"type":["chr"],"align":["left"]},{"label":["option_c"],"name":[9],"type":["chr"],"align":["left"]},{"label":["option_d"],"name":[10],"type":["chr"],"align":["left"]},{"label":["question_text"],"name":[11],"type":["chr"],"align":["left"]},{"label":["problem_mongo_id.$oid"],"name":[12],"type":["chr"],"align":["left"]}],"data":[{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"1","5":"P003453","6":"final","7":"\\\\(\\\\tan^2(\\\\frac{a}{2})\\\\)","8":"\\\\(\\\\cot^2(\\\\frac{a}{2})\\\\)","9":"\\\\(\\\\tana\\\\)","10":"None of these","11":"\\\\(\\\\cot^{-1}(\\\\sqrt{\\\\cosa})+\\\\tan^{-1}(\\\\sqrt{\\\\cosa })=x\\\\), where \\\\(\\\\alpha\\\\) is some arbitrary constant, then \\\\(\\\\sin x\\\\) is equal to","12":"5639b21a69702d51ff0010b6","_rn_":"1"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"3","5":"P003479","6":"final","7":"\\\\(-4 \\\\sin^2a\\\\)","8":"\\\\(4 \\\\sin^2<U+2061>a\\\\)","9":"\\\\(4\\\\)","10":"\\\\(2 \\\\sin<U+2061>2a\\\\)","11":"If \\\\(\\\\cos^{-1}x-\\\\cos^{-1}\\\\frac y2=a\\\\), then \\\\(4x^2-4xy \\\\cosa+y^2\\\\) is equal to","12":"563a056069702d51ff00129c","_rn_":"2"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"1","5":"P005024","6":"final","7":"\\\\(-\\\\frac{3\\\\pi}{4}\\\\)","8":"\\\\(\\\\frac{3\\\\pi}{4}\\\\)","9":"\\\\(-\\\\frac{\\\\pi}{4}\\\\)","10":"\\\\(\\\\frac{\\\\pi}{4}\\\\)","11":"The principal value of \\\\(\\\\tan^{-1}\\\\left(\\\\cot\\\\frac{43\\\\pi}{4}\\\\right)\\\\) is","12":"567e789069702d4edd001893","_rn_":"3"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"3","5":"P005140","6":"final","7":"\\\\(\\\\frac{\\\\pi}{2}\\\\)","8":"\\\\(\\\\pi\\\\)","9":"\\\\(4\\\\tan^{-1}\\\\left(5\\\\right)\\\\)","10":"\\\\(\\\\tan^{-1}\\\\left(\\\\frac{65}{156}\\\\right)\\\\)","11":"If \\\\(f\\\\left(x\\\\right)=2\\\\tan^{-1}x+\\\\sin^{-1}\\\\left(\\\\frac{2x}{1+x^2}\\\\right), x&gt;1\\\\), then \\\\(f(5)\\\\) is equal to","12":"5684e6b469702d4edd002f5e","_rn_":"4"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"1","5":"P006282","6":"final","7":"\\\\(0\\\\)","8":"\\\\(-\\\\frac{\\\\pi}{3}\\\\)","9":"\\\\(\\\\frac{\\\\pi}{3}\\\\)","10":"\\\\(\\\\frac{2\\\\pi}{3}\\\\)","11":"\\\\(\\\\tan^{-1}{\\\\sqrt 3}-\\\\sin^{-1}\\\\left({\\\\frac{\\\\sqrt3}{2}}\\\\right)=\\\\)","12":"570f25393562d91f540002bd","_rn_":"5"},{"1":"MTH-12-JEE-18-00","2":"Inverse Trigonometry","3":"Introduction","4":"2","5":"P006283","6":"final","7":"\\\\(3\\\\)","8":"\\\\(5\\\\)","9":"\\\\(11\\\\)","10":"\\\\(9\\\\)","11":"The value of \\\\(\\\\tan^2<U+2061>(\\\\sec^{-1}<U+2061>2 )+\\\\cot^2<U+2061>(\\\\text{cosec}^{-1}\\\\ 3)\\\\) is","12":"570f26be3562d91f540002c4","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[12]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
   </script>
 </div>
 <!-- rnb-frame-end -->
@@ -203,14 +204,182 @@ head(Qs)</code></pre>
 <h3>Cleaning and adding Grade, Subject, Curriculum and Chapter No</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBOZWVkIHRvIGNsZWFuIHRoZSBvdmVyZmxvdyBvZiB0ZXh0XG5Rc19jbGVhbiA8LSBRcyAgJT4lXG4gIGRwbHlyOjpzZWxlY3QoMToxMikgJT4lICAgICAgICAgICAgICAgICAgICAjIEtlZXBpbmcgb25seSB0aGUgZmlyc3QgMTIgY29sdW1uc1xuICBkcGx5cjo6ZmlsdGVyKCFpcy5uYShEaWZmaWN1bHR5KSkgICU+JSAgICAgICAgICAgIyBDbGVhbmluZyBvdmVyZmxvd1xuICBkcGx5cjo6bXV0YXRlKEdyYWRlID0gc3RyX3N1YihUb3BpY19Db2RlLCA1LCA2KSwgU3ViamVjdCA9IHN0cl9zdWIoVG9waWNfQ29kZSwgMSwgMyksIEN1cnJpY3VsdW0gPSBzdHJfc3ViKFRvcGljX0NvZGUsIDgsIDEwKSwgQ2hfTm8gPSBzdHJfc3ViKFRvcGljX0NvZGUsIDEyLCAxMykpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBOZWVkIHRvIGNsZWFuIHRoZSBvdmVyZmxvdyBvZiB0ZXh0XG5Rc19jbGVhbiA8LSBRcyAgJT4lXG4gIGRwbHlyOjpzZWxlY3QoMToxMikgJT4lICAgICAgICAgICAgICAgICAgICAjIEtlZXBpbmcgb25seSB0aGUgZmlyc3QgMTIgY29sdW1uc1xuICBkcGx5cjo6ZmlsdGVyKCFpcy5uYShkaWZmaWN1bHR5KSkgICU+JSAgICAgICAgICAgIyBDbGVhbmluZyBvdmVyZmxvd1xuICBkcGx5cjo6bXV0YXRlKEdyYWRlID0gc3RyX3N1Yih0b3BpY19jb2RlLCA1LCA2KSwgU3ViamVjdCA9IHN0cl9zdWIodG9waWNfY29kZSwgMSwgMyksIEN1cnJpY3VsdW0gPSBzdHJfc3ViKHRvcGljX2NvZGUsIDgsIDEwKSwgQ2hfTm8gPSBzdHJfc3ViKHRvcGljX2NvZGUsIDEyLCAxMykpXG4jIFJlbW92aW5nIG5vbi1VVEYgY2hhcmFjdGVyc1xuUXNfY2xlYW4kVGV4dCA8LSBsYXBwbHkoUXNfY2xlYW4kcXVlc3Rpb25fdGV4dCxnc3ViLCBwYXR0ZXJuID0gXCJbXls6YWxudW06XV1cIiwgcmVwbGFjZW1lbnQgPSBcIiBcIilcblFzX2NsZWFuJHF1ZXN0aW9uX3RleHQgPC0gbGFwcGx5KFFzX2NsZWFuJHF1ZXN0aW9uX3RleHQsZ3N1YiwgcGF0dGVybiA9IFwiPC4qPz5cIiwgcmVwbGFjZW1lbnQ9IFwiIFwiKVxua25pdHI6OmthYmxlKGhlYWQoUXNfY2xlYW4pKVxuYGBgIn0= -->
 <pre class="r"><code># Need to clean the overflow of text
 Qs_clean &lt;- Qs  %&gt;%
   dplyr::select(1:12) %&gt;%                    # Keeping only the first 12 columns
-  dplyr::filter(!is.na(Difficulty))  %&gt;%           # Cleaning overflow
-  dplyr::mutate(Grade = str_sub(Topic_Code, 5, 6), Subject = str_sub(Topic_Code, 1, 3), Curriculum = str_sub(Topic_Code, 8, 10), Ch_No = str_sub(Topic_Code, 12, 13))</code></pre>
+  dplyr::filter(!is.na(difficulty))  %&gt;%           # Cleaning overflow
+  dplyr::mutate(Grade = str_sub(topic_code, 5, 6), Subject = str_sub(topic_code, 1, 3), Curriculum = str_sub(topic_code, 8, 10), Ch_No = str_sub(topic_code, 12, 13))
+# Removing non-UTF characters
+Qs_clean$Text &lt;- lapply(Qs_clean$question_text,gsub, pattern = &quot;[^[:alnum:]]&quot;, replacement = &quot; &quot;)
+Qs_clean$question_text &lt;- lapply(Qs_clean$question_text,gsub, pattern = &quot;&lt;.*?&gt;&quot;, replacement= &quot; &quot;)
+knitr::kable(head(Qs_clean))</code></pre>
 <!-- rnb-source-end -->
-<p>Error: Column <code>problem_mongo_id</code> must be a 1d atomic vector or a list</p>
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
+
+<table style="width:100%;">
+<colgroup>
+<col width="3%" />
+<col width="4%" />
+<col width="2%" />
+<col width="2%" />
+<col width="2%" />
+<col width="2%" />
+<col width="4%" />
+<col width="4%" />
+<col width="5%" />
+<col width="7%" />
+<col width="24%" />
+<col width="4%" />
+<col width="1%" />
+<col width="1%" />
+<col width="2%" />
+<col width="1%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">topic_code</th>
+<th align="left">chapter</th>
+<th align="left">topic</th>
+<th align="left">difficulty</th>
+<th align="left">problem_code</th>
+<th align="left">problem_status</th>
+<th align="left">option_a</th>
+<th align="left">option_b</th>
+<th align="left">option_c</th>
+<th align="left">option_d</th>
+<th align="left">question_text</th>
+<th align="left">problem_mongo_id.$oid</th>
+<th align="left">Grade</th>
+<th align="left">Subject</th>
+<th align="left">Curriculum</th>
+<th align="left">Ch_No</th>
+<th align="left">Text</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">MTH-12-JEE-18-00</td>
+<td align="left">Inverse Trigonometry</td>
+<td align="left">Introduction</td>
+<td align="left">1</td>
+<td align="left">P003453</td>
+<td align="left">final</td>
+<td align="left">(^2())</td>
+<td align="left">(^2())</td>
+<td align="left">()</td>
+<td align="left">None of these</td>
+<td align="left">(<sup>{-1}()+</sup>{-1}()=x), where () is some arbitrary constant, then (x) is equal to</td>
+<td align="left">5639b21a69702d51ff0010b6</td>
+<td align="left">12</td>
+<td align="left">MTH</td>
+<td align="left">JEE</td>
+<td align="left">18</td>
+<td align="left">cot 1 sqrt cos tan 1 sqrt cos x where alpha is some arbitrary constant then sin x is equal to</td>
+</tr>
+<tr class="even">
+<td align="left">MTH-12-JEE-18-00</td>
+<td align="left">Inverse Trigonometry</td>
+<td align="left">Introduction</td>
+<td align="left">3</td>
+<td align="left">P003479</td>
+<td align="left">final</td>
+<td align="left">(-4 ^2a)</td>
+<td align="left">(4 ^2<U+2061>a)</td>
+<td align="left">(4)</td>
+<td align="left">(2 2a)</td>
+<td align="left">If (<sup>{-1}x-</sup>{-1}y2=a), then (4x^2-4xy +y^2) is equal to</td>
+<td align="left">563a056069702d51ff00129c</td>
+<td align="left">12</td>
+<td align="left">MTH</td>
+<td align="left">JEE</td>
+<td align="left">18</td>
+<td align="left">If cos 1 x cos 1 frac y2 then 4x 2 4xy cos y 2 is equal to</td>
+</tr>
+<tr class="odd">
+<td align="left">MTH-12-JEE-18-00</td>
+<td align="left">Inverse Trigonometry</td>
+<td align="left">Introduction</td>
+<td align="left">1</td>
+<td align="left">P005024</td>
+<td align="left">final</td>
+<td align="left">(-)</td>
+<td align="left">()</td>
+<td align="left">(-)</td>
+<td align="left">()</td>
+<td align="left">The principal value of (^{-1}()) is</td>
+<td align="left">567e789069702d4edd001893</td>
+<td align="left">12</td>
+<td align="left">MTH</td>
+<td align="left">JEE</td>
+<td align="left">18</td>
+<td align="left">The principal value of tan 1 left cot frac 43 pi 4 right is</td>
+</tr>
+<tr class="even">
+<td align="left">MTH-12-JEE-18-00</td>
+<td align="left">Inverse Trigonometry</td>
+<td align="left">Introduction</td>
+<td align="left">3</td>
+<td align="left">P005140</td>
+<td align="left">final</td>
+<td align="left">()</td>
+<td align="left">()</td>
+<td align="left">(4^{-1}(5))</td>
+<td align="left">(^{-1}())</td>
+<td align="left">If (f(x)=2<sup>{-1}x+</sup>{-1}(), x&gt;1), then (f(5)) is equal to</td>
+<td align="left">5684e6b469702d4edd002f5e</td>
+<td align="left">12</td>
+<td align="left">MTH</td>
+<td align="left">JEE</td>
+<td align="left">18</td>
+<td align="left">If f left x right 2 tan 1 x sin 1 left frac 2x 1 x 2 right x gt 1 then f 5 is equal to</td>
+</tr>
+<tr class="odd">
+<td align="left">MTH-12-JEE-18-00</td>
+<td align="left">Inverse Trigonometry</td>
+<td align="left">Introduction</td>
+<td align="left">1</td>
+<td align="left">P006282</td>
+<td align="left">final</td>
+<td align="left">(0)</td>
+<td align="left">(-)</td>
+<td align="left">()</td>
+<td align="left">()</td>
+<td align="left">(<sup>{-1}{3}-</sup>{-1}({})=)</td>
+<td align="left">570f25393562d91f540002bd</td>
+<td align="left">12</td>
+<td align="left">MTH</td>
+<td align="left">JEE</td>
+<td align="left">18</td>
+<td align="left">tan 1 sqrt 3 sin 1 left frac sqrt3 2 right</td>
+</tr>
+<tr class="even">
+<td align="left">MTH-12-JEE-18-00</td>
+<td align="left">Inverse Trigonometry</td>
+<td align="left">Introduction</td>
+<td align="left">2</td>
+<td align="left">P006283</td>
+<td align="left">final</td>
+<td align="left">(3)</td>
+<td align="left">(5)</td>
+<td align="left">(11)</td>
+<td align="left">(9)</td>
+<td align="left">The value of (<sup>2<U+2061>(</sup>{-1}<U+2061>2 )+<sup>2<U+2061>(</sup>{-1} 3)) is</td>
+<td align="left">570f26be3562d91f540002c4</td>
+<td align="left">12</td>
+<td align="left">MTH</td>
+<td align="left">JEE</td>
+<td align="left">18</td>
+<td align="left">The value of tan 2 sec 1 2 cot 2 text cosec 1 3 is</td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- rnb-html-end -->
+
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -218,6 +387,17 @@ Qs_clean &lt;- Qs  %&gt;%
 <h3>Summarizing Chapter wise # Qs in the entire JEE dataset</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuUXNfdGVzdCA8LSBRc19jbGVhbiAlPiUgZmlsdGVyKEN1cnJpY3VsdW0gPT1cIkpFRVwiLCBTdWJqZWN0ID09IFwiQ0hNXCIpXG5Rc190ZXN0ICU+JSBncm91cF9ieShjaGFwdGVyKSAlPiUgc3VtbWFyaXplKGNvdW50X3FzID1uKCkpXG5gYGAifQ== -->
+<pre class="r"><code>Qs_test &lt;- Qs_clean %&gt;% filter(Curriculum ==&quot;JEE&quot;, Subject == &quot;CHM&quot;)
+Qs_test %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MiwibnJvdyI6MzN9LCJyZGYiOiJINHNJQUFBQUFBQUFCbVZVVFc4VE1SQjFrNWEyZ2RKVUZIb0FDZmRPSTRINGtPQ0FralNvb1dxSmtnTGxBTWp4VGhKVHI1MTZ2YUVyTGtpYytTLzhJLzVKdzNoanAyV3owdFBhYjhZejg4WWYzZjNUSjVYVENpR2tSTXJMSlZJcTR4RC9oQ3lSWmJMdS9oZUVsTy9rRG9SVUVidmU4S0F1dVI1cG1UeWlMVHNDazFDbUl0b1pnVUxPKzl5dHl3aEdXUVF6NHlGWXJTQVliOVJqY1RYYnFsc2RDMDU3MXFUY3BnYW9OOXh2c0FUNXBsWWN4amFoZWtDYkk0aEZZazNtWFo0M2hJNjFCSjVLd0hJNldtWnhLR2p1UzRXaXJRbVlMR0labFdJd1QwQ2J6UFQxUlNZeFM1MkxhTFp1SDR5WU1Dc21WeFhtb1RpVHRLRlZKTlF3Qk5pZUcxcm5xWkNpYjBRYUx5dzZSTEZXOEJEdFhsTnJnMUV3aFZhb0xoN3JWRVZ6NjM1ZXhCdmFrSnFmMFphRUdKUU4xaXJPdVRXYUYvcXcwMUlUWWJSeXZwaXgyS2J0QXliMUVOUjFiVUhEcllNc3dvQ3VFeXFrV2NzNVhPRG51MjJGU1NQY0hsZXkxZlNkR1RMbDlxYVFhS3V0SGIzWWpjb1JZR0V5TmNPNTYzSEtKVEN6RUdPblEvY0s2cEZvdDczNVpvZjJjeU55bm5yWVFWazZ3c1FkbzhkZ3JJRDh0QlNhdDltRlNGL1FMckJjUjZBclhSanJSRmc5cjZEYTh5bmcvd0MzZStEYTczcHdBb2tOQmZXMEZCRWVYMmJCVSt0SXBkZHpWSE5yWHRRUnN4Wk1hRUl2TlFQR1lhRUp0MC93WXNVNnloU0wzZEVoWkNPL2dZUzBFUm5pRStJSG9vLzRpVGhHL0VMMEVJY0k0Y2NEeENyaXBSOC9RM3hEZkVhOGNuY2U4Ukh4QXZFQjhSN3hCL0hhblJ2djh4YnhCZkVZOGJ2d1RLeHd5WkxFUHhHQnJFVE1zdHJBc0JpSzdpZ0lnbnZKazZ0OHhNWlhYVm5qZUNQczEvT2tzSGJkNk8rMXNONzFvK1NFVDZmVHYvaTdMRGl2NnZGc0IwakpQV0lyaFFxWFRJSFlUSlVMSGUzeFVhck85cDQ2RmJsNTltMzQ4ZTYxY1dtV3NqejFvVmJDK3dacWlIYytLSmFzRHpMc0swcklGZFRHUnFod2hDcklKaldyOFlvRWh1TmI2cGxjRzduOEIySG1DRXV5QlFBQSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["chapter"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count_qs"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Alcohols, Ethers and Phenols","2":"73"},{"1":"Aldehydes and Ketones","2":"121"},{"1":"Amines","2":"89"},{"1":"Atomic Structure","2":"123"},{"1":"Basic Concepts of Chemistry","2":"98"},{"1":"Biomolecules, Polymers and Chemistry in Everyday life","2":"128"},{"1":"Carboxylic Acids and Derivatives","2":"78"},{"1":"Chemical Bonding","2":"131"},{"1":"Chemical Equilibrium","2":"83"},{"1":"Chemical Kinetics","2":"75"},{"1":"Coordination Compounds","2":"105"},{"1":"D and F Block Elements","2":"83"},{"1":"Electrochemistry","2":"102"},{"1":"Environmental Chemistry","2":"7"},{"1":"Halogen Derivatives","2":"58"},{"1":"Hydrocarbons","2":"102"},{"1":"Hydrogen","2":"53"},{"1":"Introduction to Organic Chemistry","2":"106"},{"1":"Ionic Equilibrium","2":"93"},{"1":"Metallurgy","2":"59"},{"1":"Nuclear Chemistry","2":"4"},{"1":"P - Block Elements - II","2":"87"},{"1":"P block - I","2":"55"},{"1":"Periodic Properties of Elements","2":"86"},{"1":"Redox Reactions","2":"85"},{"1":"Repository","2":"176"},{"1":"S block elements","2":"63"},{"1":"Selection Test","2":"20"},{"1":"Solid State","2":"59"},{"1":"Solutions","2":"74"},{"1":"States of Matter","2":"94"},{"1":"Surface Chemistry","2":"49"},{"1":"Thermodynamics","2":"141"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[33]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -225,6 +405,20 @@ Qs_clean &lt;- Qs  %&gt;%
 <h3>Picking 3 chapters for classification</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVsdGkgPC0gIGZpbHRlcihRc190ZXN0LCBjaGFwdGVyICVpbiUgYyhcIkFsZGVoeWRlcyBhbmQgS2V0b25lc1wiLCBcIkNvb3JkaW5hdGlvbiBDb21wb3VuZHNcIiwgXCJCaW9tb2xlY3VsZXMsIFBvbHltZXJzIGFuZCBDaGVtaXN0cnkgaW4gRXZlcnlkYXkgbGlmZVwiLCBcIkVsZWN0cm9jaGVtaXN0cnlcIiwgXCJBbWluZXNcIikpIFxuIyBVc2luZyBjaGFwdGVyIG5hbWVzIGZvciBmaWx0ZXJpbmcgZ2F2ZSB0aGUgZXJyb3IgbWVzc2FnZSA6XG4jIGxvbmdlciBvYmplY3QgbGVuZ3RoIGlzIG5vdCBhIG11bHRpcGxlIG9mIHNob3J0ZXIgb2JqZWN0IGxlbmd0aFxuI211bHRpIDwtIGFycmFuZ2UobXVsdGksIENvZGUpICAgICAgIyMgVG8gcmVhcnJhbmdlIGFuZCByYW5kb21pemUgY2hhcHRlcnMgYnkgcm93IG5vXG5tdWx0aSAlPiUgZ3JvdXBfYnkoY2hhcHRlcikgJT4lIHN1bW1hcml6ZShjb3VudF9xcyA9bigpKVxuYGBgIn0= -->
+<pre class="r"><code>multi &lt;-  filter(Qs_test, chapter %in% c(&quot;Aldehydes and Ketones&quot;, &quot;Coordination Compounds&quot;, &quot;Biomolecules, Polymers and Chemistry in Everyday life&quot;, &quot;Electrochemistry&quot;, &quot;Amines&quot;)) 
+# Using chapter names for filtering gave the error message :
+# longer object length is not a multiple of shorter object length
+#multi &lt;- arrange(multi, Code)      ## To rearrange and randomize chapters by row no
+multi %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MiwibnJvdyI6NH0sInJkZiI6Ikg0c0lBQUFBQUFBQUJsMVJ3VTdETUF4MTA5S3hTc0FrQk9mK3dIcEE0Z09td1lrYnAzRkNJY2xvUlpxVUpBVjI0OFBSaXRNbE1QWGcybjUrcnArZHg3dk5UYkVwQUlCQW1oRWdLWWJvQVJMSVlPNzlGMEI2T1JJQUZyNGFDbGNyeVVXOTQ4S1dWUEh5UVRpdGhBM0ZmTlUyLzluMVdtdkRHMFZkbzFXNTFtMm5lOFZqZFhFdkJYTkdzMXEwalhWbWg5alpPQWpBeDA5b0RkcDJvdXlFU1dwdFVCWEJnbE5IcTYyaHJaalNGV0tSVGdJNFl6WHRuREFoUFdVb3pEMi8yMG52M09qUEt2WjdiZVFiUDhNdy9LRGJUOGd6M2ZrOWtVcjgzZktKd3NSNG1TTndzT1BpUmEvOEdMNWtkYS9lbHJkSFZBaWprM0NhR0pQRCtIUUl2OHJqRXdqMWltOFFza3g4VUJrdkllbUxpTWs1cmpadVZuV21VUzZlRVZGYk9lMyttZ3FtWlVUR25XSC9DMXpSL3JBOUFnQUEifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["chapter"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count_qs"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Aldehydes and Ketones","2":"121"},{"1":"Amines","2":"89"},{"1":"Coordination Compounds","2":"105"},{"1":"Electrochemistry","2":"102"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[4]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -233,6 +427,13 @@ Qs_clean &lt;- Qs  %&gt;%
 <p>The Chapter variable is currently a character vector. Since this is a categorical variable, it would be better to convert it to a factor.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVsdGkkY2hhcHRlciA8LSBmYWN0b3IobXVsdGkkY2hhcHRlcilcbnN0cihtdWx0aSRjaGFwdGVyKVxuYGBgIn0= -->
+<pre class="r"><code>multi$chapter &lt;- factor(multi$chapter)
+str(multi$chapter)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIEZhY3RvciB3LyA0IGxldmVscyBcIkFsZGVoeWRlcyBhbmQgS2V0b25lc1wiLC4uOiA0IDQgNCA0IDQgNCA0IDQgNCA0IC4uLlxuIn0= -->
+<pre><code> Factor w/ 4 levels &quot;Aldehydes and Ketones&quot;,..: 4 4 4 4 4 4 4 4 4 4 ...</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -241,12 +442,30 @@ Qs_clean &lt;- Qs  %&gt;%
 <h2>Create text corpus</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dF9jb3JwdXMgPC0gVkNvcnB1cyhWZWN0b3JTb3VyY2UobXVsdGkkcXVlc3Rpb25fdGV4dCkpIFxuIyNpbmNsdWRlIGJvdGggYW5kIHRlc3QgYW5kIHRyYWluaW5nIHNldCB0byBidWlsZCB0aGUgY29ycHVzXG4jaW5zcGVjdCAodGV4dF9jb3JwdXMpXG5gYGAifQ== -->
+<pre class="r"><code>text_corpus &lt;- VCorpus(VectorSource(multi$question_text)) 
+##include both and test and training set to build the corpus
+#inspect (text_corpus)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="lets-view-some-qs" class="section level3">
 <h3>Let’s view some Qs</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGFwcGx5KHRleHRfY29ycHVzWzI6NF0sIGFzLmNoYXJhY3RlcikgICAgICAgIyBNdWx0aXBsZSBkb2NzXG5gYGAifQ== -->
+<pre class="r"><code>lapply(text_corpus[2:4], as.character)       # Multiple docs</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJGAyYFxuWzFdIFwiRm9yIHRoZSByZWFjdGlvbizCoFxcXFwoMk5fMk9fNVxcXFx0bzROT18yK09fMlxcXFwpLCB0aGUgcmF0ZSBlcXVhdGlvbiBjYW4gYmUgZXhwcmVzc2VkIGluIHR3byB3YXlzwqBcXFxcKC1cXFxcZnJhY3tkXFxcXGxlZnRbTl8yT181XFxcXHJpZ2h0XX17ZHR9PWtcXFxcbGVmdFtOXzJPXzVcXFxccmlnaHRdXFxcXCkgYW5kwqBcXFxcKCtcXFxcZnJhY3tkXFxcXGxlZnRbTk9fMlxcXFxyaWdodF19e2R0fT1rJ1xcXFxsZWZ0W05fMk9fNVxcXFxyaWdodF1cXFxcKcKgXFxcXChrXFxcXCkgYW5kwqBcXFxcKGsnXFxcXCkgYXJlIHJlbGF0ZWQgYXM6XCJcblxuJGAzYFxuWzFdIFwiR2l2ZW5cXFxcKEZlXnszK30oYXEpK2VeLVxcXFx0byBGZV57Mit9KGFxKTtFXlxcXFxjaXJjPSswLjc3IMKgVlxcXFwpXFxcXChBbF57Myt9KyhhcSkrM2VeLVxcXFx0byBBbChzKTtFXlxcXFxjaXJjPS0xLjY2IMKgVlxcXFwpXFxcXChCcl8yKGFxKSsyZV4tXFxcXHRvIDJCcl4tO0VeXFxcXGNpcmM9KzEuMDkgwqBWXFxcXClDb25zaWRlcmluZyB0aGUgZWxlY3Ryb2RlIHBvdGVudGlhbHMsIHdoaWNoIG9mIHRoZSBmb2xsb3dpbmcgcmVwcmVzZW50cyB0aGUgY29ycmVjdCBvcmRlciBvZiByZWR1Y2luZyBwb3dlcj9cIlxuXG4kYDRgXG5bMV0gXCJUaGUgY29uZHVjdGl2aXR5IG9mIGEgXFxcXCgwLjAxIE5cXFxcKSBzb2x1dGlvbiBpcyBmb3VuZCB0byBiZSBcXFxcKDAuMDA1IG9obV57LTF9IMKgY21eey0xfVxcXFwpLiBUaGUgZXF1aXZhbGVudCBjb25kdWN0aXZpdHkgb2YgdGhlIHNvbHV0aW9uIHdpbGwgYmVcIlxuIn0= -->
+<pre><code>$`2`
+[1] &quot;For the reaction, \\(2N_2O_5\\to4NO_2+O_2\\), the rate equation can be expressed in two ways \\(-\\frac{d\\left[N_2O_5\\right]}{dt}=k\\left[N_2O_5\\right]\\) and \\(+\\frac{d\\left[NO_2\\right]}{dt}=k'\\left[N_2O_5\\right]\\) \\(k\\) and \\(k'\\) are related as:&quot;
+
+$`3`
+[1] &quot;Given\\(Fe^{3+}(aq)+e^-\\to Fe^{2+}(aq);E^\\circ=+0.77  V\\)\\(Al^{3+}+(aq)+3e^-\\to Al(s);E^\\circ=-1.66  V\\)\\(Br_2(aq)+2e^-\\to 2Br^-;E^\\circ=+1.09  V\\)Considering the electrode potentials, which of the following represents the correct order of reducing power?&quot;
+
+$`4`
+[1] &quot;The conductivity of a \\(0.01 N\\) solution is found to be \\(0.005 ohm^{-1}  cm^{-1}\\). The equivalent conductivity of the solution will be&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -256,12 +475,38 @@ Qs_clean &lt;- Qs  %&gt;%
 <p>Removing punctuations, numbers and stop words Converting to lower case Stemming words - learned, learning, and learns are transformed into the base form, learn Removing additional white spaces</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTb3VyY2UgOiBbMl0gUmVtb3Zpbmcgbm9uLVVURjggY2hhcmFjdGVyc1xudGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzLCBjb250ZW50X3RyYW5zZm9ybWVyKGdzdWIpLCBwYXR0ZXJuID1cIlteWzphbG51bTpdXVwiICwgcmVwbGFjZW1lbnQgPSBcIiBcIilcbnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgY29udGVudF90cmFuc2Zvcm1lcihnc3ViKSwgcGF0dGVybiA9XCJbXFx1MDA4MC1cXHVmZmZmXVwiICwgcmVwbGFjZW1lbnQgPSBcIiBcIilcbiMjIE5vdyBub24tVVRGIGNoYXJhY3RlcnMgYXJlIHJlbW92ZWQuIFdlIGNhbiBkbyByZWd1bGFyIHRhc2tzIG9uIHRoZSBjbGVhbiBjb3JwdXMuXG50ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHJlbW92ZU51bWJlcnMpXG50ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIGNvbnRlbnRfdHJhbnNmb3JtZXIodG9sb3dlcikpXG4jIyBBZGQgc3RvcHdvcmRzIGxpa2UgbGVmdCwgcmlnaHQgKGZyYWMgPylcbnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgcmVtb3ZlV29yZHMsIGMoc3RvcHdvcmRzKCksIFwibGVmdFwiLFwicmlnaHRcIikpXG50ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHJlbW92ZVB1bmN0dWF0aW9uKVxuI3RleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgc3RlbURvY3VtZW50KVxudGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBzdHJpcFdoaXRlc3BhY2UpXG5gYGAifQ== -->
+<pre class="r"><code># Source : [2] Removing non-UTF8 characters
+text_corpus_clean &lt;- tm_map(text_corpus, content_transformer(gsub), pattern =&quot;[^[:alnum:]]&quot; , replacement = &quot; &quot;)
+text_corpus_clean &lt;- tm_map(text_corpus_clean, content_transformer(gsub), pattern =&quot;[\u0080-\uffff]&quot; , replacement = &quot; &quot;)
+## Now non-UTF characters are removed. We can do regular tasks on the clean corpus.
+text_corpus_clean &lt;- tm_map(text_corpus_clean, removeNumbers)
+text_corpus_clean &lt;- tm_map(text_corpus_clean, content_transformer(tolower))
+## Add stopwords like left, right (frac ?)
+text_corpus_clean &lt;- tm_map(text_corpus_clean, removeWords, c(stopwords(), &quot;left&quot;,&quot;right&quot;))
+text_corpus_clean &lt;- tm_map(text_corpus_clean, removePunctuation)
+#text_corpus_clean &lt;- tm_map(text_corpus_clean, stemDocument)
+text_corpus_clean &lt;- tm_map(text_corpus_clean, stripWhitespace)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="lets-view-some-cleaned-qs" class="section level3">
 <h3>Let’s view some cleaned Qs</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGFwcGx5KHRleHRfY29ycHVzX2NsZWFuWzI6NF0sIGFzLmNoYXJhY3RlcikgICAgICAgXG5gYGAifQ== -->
+<pre class="r"><code>lapply(text_corpus_clean[2:4], as.character)       </code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJGAyYFxuWzFdIFwiIHJlYWN0aW9uIG4gbyB0b25vIG8gcmF0ZSBlcXVhdGlvbiBjYW4gZXhwcmVzc2VkIHR3byB3YXlzIGZyYWMgZCBuIG8gZHQgayBuIG8gZnJhYyBkIGR0IGsgbiBvIGsgayByZWxhdGVkIFwiXG5cbiRgM2BcblsxXSBcImdpdmVuIGZlIGFxIGUgZmUgYXEgZSBjaXJjIHYgYWwgYXEgZSBhbCBzIGUgY2lyYyB2IGJyIGFxIGUgYnIgZSBjaXJjIHYgY29uc2lkZXJpbmcgZWxlY3Ryb2RlIHBvdGVudGlhbHMgZm9sbG93aW5nIHJlcHJlc2VudHMgY29ycmVjdCBvcmRlciByZWR1Y2luZyBwb3dlciBcIlxuXG4kYDRgXG5bMV0gXCIgY29uZHVjdGl2aXR5IG4gc29sdXRpb24gZm91bmQgb2htIGNtIGVxdWl2YWxlbnQgY29uZHVjdGl2aXR5IHNvbHV0aW9uIHdpbGwgXCJcbiJ9 -->
+<pre><code>$`2`
+[1] &quot; reaction n o tono o rate equation can expressed two ways frac d n o dt k n o frac d dt k n o k k related &quot;
+
+$`3`
+[1] &quot;given fe aq e fe aq e circ v al aq e al s e circ v br aq e br e circ v considering electrode potentials following represents correct order reducing power &quot;
+
+$`4`
+[1] &quot; conductivity n solution found ohm cm equivalent conductivity solution will &quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -270,6 +515,13 @@ Qs_clean &lt;- Qs  %&gt;%
 <h2>Bag of words - Tokenization</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dF9kdG0gPC0gRG9jdW1lbnRUZXJtTWF0cml4KHRleHRfY29ycHVzX2NsZWFuKVxuYGBgIn0= -->
+<pre class="r"><code>text_dtm &lt;- DocumentTermMatrix(text_corpus_clean)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gc2ltcGxlX3RyaXBsZXRfbWF0cml4KGksIGosIHYsIG5yb3cgPSBsZW5ndGgodGVybXMpLCBuY29sID0gbGVuZ3RoKGNvcnB1cyksICA6IFxuICAnaSwgaicgaW52YWxpZFxuIn0= -->
+<pre><code>Error in simple_triplet_matrix(i, j, v, nrow = length(terms), ncol = length(corpus),  : 
+  'i, j' invalid</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -344,7 +596,7 @@ Qs_clean &lt;- Qs  %&gt;%
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KIyMgUmVhZGluZyBkYXRhIGZyb20gQ01TDQoNCmBgYHtyIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2FzaXMnfQ0KbGlicmFyeSgndGlkeXZlcnNlJykNCmxpYnJhcnkoJ2UxMDcxJykNCmxpYnJhcnkoJ1NwYXJzZU0nKQ0KbGlicmFyeSgndG0nKQ0KbGlicmFyeSgnY2FyZXQnKQ0KbGlicmFyeSgnU25vd2JhbGxDJykNCmxpYnJhcnkoJ3dvcmRjbG91ZCcpDQpsaWJyYXJ5KCdqc29ubGl0ZScpDQoNClFzIDwtIGpzb25saXRlOjpmcm9tSlNPTigncXNfdG9waWN3aXNlLmpzb24nKQ0KDQojUXMgPC0gcmVhZF90c3YoInFzX3RvcGljd2lzZV9kdW1wLnRzdiIpDQoNCmhlYWQoUXMpDQpgYGANCg0KIyMjIENsZWFuaW5nIGFuZCBhZGRpbmcgR3JhZGUsIFN1YmplY3QsIEN1cnJpY3VsdW0gYW5kIENoYXB0ZXIgTm8gDQoNCmBgYHtyIHJlc3VsdHM9J2FzaXMnfQ0KIyBOZWVkIHRvIGNsZWFuIHRoZSBvdmVyZmxvdyBvZiB0ZXh0DQpRc19jbGVhbiA8LSBRcyAgJT4lDQogIGRwbHlyOjpzZWxlY3QoMToxMikgJT4lICAgICAgICAgICAgICAgICAgICAjIEtlZXBpbmcgb25seSB0aGUgZmlyc3QgMTIgY29sdW1ucw0KICBkcGx5cjo6ZmlsdGVyKCFpcy5uYShEaWZmaWN1bHR5KSkgICU+JSAgICAgICAgICAgIyBDbGVhbmluZyBvdmVyZmxvdw0KICBkcGx5cjo6bXV0YXRlKEdyYWRlID0gc3RyX3N1YihUb3BpY19Db2RlLCA1LCA2KSwgU3ViamVjdCA9IHN0cl9zdWIoVG9waWNfQ29kZSwgMSwgMyksIEN1cnJpY3VsdW0gPSBzdHJfc3ViKFRvcGljX0NvZGUsIDgsIDEwKSwgQ2hfTm8gPSBzdHJfc3ViKFRvcGljX0NvZGUsIDEyLCAxMykpDQoNCiMgUmVtb3Zpbmcgbm9uLVVURiBjaGFyYWN0ZXJzDQpRc19jbGVhbiRUZXh0IDwtIGxhcHBseShRc19jbGVhbiRUZXh0LGdzdWIsIHBhdHRlcm4gPSAiW15bOmFsbnVtOl1dIiwgcmVwbGFjZW1lbnQgPSAiICIpDQpRc19jbGVhbiRUZXh0IDwtIGxhcHBseShRc19jbGVhbiRUZXh0LGdzdWIsIHBhdHRlcm4gPSAiPC4qPz4iLCByZXBsYWNlbWVudD0gIiAiKQ0KDQprbml0cjo6a2FibGUoaGVhZChRc19jbGVhbikpDQoNCmBgYA0KDQojIyMgU3VtbWFyaXppbmcgQ2hhcHRlciB3aXNlICMgUXMgaW4gdGhlIGVudGlyZSBKRUUgZGF0YXNldA0KDQpgYGB7cn0NClFzX3Rlc3QgPC0gUXNfY2xlYW4gJT4lIGZpbHRlcihDdXJyaWN1bHVtID09IkpFRSIsIFN1YmplY3QgPT0gIkNITSIpDQoNClFzX3Rlc3QgJT4lIGdyb3VwX2J5KENoYXB0ZXIpICU+JSBzdW1tYXJpemUoY291bnRfcXMgPW4oKSkNCg0KYGBgDQoNCg0KIyMjIFBpY2tpbmcgMyBjaGFwdGVycyBmb3IgY2xhc3NpZmljYXRpb24NCg0KYGBge3IgZXZhbD0gVFJVRX0NCg0KbXVsdGkgPC0gIGZpbHRlcihRc190ZXN0LCBDaGFwdGVyICVpbiUgYygiQWxkZWh5ZGVzIGFuZCBLZXRvbmVzIiwgIkNvb3JkaW5hdGlvbiBDb21wb3VuZHMiLCAiQmlvbW9sZWN1bGVzLCBQb2x5bWVycyBhbmQgQ2hlbWlzdHJ5IGluIEV2ZXJ5ZGF5IGxpZmUiLCAiRWxlY3Ryb2NoZW1pc3RyeSIsICJBbWluZXMiKSkgDQojIFVzaW5nIGNoYXB0ZXIgbmFtZXMgZm9yIGZpbHRlcmluZyBnYXZlIHRoZSBlcnJvciBtZXNzYWdlIDoNCiMgbG9uZ2VyIG9iamVjdCBsZW5ndGggaXMgbm90IGEgbXVsdGlwbGUgb2Ygc2hvcnRlciBvYmplY3QgbGVuZ3RoDQoNCiNtdWx0aSA8LSBhcnJhbmdlKG11bHRpLCBDb2RlKSAgICAgICMjIFRvIHJlYXJyYW5nZSBhbmQgcmFuZG9taXplIGNoYXB0ZXJzIGJ5IHJvdyBubw0KDQptdWx0aSAlPiUgZ3JvdXBfYnkoQ2hhcHRlcikgJT4lIHN1bW1hcml6ZShjb3VudF9xcyA9bigpKQ0KDQpgYGANCg0KIyMjIENoYW5naW5nIENoYXB0ZXIgbGFiZWxzIHRvIGZhY3RvcnMNCg0KVGhlIENoYXB0ZXIgdmFyaWFibGUgaXMgY3VycmVudGx5IGEgY2hhcmFjdGVyIHZlY3Rvci4gU2luY2UgdGhpcyBpcyBhIGNhdGVnb3JpY2FsIHZhcmlhYmxlLCBpdCB3b3VsZCBiZSBiZXR0ZXIgdG8gY29udmVydCBpdCB0byBhIGZhY3Rvci4NCmBgYHtyfQ0KbXVsdGkkQ2hhcHRlciA8LSBmYWN0b3IobXVsdGkkQ2hhcHRlcikNCnN0cihtdWx0aSRDaGFwdGVyKQ0KYGBgDQoNCiMjIENyZWF0ZSB0ZXh0IGNvcnB1cw0KDQpgYGB7cn0NCnRleHRfY29ycHVzIDwtIFZDb3JwdXMoVmVjdG9yU291cmNlKG11bHRpJFRleHQpKSANCiMjaW5jbHVkZSBib3RoIGFuZCB0ZXN0IGFuZCB0cmFpbmluZyBzZXQgdG8gYnVpbGQgdGhlIGNvcnB1cw0KI2luc3BlY3QgKHRleHRfY29ycHVzKQ0KYGBgDQoNCiMjIyBMZXQncyB2aWV3IHNvbWUgUXMNCmBgYHtyfQ0KbGFwcGx5KHRleHRfY29ycHVzWzI6NF0sIGFzLmNoYXJhY3RlcikgICAgICAgIyBNdWx0aXBsZSBkb2NzDQpgYGANCg0KIyMgQ2xlYW5pbmcgdGV4dCANClJlbW92aW5nIHB1bmN0dWF0aW9ucywgbnVtYmVycyBhbmQgc3RvcCB3b3Jkcw0KQ29udmVydGluZyB0byBsb3dlciBjYXNlDQpTdGVtbWluZyB3b3JkcyAtIGxlYXJuZWQsIGxlYXJuaW5nLCBhbmQgbGVhcm5zIGFyZSB0cmFuc2Zvcm1lZCBpbnRvIHRoZSBiYXNlIGZvcm0sIGxlYXJuDQpSZW1vdmluZyBhZGRpdGlvbmFsIHdoaXRlIHNwYWNlcw0KDQpgYGB7cn0NCiMgU291cmNlIDogWzJdIFJlbW92aW5nIG5vbi1VVEY4IGNoYXJhY3RlcnMNCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1cywgY29udGVudF90cmFuc2Zvcm1lcihnc3ViKSwgcGF0dGVybiA9IlteWzphbG51bTpdXSIgLCByZXBsYWNlbWVudCA9ICIgIikNCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgY29udGVudF90cmFuc2Zvcm1lcihnc3ViKSwgcGF0dGVybiA9IltcdTAwODAtXHVmZmZmXSIgLCByZXBsYWNlbWVudCA9ICIgIikNCg0KIyMgTm93IG5vbi1VVEYgY2hhcmFjdGVycyBhcmUgcmVtb3ZlZC4gV2UgY2FuIGRvIHJlZ3VsYXIgdGFza3Mgb24gdGhlIGNsZWFuIGNvcnB1cy4NCg0KdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCByZW1vdmVOdW1iZXJzKQ0KdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBjb250ZW50X3RyYW5zZm9ybWVyKHRvbG93ZXIpKQ0KDQojIyBBZGQgc3RvcHdvcmRzIGxpa2UgbGVmdCwgcmlnaHQgKGZyYWMgPykNCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgcmVtb3ZlV29yZHMsIGMoc3RvcHdvcmRzKCksICJsZWZ0IiwicmlnaHQiKSkNCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgcmVtb3ZlUHVuY3R1YXRpb24pDQojdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBzdGVtRG9jdW1lbnQpDQp0ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHN0cmlwV2hpdGVzcGFjZSkNCmBgYA0KDQojIyMgTGV0J3MgdmlldyBzb21lIGNsZWFuZWQgUXMNCmBgYHtyfQ0KbGFwcGx5KHRleHRfY29ycHVzX2NsZWFuWzI6NF0sIGFzLmNoYXJhY3RlcikgICAgICAgDQpgYGANCg0KIyMgQmFnIG9mIHdvcmRzIC0gVG9rZW5pemF0aW9uDQpgYGB7cn0NCnRleHRfZHRtIDwtIERvY3VtZW50VGVybU1hdHJpeCh0ZXh0X2NvcnB1c19jbGVhbikNCnRleHRfZHRtDQoNCiMgQWRkIGEgZGljdGlvbmFyeSB0byBEVE0gPw0KYGBgDQoNCiMjIERhdGEgcHJlcGFyYXRpb24gLSBDcmVhdGluZyB0cmFpbmluZyBhbmQgdGVzdCBkYXRhc2V0cw0KDQpgYGB7cn0NCnRleHRfZHRtX3RyYWluIDwtIHRleHRfZHRtW211bHRpJERpZmZpY3VsdHkgPT0gJzInLCBdDQoNCnRleHRfZHRtX3Rlc3QgPC0gdGV4dF9kdG1bbXVsdGkkRGlmZmljdWx0eSAhPSAnMicsIF0NCg0KDQp0ZXh0X3RyYWluX2xhYmVscyA8LSBtdWx0aVttdWx0aSREaWZmaWN1bHR5ID09ICcyJywgXSRDaGFwdGVyDQp0ZXh0X3Rlc3RfbGFiZWxzIDwtIG11bHRpW211bHRpJERpZmZpY3VsdHkgIT0gJzInLCBdJENoYXB0ZXIgDQoNCnByb3AudGFibGUodGFibGUodGV4dF90cmFpbl9sYWJlbHMpKQ0KYGBgDQoNCiMjIyBEaXN0cmlidXRpb24gb2YgbGFiZWxzIGluIHRlc3Qgc2V0DQpgYGB7cn0NCnByb3AudGFibGUodGFibGUodGV4dF90ZXN0X2xhYmVscykpDQpgYGANCg0KIyMgVmlzdWFsaXppbmcgdGV4dCBkYXRhIC0gd29yZCBjbG91ZHMNCmBgYHtyfQ0Kd29yZGNsb3VkKHRleHRfY29ycHVzX2NsZWFuLCBtaW4uZnJlcT0xMCwgcmFuZG9tLm9yZGVyID0gRkFMU0UpDQpgYGANCg0KIyMjIFdvcmQgQ2xvdWQgZnJvbSBjaGFwdGVyIC0gQXBwbGljYXRpb25zIG9mIERlcml2YXRpdmVzDQpgYGB7cn0NCndvcmRjbG91ZCh0ZXh0X2NvcnB1c19jbGVhblttdWx0aSRDaGFwdGVyID09ICJBcHBsaWNhdGlvbnMgb2YgRGVyaXZhdGl2ZXMiXSwgbWF4LndvcmRzID0gNDAsIHNjYWxlID0gYygzLCAwLjUpKQ0KYGBgDQoNCiMjIyBXb3JkIGNsb3VkIGZyb20gdGhlIGNoYXB0ZXIgLSBGdW5kYW1lbnRhbHMgb2YgTWF0aGVtYXRpY3MNCmBgYHtyIGVjaG89RkFMU0UsIGV2YWw9VFJVRX0NCndvcmRjbG91ZCh0ZXh0X2NvcnB1c19jbGVhblttdWx0aSRDaGFwdGVyID09ICJGdW5kYW1lbnRhbHMgb2YgTWF0aGVtYXRpY3MiXSwgbWF4LndvcmRzID0gNDAsIHNjYWxlID0gYygzLCAwLjUpKQ0KYGBgDQojIyMgV29yZCBjbG91ZCBmcm9tIENoYXB0ZXIgMw0KYGBge3IgZXZhbD1UUlVFfQ0Kd29yZGNsb3VkKHRleHRfY29ycHVzX2NsZWFuW211bHRpJENoYXB0ZXIgPT0gIkNvbmljIFNlY3Rpb25zIC0gSSJdLCBtYXgud29yZHMgPSA0MCwgc2NhbGUgPSBjKDMsIDAuNSkpDQpgYGANCg0KV29yZHMgYXBwZWFyaW5nIGF0IGxlYXN0IGEgc3BlY2lmaWVkIG51bWJlciBvZiB0aW1lcy5GaWx0ZXIgb3VyIERUTSB0byBpbmNsdWRlIG9ubHkgdGhlIHRlcm1zIGFwcGVhcmluZyBpbiBhIHNwZWNpZmllZCB2ZWN0b3IuDQoNCmBgYHtyfQ0KdGV4dF9mcmVxX3dvcmRzIDwtIGZpbmRGcmVxVGVybXModGV4dF9kdG0sIDI1KQ0KDQojIHRmLWlkZiA/DQojIFVzZWZ1bCB0byByZW1vdmUgd29yZHMgd2hpY2ggbWF5YmUgaW4gdHJhaW5pbmcgc2V0IGJ1dCBub3QgaW4gdGVzdCBzZXQgbGVhZGluZyB0byBhbiBvdXQgb2YgYm91bmRzIGVycm9yDQoNCnRleHRfZHRtX2ZyZXFfdHJhaW4gPC0gdGV4dF9kdG1fdHJhaW5bICwgdGV4dF9mcmVxX3dvcmRzXQ0KdGV4dF9kdG1fZnJlcV90ZXN0IDwtIHRleHRfZHRtX3Rlc3RbICwgdGV4dF9mcmVxX3dvcmRzXQ0KYGBgDQoNClRoZSBOYWl2ZSBCYXllcyBjbGFzc2lmaWVyIGlzIHR5cGljYWxseSB0cmFpbmVkIG9uIGRhdGEgd2l0aCBjYXRlZ29yaWNhbCBmZWF0dXJlcy4gVGhpcyBwb3NlcyBhIHByb2JsZW0sIHNpbmNlIHRoZSBjZWxscyBpbiB0aGUgc3BhcnNlIG1hdHJpeCBhcmUgbnVtZXJpYyBhbmQgbWVhc3VyZSB0aGUgbnVtYmVyIG9mIHRpbWVzIGEgd29yZCBhcHBlYXJzIGluIGEgbWVzc2FnZS4gV2UgbmVlZCB0byBjaGFuZ2UgdGhpcyB0byBhIGNhdGVnb3JpY2FsIHZhcmlhYmxlIHRoYXQgc2ltcGx5IGluZGljYXRlcyB5ZXMgb3Igbm8gZGVwZW5kaW5nIG9uIHdoZXRoZXIgdGhlIHdvcmQgYXBwZWFycyBhdCBhbGwuIFRyYWluIG1hdHJpeCA6DQoNCmBgYHtyfQ0KY29udmVydF9jb3VudHMgPC0gZnVuY3Rpb24oeCkgew0KeCA8LSBpZmVsc2UoeCA+IDAsICJZZXMiLCAiTm8iKQ0KfQ0KDQojIE1BUkdJTiA9IDEgaXMgdXNlZCBmb3Igcm93cw0KdGV4dF90cmFpbiA8LSBhcHBseSh0ZXh0X2R0bV9mcmVxX3RyYWluLCBNQVJHSU4gPSAyLCBjb252ZXJ0X2NvdW50cykNCnRleHRfdGVzdCA8LSBhcHBseSh0ZXh0X2R0bV9mcmVxX3Rlc3QsIE1BUkdJTiA9IDIsIGNvbnZlcnRfY291bnRzKQ0Kc3RyKHRleHRfdHJhaW4pDQpgYGANCg0KVGVzdCBtYXRyaXggOg0KYGBge3J9DQpzdHIodGV4dF90ZXN0KQ0KYGBgDQoNCg0KIyMgVFJBSU4gTkFJVkUgQkFZRVMgTU9ERUwgDQpgYGB7cn0NCnRleHRfY2xhc3NpZmllciA8LSBuYWl2ZUJheWVzKHRleHRfdHJhaW4sIHRleHRfdHJhaW5fbGFiZWxzLCBsYXBsYWNlID0gMSkNCg0KIyBMYXBsYWNlIC0gVGhpcyBhbGxvd3Mgd29yZHMgdGhhdCBkaWQgbm90IGFwcGVhciBlYXJsaWVyIHRvIGhhdmUgYW4gaW5kaXNwdXRhYmxlIHNheSBpbiB0aGUgY2xhc3NpZmljYXRpb24gcHJvY2Vzcy4gSnVzdCBiZWNhdXNlIHRoZSB3b3JkICJyaW5ndG9uZSIgb25seSBhcHBlYXJlZCBpbiB0aGUgc3BhbSBtZXNzYWdlcyBpbiB0aGUgdHJhaW5pbmcgZGF0YSwgaXQgZG9lcyBub3QgbWVhbiB0aGF0IGV2ZXJ5IG1lc3NhZ2Ugd2l0aCB0aGlzIHdvcmQgc2hvdWxkIGJlIGNsYXNzaWZpZWQgYXMgc3BhbQ0KYGBgDQoNCiMjIFBSRURJQ1RJT04NCmBgYHtyfQ0KI3Jlc3VsdHMgPC0gcHJlZGljdCh0ZXh0X2NsYXNzaWZpZXIsYXMubWF0cml4KHRleHRfZHRtX3Rlc3QpKQ0KcmVzdWx0cyA8LSBwcmVkaWN0KHRleHRfY2xhc3NpZmllcix0ZXh0X3Rlc3QpDQoNCmNvbmZ1c2lvbk1hdHJpeChyZXN1bHRzLCB0ZXh0X3Rlc3RfbGFiZWxzKQ0KDQojVmlldyhyZXN1bHRzKQ0KYGBgDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KIyMgUmVhZGluZyBkYXRhIGZyb20gQ01TDQoNCmBgYHtyIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2FzaXMnfQ0KbGlicmFyeSgndGlkeXZlcnNlJykNCmxpYnJhcnkoJ2UxMDcxJykNCmxpYnJhcnkoJ1NwYXJzZU0nKQ0KbGlicmFyeSgndG0nKQ0KbGlicmFyeSgnY2FyZXQnKQ0KI2xpYnJhcnkoJ1Nub3diYWxsQycpDQpsaWJyYXJ5KCd3b3JkY2xvdWQnKQ0KbGlicmFyeSgnanNvbmxpdGUnKQ0KDQpRcyA8LSBqc29ubGl0ZTo6ZnJvbUpTT04oJ3FzX3RvcGljd2lzZS5qc29uJykNClFzIDwtIGZsYXR0ZW4oUXMpDQoNCiNRcyA8LSByZWFkX3RzdigicXNfdG9waWN3aXNlX2R1bXAudHN2IikNCg0KaGVhZChRcykNCmBgYA0KDQojIyMgQ2xlYW5pbmcgYW5kIGFkZGluZyBHcmFkZSwgU3ViamVjdCwgQ3VycmljdWx1bSBhbmQgQ2hhcHRlciBObyANCg0KYGBge3IgcmVzdWx0cz0nYXNpcyd9DQojIE5lZWQgdG8gY2xlYW4gdGhlIG92ZXJmbG93IG9mIHRleHQNClFzX2NsZWFuIDwtIFFzICAlPiUNCiAgZHBseXI6OnNlbGVjdCgxOjEyKSAlPiUgICAgICAgICAgICAgICAgICAgICMgS2VlcGluZyBvbmx5IHRoZSBmaXJzdCAxMiBjb2x1bW5zDQogIGRwbHlyOjpmaWx0ZXIoIWlzLm5hKGRpZmZpY3VsdHkpKSAgJT4lICAgICAgICAgICAjIENsZWFuaW5nIG92ZXJmbG93DQogIGRwbHlyOjptdXRhdGUoR3JhZGUgPSBzdHJfc3ViKHRvcGljX2NvZGUsIDUsIDYpLCBTdWJqZWN0ID0gc3RyX3N1Yih0b3BpY19jb2RlLCAxLCAzKSwgQ3VycmljdWx1bSA9IHN0cl9zdWIodG9waWNfY29kZSwgOCwgMTApLCBDaF9ObyA9IHN0cl9zdWIodG9waWNfY29kZSwgMTIsIDEzKSkNCg0KIyBSZW1vdmluZyBub24tVVRGIGNoYXJhY3RlcnMNClFzX2NsZWFuJFRleHQgPC0gbGFwcGx5KFFzX2NsZWFuJHF1ZXN0aW9uX3RleHQsZ3N1YiwgcGF0dGVybiA9ICJbXls6YWxudW06XV0iLCByZXBsYWNlbWVudCA9ICIgIikNClFzX2NsZWFuJHF1ZXN0aW9uX3RleHQgPC0gbGFwcGx5KFFzX2NsZWFuJHF1ZXN0aW9uX3RleHQsZ3N1YiwgcGF0dGVybiA9ICI8Lio/PiIsIHJlcGxhY2VtZW50PSAiICIpDQoNCmtuaXRyOjprYWJsZShoZWFkKFFzX2NsZWFuKSkNCg0KYGBgDQoNCiMjIyBTdW1tYXJpemluZyBDaGFwdGVyIHdpc2UgIyBRcyBpbiB0aGUgZW50aXJlIEpFRSBkYXRhc2V0DQoNCmBgYHtyfQ0KUXNfdGVzdCA8LSBRc19jbGVhbiAlPiUgZmlsdGVyKEN1cnJpY3VsdW0gPT0iSkVFIiwgU3ViamVjdCA9PSAiQ0hNIikNCg0KUXNfdGVzdCAlPiUgZ3JvdXBfYnkoY2hhcHRlcikgJT4lIHN1bW1hcml6ZShjb3VudF9xcyA9bigpKQ0KDQpgYGANCg0KDQojIyMgUGlja2luZyAzIGNoYXB0ZXJzIGZvciBjbGFzc2lmaWNhdGlvbg0KDQpgYGB7ciBldmFsPSBUUlVFfQ0KDQptdWx0aSA8LSAgZmlsdGVyKFFzX3Rlc3QsIGNoYXB0ZXIgJWluJSBjKCJBbGRlaHlkZXMgYW5kIEtldG9uZXMiLCAiQ29vcmRpbmF0aW9uIENvbXBvdW5kcyIsICJCaW9tb2xlY3VsZXMsIFBvbHltZXJzIGFuZCBDaGVtaXN0cnkgaW4gRXZlcnlkYXkgbGlmZSIsICJFbGVjdHJvY2hlbWlzdHJ5IiwgIkFtaW5lcyIpKSANCiMgVXNpbmcgY2hhcHRlciBuYW1lcyBmb3IgZmlsdGVyaW5nIGdhdmUgdGhlIGVycm9yIG1lc3NhZ2UgOg0KIyBsb25nZXIgb2JqZWN0IGxlbmd0aCBpcyBub3QgYSBtdWx0aXBsZSBvZiBzaG9ydGVyIG9iamVjdCBsZW5ndGgNCg0KI211bHRpIDwtIGFycmFuZ2UobXVsdGksIENvZGUpICAgICAgIyMgVG8gcmVhcnJhbmdlIGFuZCByYW5kb21pemUgY2hhcHRlcnMgYnkgcm93IG5vDQoNCm11bHRpICU+JSBncm91cF9ieShjaGFwdGVyKSAlPiUgc3VtbWFyaXplKGNvdW50X3FzID1uKCkpDQoNCmBgYA0KDQojIyMgQ2hhbmdpbmcgQ2hhcHRlciBsYWJlbHMgdG8gZmFjdG9ycw0KDQpUaGUgQ2hhcHRlciB2YXJpYWJsZSBpcyBjdXJyZW50bHkgYSBjaGFyYWN0ZXIgdmVjdG9yLiBTaW5jZSB0aGlzIGlzIGEgY2F0ZWdvcmljYWwgdmFyaWFibGUsIGl0IHdvdWxkIGJlIGJldHRlciB0byBjb252ZXJ0IGl0IHRvIGEgZmFjdG9yLg0KYGBge3J9DQptdWx0aSRjaGFwdGVyIDwtIGZhY3RvcihtdWx0aSRjaGFwdGVyKQ0Kc3RyKG11bHRpJGNoYXB0ZXIpDQpgYGANCg0KIyMgQ3JlYXRlIHRleHQgY29ycHVzDQoNCmBgYHtyfQ0KdGV4dF9jb3JwdXMgPC0gVkNvcnB1cyhWZWN0b3JTb3VyY2UobXVsdGkkcXVlc3Rpb25fdGV4dCkpIA0KIyNpbmNsdWRlIGJvdGggYW5kIHRlc3QgYW5kIHRyYWluaW5nIHNldCB0byBidWlsZCB0aGUgY29ycHVzDQojaW5zcGVjdCAodGV4dF9jb3JwdXMpDQpgYGANCg0KIyMjIExldCdzIHZpZXcgc29tZSBRcw0KYGBge3J9DQpsYXBwbHkodGV4dF9jb3JwdXNbMjo0XSwgYXMuY2hhcmFjdGVyKSAgICAgICAjIE11bHRpcGxlIGRvY3MNCmBgYA0KDQojIyBDbGVhbmluZyB0ZXh0IA0KUmVtb3ZpbmcgcHVuY3R1YXRpb25zLCBudW1iZXJzIGFuZCBzdG9wIHdvcmRzDQpDb252ZXJ0aW5nIHRvIGxvd2VyIGNhc2UNClN0ZW1taW5nIHdvcmRzIC0gbGVhcm5lZCwgbGVhcm5pbmcsIGFuZCBsZWFybnMgYXJlIHRyYW5zZm9ybWVkIGludG8gdGhlIGJhc2UgZm9ybSwgbGVhcm4NClJlbW92aW5nIGFkZGl0aW9uYWwgd2hpdGUgc3BhY2VzDQoNCmBgYHtyfQ0KIyBTb3VyY2UgOiBbMl0gUmVtb3Zpbmcgbm9uLVVURjggY2hhcmFjdGVycw0KdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzLCBjb250ZW50X3RyYW5zZm9ybWVyKGdzdWIpLCBwYXR0ZXJuID0iW15bOmFsbnVtOl1dIiAsIHJlcGxhY2VtZW50ID0gIiAiKQ0KdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBjb250ZW50X3RyYW5zZm9ybWVyKGdzdWIpLCBwYXR0ZXJuID0iW1x1MDA4MC1cdWZmZmZdIiAsIHJlcGxhY2VtZW50ID0gIiAiKQ0KDQojIyBOb3cgbm9uLVVURiBjaGFyYWN0ZXJzIGFyZSByZW1vdmVkLiBXZSBjYW4gZG8gcmVndWxhciB0YXNrcyBvbiB0aGUgY2xlYW4gY29ycHVzLg0KDQp0ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHJlbW92ZU51bWJlcnMpDQp0ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIGNvbnRlbnRfdHJhbnNmb3JtZXIodG9sb3dlcikpDQoNCiMjIEFkZCBzdG9wd29yZHMgbGlrZSBsZWZ0LCByaWdodCAoZnJhYyA/KQ0KdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCByZW1vdmVXb3JkcywgYyhzdG9wd29yZHMoKSwgImxlZnQiLCJyaWdodCIpKQ0KdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCByZW1vdmVQdW5jdHVhdGlvbikNCiN0ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHN0ZW1Eb2N1bWVudCkNCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgc3RyaXBXaGl0ZXNwYWNlKQ0KYGBgDQoNCiMjIyBMZXQncyB2aWV3IHNvbWUgY2xlYW5lZCBRcw0KYGBge3J9DQpsYXBwbHkodGV4dF9jb3JwdXNfY2xlYW5bMjo0XSwgYXMuY2hhcmFjdGVyKSAgICAgICANCmBgYA0KDQojIyBCYWcgb2Ygd29yZHMgLSBUb2tlbml6YXRpb24NCmBgYHtyfQ0KdGV4dF9kdG0gPC0gRG9jdW1lbnRUZXJtTWF0cml4KHRleHRfY29ycHVzX2NsZWFuKQ0KdGV4dF9kdG0NCg0KIyBBZGQgYSBkaWN0aW9uYXJ5IHRvIERUTSA/DQpgYGANCg0KIyMgRGF0YSBwcmVwYXJhdGlvbiAtIENyZWF0aW5nIHRyYWluaW5nIGFuZCB0ZXN0IGRhdGFzZXRzDQoNCmBgYHtyfQ0KdGV4dF9kdG1fdHJhaW4gPC0gdGV4dF9kdG1bbXVsdGkkRGlmZmljdWx0eSA9PSAnMicsIF0NCg0KdGV4dF9kdG1fdGVzdCA8LSB0ZXh0X2R0bVttdWx0aSREaWZmaWN1bHR5ICE9ICcyJywgXQ0KDQoNCnRleHRfdHJhaW5fbGFiZWxzIDwtIG11bHRpW211bHRpJERpZmZpY3VsdHkgPT0gJzInLCBdJENoYXB0ZXINCnRleHRfdGVzdF9sYWJlbHMgPC0gbXVsdGlbbXVsdGkkRGlmZmljdWx0eSAhPSAnMicsIF0kQ2hhcHRlciANCg0KcHJvcC50YWJsZSh0YWJsZSh0ZXh0X3RyYWluX2xhYmVscykpDQpgYGANCg0KIyMjIERpc3RyaWJ1dGlvbiBvZiBsYWJlbHMgaW4gdGVzdCBzZXQNCmBgYHtyfQ0KcHJvcC50YWJsZSh0YWJsZSh0ZXh0X3Rlc3RfbGFiZWxzKSkNCmBgYA0KDQojIyBWaXN1YWxpemluZyB0ZXh0IGRhdGEgLSB3b3JkIGNsb3Vkcw0KYGBge3J9DQp3b3JkY2xvdWQodGV4dF9jb3JwdXNfY2xlYW4sIG1pbi5mcmVxPTEwLCByYW5kb20ub3JkZXIgPSBGQUxTRSkNCmBgYA0KDQojIyMgV29yZCBDbG91ZCBmcm9tIGNoYXB0ZXIgLSBBcHBsaWNhdGlvbnMgb2YgRGVyaXZhdGl2ZXMNCmBgYHtyfQ0Kd29yZGNsb3VkKHRleHRfY29ycHVzX2NsZWFuW211bHRpJENoYXB0ZXIgPT0gIkFwcGxpY2F0aW9ucyBvZiBEZXJpdmF0aXZlcyJdLCBtYXgud29yZHMgPSA0MCwgc2NhbGUgPSBjKDMsIDAuNSkpDQpgYGANCg0KIyMjIFdvcmQgY2xvdWQgZnJvbSB0aGUgY2hhcHRlciAtIEZ1bmRhbWVudGFscyBvZiBNYXRoZW1hdGljcw0KYGBge3IgZWNobz1GQUxTRSwgZXZhbD1UUlVFfQ0Kd29yZGNsb3VkKHRleHRfY29ycHVzX2NsZWFuW211bHRpJENoYXB0ZXIgPT0gIkZ1bmRhbWVudGFscyBvZiBNYXRoZW1hdGljcyJdLCBtYXgud29yZHMgPSA0MCwgc2NhbGUgPSBjKDMsIDAuNSkpDQpgYGANCiMjIyBXb3JkIGNsb3VkIGZyb20gQ2hhcHRlciAzDQpgYGB7ciBldmFsPVRSVUV9DQp3b3JkY2xvdWQodGV4dF9jb3JwdXNfY2xlYW5bbXVsdGkkQ2hhcHRlciA9PSAiQ29uaWMgU2VjdGlvbnMgLSBJIl0sIG1heC53b3JkcyA9IDQwLCBzY2FsZSA9IGMoMywgMC41KSkNCmBgYA0KDQpXb3JkcyBhcHBlYXJpbmcgYXQgbGVhc3QgYSBzcGVjaWZpZWQgbnVtYmVyIG9mIHRpbWVzLkZpbHRlciBvdXIgRFRNIHRvIGluY2x1ZGUgb25seSB0aGUgdGVybXMgYXBwZWFyaW5nIGluIGEgc3BlY2lmaWVkIHZlY3Rvci4NCg0KYGBge3J9DQp0ZXh0X2ZyZXFfd29yZHMgPC0gZmluZEZyZXFUZXJtcyh0ZXh0X2R0bSwgMjUpDQoNCiMgdGYtaWRmID8NCiMgVXNlZnVsIHRvIHJlbW92ZSB3b3JkcyB3aGljaCBtYXliZSBpbiB0cmFpbmluZyBzZXQgYnV0IG5vdCBpbiB0ZXN0IHNldCBsZWFkaW5nIHRvIGFuIG91dCBvZiBib3VuZHMgZXJyb3INCg0KdGV4dF9kdG1fZnJlcV90cmFpbiA8LSB0ZXh0X2R0bV90cmFpblsgLCB0ZXh0X2ZyZXFfd29yZHNdDQp0ZXh0X2R0bV9mcmVxX3Rlc3QgPC0gdGV4dF9kdG1fdGVzdFsgLCB0ZXh0X2ZyZXFfd29yZHNdDQpgYGANCg0KVGhlIE5haXZlIEJheWVzIGNsYXNzaWZpZXIgaXMgdHlwaWNhbGx5IHRyYWluZWQgb24gZGF0YSB3aXRoIGNhdGVnb3JpY2FsIGZlYXR1cmVzLiBUaGlzIHBvc2VzIGEgcHJvYmxlbSwgc2luY2UgdGhlIGNlbGxzIGluIHRoZSBzcGFyc2UgbWF0cml4IGFyZSBudW1lcmljIGFuZCBtZWFzdXJlIHRoZSBudW1iZXIgb2YgdGltZXMgYSB3b3JkIGFwcGVhcnMgaW4gYSBtZXNzYWdlLiBXZSBuZWVkIHRvIGNoYW5nZSB0aGlzIHRvIGEgY2F0ZWdvcmljYWwgdmFyaWFibGUgdGhhdCBzaW1wbHkgaW5kaWNhdGVzIHllcyBvciBubyBkZXBlbmRpbmcgb24gd2hldGhlciB0aGUgd29yZCBhcHBlYXJzIGF0IGFsbC4gVHJhaW4gbWF0cml4IDoNCg0KYGBge3J9DQpjb252ZXJ0X2NvdW50cyA8LSBmdW5jdGlvbih4KSB7DQp4IDwtIGlmZWxzZSh4ID4gMCwgIlllcyIsICJObyIpDQp9DQoNCiMgTUFSR0lOID0gMSBpcyB1c2VkIGZvciByb3dzDQp0ZXh0X3RyYWluIDwtIGFwcGx5KHRleHRfZHRtX2ZyZXFfdHJhaW4sIE1BUkdJTiA9IDIsIGNvbnZlcnRfY291bnRzKQ0KdGV4dF90ZXN0IDwtIGFwcGx5KHRleHRfZHRtX2ZyZXFfdGVzdCwgTUFSR0lOID0gMiwgY29udmVydF9jb3VudHMpDQpzdHIodGV4dF90cmFpbikNCmBgYA0KDQpUZXN0IG1hdHJpeCA6DQpgYGB7cn0NCnN0cih0ZXh0X3Rlc3QpDQpgYGANCg0KDQojIyBUUkFJTiBOQUlWRSBCQVlFUyBNT0RFTCANCmBgYHtyfQ0KdGV4dF9jbGFzc2lmaWVyIDwtIG5haXZlQmF5ZXModGV4dF90cmFpbiwgdGV4dF90cmFpbl9sYWJlbHMsIGxhcGxhY2UgPSAxKQ0KDQojIExhcGxhY2UgLSBUaGlzIGFsbG93cyB3b3JkcyB0aGF0IGRpZCBub3QgYXBwZWFyIGVhcmxpZXIgdG8gaGF2ZSBhbiBpbmRpc3B1dGFibGUgc2F5IGluIHRoZSBjbGFzc2lmaWNhdGlvbiBwcm9jZXNzLiBKdXN0IGJlY2F1c2UgdGhlIHdvcmQgInJpbmd0b25lIiBvbmx5IGFwcGVhcmVkIGluIHRoZSBzcGFtIG1lc3NhZ2VzIGluIHRoZSB0cmFpbmluZyBkYXRhLCBpdCBkb2VzIG5vdCBtZWFuIHRoYXQgZXZlcnkgbWVzc2FnZSB3aXRoIHRoaXMgd29yZCBzaG91bGQgYmUgY2xhc3NpZmllZCBhcyBzcGFtDQpgYGANCg0KIyMgUFJFRElDVElPTg0KYGBge3J9DQojcmVzdWx0cyA8LSBwcmVkaWN0KHRleHRfY2xhc3NpZmllcixhcy5tYXRyaXgodGV4dF9kdG1fdGVzdCkpDQpyZXN1bHRzIDwtIHByZWRpY3QodGV4dF9jbGFzc2lmaWVyLHRleHRfdGVzdCkNCg0KY29uZnVzaW9uTWF0cml4KHJlc3VsdHMsIHRleHRfdGVzdF9sYWJlbHMpDQoNCiNWaWV3KHJlc3VsdHMpDQpgYGANCg==</div>
 
 
 

@@ -10,11 +10,12 @@ library('e1071')
 library('SparseM')
 library('tm')
 library('caret')
-library('SnowballC')
+#library('SnowballC')
 library('wordcloud')
 library('jsonlite')
 
 Qs <- jsonlite::fromJSON('qs_topicwise.json')
+Qs <- flatten(Qs)
 
 #Qs <- read_tsv("qs_topicwise_dump.tsv")
 
@@ -27,12 +28,12 @@ head(Qs)
 # Need to clean the overflow of text
 Qs_clean <- Qs  %>%
   dplyr::select(1:12) %>%                    # Keeping only the first 12 columns
-  dplyr::filter(!is.na(Difficulty))  %>%           # Cleaning overflow
-  dplyr::mutate(Grade = str_sub(Topic_Code, 5, 6), Subject = str_sub(Topic_Code, 1, 3), Curriculum = str_sub(Topic_Code, 8, 10), Ch_No = str_sub(Topic_Code, 12, 13))
+  dplyr::filter(!is.na(difficulty))  %>%           # Cleaning overflow
+  dplyr::mutate(Grade = str_sub(topic_code, 5, 6), Subject = str_sub(topic_code, 1, 3), Curriculum = str_sub(topic_code, 8, 10), Ch_No = str_sub(topic_code, 12, 13))
 
 # Removing non-UTF characters
-Qs_clean$Text <- lapply(Qs_clean$Text,gsub, pattern = "[^[:alnum:]]", replacement = " ")
-Qs_clean$Text <- lapply(Qs_clean$Text,gsub, pattern = "<.*?>", replacement= " ")
+Qs_clean$Text <- lapply(Qs_clean$question_text,gsub, pattern = "[^[:alnum:]]", replacement = " ")
+Qs_clean$question_text <- lapply(Qs_clean$question_text,gsub, pattern = "<.*?>", replacement= " ")
 
 knitr::kable(head(Qs_clean))
 
@@ -43,7 +44,7 @@ knitr::kable(head(Qs_clean))
 ```{r}
 Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "CHM")
 
-Qs_test %>% group_by(Chapter) %>% summarize(count_qs =n())
+Qs_test %>% group_by(chapter) %>% summarize(count_qs =n())
 
 ```
 
@@ -52,13 +53,13 @@ Qs_test %>% group_by(Chapter) %>% summarize(count_qs =n())
 
 ```{r eval= TRUE}
 
-multi <-  filter(Qs_test, Chapter %in% c("Aldehydes and Ketones", "Coordination Compounds", "Biomolecules, Polymers and Chemistry in Everyday life", "Electrochemistry", "Amines")) 
+multi <-  filter(Qs_test, chapter %in% c("Aldehydes and Ketones", "Coordination Compounds", "Biomolecules, Polymers and Chemistry in Everyday life", "Electrochemistry", "Amines")) 
 # Using chapter names for filtering gave the error message :
 # longer object length is not a multiple of shorter object length
 
 #multi <- arrange(multi, Code)      ## To rearrange and randomize chapters by row no
 
-multi %>% group_by(Chapter) %>% summarize(count_qs =n())
+multi %>% group_by(chapter) %>% summarize(count_qs =n())
 
 ```
 
@@ -66,14 +67,14 @@ multi %>% group_by(Chapter) %>% summarize(count_qs =n())
 
 The Chapter variable is currently a character vector. Since this is a categorical variable, it would be better to convert it to a factor.
 ```{r}
-multi$Chapter <- factor(multi$Chapter)
-str(multi$Chapter)
+multi$chapter <- factor(multi$chapter)
+str(multi$chapter)
 ```
 
 ## Create text corpus
 
 ```{r}
-text_corpus <- VCorpus(VectorSource(multi$Text)) 
+text_corpus <- VCorpus(VectorSource(multi$question_text)) 
 ##include both and test and training set to build the corpus
 #inspect (text_corpus)
 ```
