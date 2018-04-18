@@ -42,7 +42,7 @@ knitr::kable(head(Qs_clean))
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
 ```{r}
-Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "CHM")
+Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "MTH")
 
 
 Qs_test <- Qs_test %>% filter(!chapter %in%  c('Selection Test', 'Repository'))
@@ -208,9 +208,34 @@ text_classifier <- naiveBayes(text_train, text_train_labels, laplace = 1)
 ## PREDICTION
 ```{r}
 #results <- predict(text_classifier,as.matrix(text_dtm_test))
-results <- predict(text_classifier,text_test)
+results <- predict(text_classifier,text_test, type="raw")
+true_values <- multi[test_indices, ]$chapter
+df.frame <- as.data.frame(matrix(ncol=7, nrow=nrow(results)))
 
-confusionMatrix(results, text_test_labels)
+labels = colnames(results)
+for (i in 1:nrow(results)) {
+  true_value = true_values[i]
+  probs = results[i, ]
+  goodPred = FALSE
+  preds = vector()
+  for (j in 1:5) {
+    ind = which.max(probs)
+    prob = max(probs)
+    probs <- probs[-ind]
+    x <- match(prob, results[i, ])
+    preds <- c(preds, labels[x])
+  }
+  if (labels[true_value] %in% preds) {
+    goodPred = TRUE
+  }
+  df.frame[i, ] = c(labels[true_value], goodPred, preds)
+}
+
+top_five_stats = df.frame %>% group_by(V2) %>% summarize(n())
+top_five_accuracy = top_five_stats[2,2] / (top_five_stats[1,2] + top_five_stats[2,2])
+
+
+# confusionMatrix(results, text_test_labels)
 
 #View(results)
 ```
