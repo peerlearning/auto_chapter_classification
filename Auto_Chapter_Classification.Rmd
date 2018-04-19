@@ -44,8 +44,9 @@ knitr::kable(head(Qs_clean))
 ```{r}
 Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "MTH")
 
+chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test', 'M1.1 Scaffold test')
 
-Qs_test <- Qs_test %>% filter(!chapter %in%  c('Selection Test', 'Repository'))
+Qs_test <- Qs_test %>% filter(!chapter %in%  chapters_to_remove)
 
 Qs_test %>% group_by(chapter) %>% summarize(count_qs =n())
 
@@ -209,7 +210,11 @@ text_classifier <- naiveBayes(text_train, text_train_labels, laplace = 1)
 ```{r}
 #results <- predict(text_classifier,as.matrix(text_dtm_test))
 results <- predict(text_classifier,text_test)
-# true_values <- multi[test_indices, ]$chapter
+true_values <- multi[test_indices, ]$chapter
+
+### UNCOMMENT BELOW FOR GETTING TOP 5 STATS
+### You will have to comment the confusion matrix lines
+
 # df.frame <- as.data.frame(matrix(ncol=7, nrow=nrow(results)))
 # 
 # labels = colnames(results)
@@ -238,8 +243,12 @@ results <- predict(text_classifier,text_test)
 # top_five_stats = df.frame %>% group_by(V2) %>% summarize(n())
 # top_five_accuracy = top_five_stats[2,2] / (top_five_stats[1,2] + top_five_stats[2,2])
 
-
-confusionMatrix(results, text_test_labels)
+conf = confusionMatrix(results, text_test_labels)
+confusion_table = as.data.frame.matrix( conf$table  )
+conf_stats = as.data.frame(conf$byClass)
+confusion_table[nrow(confusion_table) + 1, ] <- conf_stats$Sensitivity
+q_counts = multi %>% group_by(chapter) %>% summarize(count_qs =n())
+confusion_table[nrow(confusion_table) + 1, ] <- t(q_counts[,2])
 
 #View(results)
 ```

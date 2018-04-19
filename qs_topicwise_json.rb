@@ -8,6 +8,7 @@ allowedTypes = ["ConcepTest", "Spot Test", "In Class Exercise",
 				"In Class Test" , "Illustration", "Module Exercise", 
 				"Module Homework", "Pre-Class Exercise"]
 
+				
 Syllabus.all.select{|s| s.curriculum.present?}.each do |s|
 	s.chapters.each do |c|
 		c.topics.each do |top|
