@@ -53,7 +53,7 @@ Qs_test %>% group_by(chapter) %>% summarize(count_qs =n())
 ```
 
 
-### Picking 3 chapters for classification
+### Picking chapters for classification from the CMS repo
 
 ```{r eval= TRUE}
 
@@ -154,12 +154,12 @@ prop.table(table(text_test_labels))
 # wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
 ```
 
-### Word Cloud from chapter - Applications of Derivatives
+### Word Cloud from chapter 1
 ```{r}
 # wordcloud(text_corpus_clean[multi$chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
 ```
 
-### Word cloud from the chapter - Fundamentals of Mathematics
+### Word cloud from the chapter 2
 ```{r echo=FALSE, eval=TRUE}
 # wordcloud(text_corpus_clean[multi$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
 ```
