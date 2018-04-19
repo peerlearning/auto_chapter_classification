@@ -3,10 +3,15 @@ require 'action_view'
 
 results = Array.new
 
+allowedTypes = ["ConcepTest", "Spot Test", "In Class Exercise", 
+				"Homework", "Test", "Pre-Reading Exercise","Miscellaneous", 
+				"In Class Test" , "Illustration", "Module Exercise", 
+				"Module Homework", "Pre-Class Exercise"]
+
 Syllabus.all.select{|s| s.curriculum.present?}.each do |s|
 	s.chapters.each do |c|
 		c.topics.each do |top|
-			top.problems.where(type: "Test").each do |p|
+			top.problems.where(type.in => allowedTypes).each do |p|
 				if (p.options[1].present?)
 
 					row = Hash[
