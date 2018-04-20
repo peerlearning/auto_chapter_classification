@@ -4,7 +4,7 @@ output: html_notebook
 ---
 ## Reading data from CMS
 
-```{r message=FALSE, warning=FALSE, results='asis'}
+```{r message=FALSE, warning=FALSE}
 library('tidyverse')
 library('e1071')
 library('SparseM')
@@ -33,13 +33,13 @@ Qs_clean <- Qs  %>%
 ```
 
 # Removing non-UTF characters for word clouds
-```{r eval=FALSE}
+#```{r eval=FALSE}
 Qs_clean$Text <- lapply(Qs_clean$question_text,gsub, pattern = "[^[:alnum:]]", replacement = " ")
 Qs_clean$question_text <- lapply(Qs_clean$question_text,gsub, pattern = "<.*?>", replacement= " ")
 
 head(Qs_clean)
 
-```
+#```
 
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
@@ -59,13 +59,6 @@ repo %>% group_by(chapter) %>% summarize(count_qs =n())
 ```
 
 
-### Changing Chapter labels to factors
-
-The Chapter variable is currently a character vector. Since this is a categorical variable, it would be better to convert it to a factor.
-```{r}
-repo$chapter <- factor(repo$chapter)
-str(repo$chapter)
-```
 
 ## Create text corpus
 
@@ -110,7 +103,6 @@ text_dtm
 ```
 
 ## Data preparation - Creating training and test datasets
-
 ```{r}
 
 folds <- cut(seq(1,nrow(repo)),breaks=5,labels=FALSE)
@@ -123,8 +115,8 @@ text_dtm_test <- text_dtm[test_indices,  ]
 
 ## Setting Labels for prediction and checking their sample proportion (%)
 ```{r}
-text_train_labels <- repo[-test_indices,  ]$chapter
-text_test_labels <- repo[test_indices,  ]$chapter 
+text_train_labels <- as.factor(repo[-test_indices,  ]$chapter)
+text_test_labels <- as.factor(repo[test_indices,  ]$chapter) 
 
 round(prop.table(table(text_train_labels))*100,2)
 ```
@@ -135,13 +127,9 @@ round(prop.table(table(text_test_labels))*100,2)
 ```
 
 ## Visualizing text data - word clouds
-```{r eval=FALSE}
-# wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
+wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
+wordcloud(text_corpus_clean[repo$chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
 
-# wordcloud(text_corpus_clean[repo$chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
-# wordcloud(text_corpus_clean[repo$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
-# wordcloud(text_corpus_clean[repo$Chapter == "Conic Sections - I"], max.words = 40, scale = c(3, 0.5))
-```
 
 ## Filter features by selecting words appearing at least a specified number of times
 
@@ -155,8 +143,8 @@ text_dtm_freq_train <- text_dtm_train[ , text_freq_words]
 text_dtm_freq_test <- text_dtm_test[ , text_freq_words]
 ```
 
-## Converting DTM to a categorical data (T/F)
-The Naive Bayes classifier is typically trained on data with categorical features. This poses a problem, since the cells in the sparse matrix are numeric and measure the number of times a word appears in a message. We need to change this to a categorical variable that simply indicates yes or no depending on whether the word appears at all. Train matrix :
+## Converting DTM to a categorical data (T/F) for NB e1071 as it only takes categorical input
+
 
 ```{r}
 convert_counts <- function(x) {
@@ -167,17 +155,14 @@ x <- ifelse(x > 0, "Yes", "No")
 text_train <- apply(text_dtm_freq_train, MARGIN = 2, convert_counts)
 text_test <- apply(text_dtm_freq_test, MARGIN = 2, convert_counts)
 str(text_train)
-```
-
 ### Categorical data for Test DTM :
-```{r}
 str(text_test)
+
 ```
 
-
-## TRAIN NAIVE BAYES MODEL 
+## Model Train
 ```{r}
-text_classifier <- naiveBayes(text_train, text_train_labels, laplace = 1)
+text_classifier <- naiveBayes(as.matrix(text_train), text_train_labels)
 
 # Laplace - This allows words that did not appear earlier to have an indisputable say in the classification process. Just because the word "ringtone" only appeared in the spam messages in the training data, it does not mean that every message with this word should be classified as spam
 ```
@@ -185,9 +170,10 @@ text_classifier <- naiveBayes(text_train, text_train_labels, laplace = 1)
 ## PREDICTION
 ```{r}
 
-results <- predict(text_classifier,text_test)
+results <- predict(text_classifier,as.matrix(text_test))
 true_values <- repo[test_indices, ]$chapter
 test_document <- repo[test_indices, ]$question_text
+
 
 ## as.table((test_document,true_values, results)) ??
 ```
@@ -201,13 +187,14 @@ confusion_table[nrow(confusion_table) + 1, ] <- conf_stats$Sensitivity
 q_counts = repo %>% group_by(chapter) %>% summarize(count_qs =n())
 confusion_table[nrow(confusion_table) + 1, ] <- t(q_counts[,2])
 
+conf$overall
 View(conf_stats)
 View(round(confusion_table, 1))
 ```
 
 ### GETTING TOP 5 STATS
 
-```{r eval=FALSE}
+#```{r eval=FALSE}
 
 
   df.frame <- as.data.frame(matrix(ncol=7, nrow=nrow(results)))
