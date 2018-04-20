@@ -32,15 +32,6 @@ Qs_clean <- Qs  %>%
   dplyr::mutate(Grade = str_sub(topic_code, 5, 6), Subject = str_sub(topic_code, 1, 3), Curriculum = str_sub(topic_code, 8, 10), Ch_No = str_sub(topic_code, 12, 13))
 ```
 
-# Removing non-UTF characters for word clouds
-#```{r eval=FALSE}
-Qs_clean$Text <- lapply(Qs_clean$question_text,gsub, pattern = "[^[:alnum:]]", replacement = " ")
-Qs_clean$question_text <- lapply(Qs_clean$question_text,gsub, pattern = "<.*?>", replacement= " ")
-
-head(Qs_clean)
-
-#```
-
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
 ```{r}
@@ -57,8 +48,6 @@ repo <- repo %>%
 repo %>% group_by(chapter) %>% summarize(count_qs =n())
 
 ```
-
-
 
 ## Create text corpus
 
@@ -121,7 +110,7 @@ text_test_labels <- as.factor(repo[test_indices,  ]$chapter)
 round(prop.table(table(text_train_labels))*100,2)
 ```
 
-### Distribution of labels in test set
+## Distribution of labels in test set
 ```{r}
 round(prop.table(table(text_test_labels))*100,2)
 ```
@@ -130,10 +119,10 @@ round(prop.table(table(text_test_labels))*100,2)
 wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
 wordcloud(text_corpus_clean[repo$chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
 
-
-## Filter features by selecting words appearing at least a specified number of times
+## Converting DTM to a categorical data (T/F) for NB e1071 as it only takes categorical input
 
 ```{r}
+## Filter features by selecting words appearing at least a specified number of times
 text_freq_words <- findFreqTerms(text_dtm, 25)
 
 # tf-idf ?
@@ -141,12 +130,7 @@ text_freq_words <- findFreqTerms(text_dtm, 25)
 
 text_dtm_freq_train <- text_dtm_train[ , text_freq_words]
 text_dtm_freq_test <- text_dtm_test[ , text_freq_words]
-```
 
-## Converting DTM to a categorical data (T/F) for NB e1071 as it only takes categorical input
-
-
-```{r}
 convert_counts <- function(x) {
 x <- ifelse(x > 0, "Yes", "No")
 }
@@ -154,15 +138,8 @@ x <- ifelse(x > 0, "Yes", "No")
 # MARGIN = 1 is used for rows
 text_train <- apply(text_dtm_freq_train, MARGIN = 2, convert_counts)
 text_test <- apply(text_dtm_freq_test, MARGIN = 2, convert_counts)
-str(text_train)
-### Categorical data for Test DTM :
-str(text_test)
 
-```
-
-## Model Train
-```{r}
-text_classifier <- naiveBayes(as.matrix(text_train), text_train_labels)
+text_classifier <- naiveBayes(as.matrix(text_train), text_train_labels, laplace=1)
 
 # Laplace - This allows words that did not appear earlier to have an indisputable say in the classification process. Just because the word "ringtone" only appeared in the spam messages in the training data, it does not mean that every message with this word should be classified as spam
 ```
@@ -173,7 +150,6 @@ text_classifier <- naiveBayes(as.matrix(text_train), text_train_labels)
 results <- predict(text_classifier,as.matrix(text_test))
 true_values <- repo[test_indices, ]$chapter
 test_document <- repo[test_indices, ]$question_text
-
 
 ## as.table((test_document,true_values, results)) ??
 ```
@@ -188,13 +164,11 @@ q_counts = repo %>% group_by(chapter) %>% summarize(count_qs =n())
 confusion_table[nrow(confusion_table) + 1, ] <- t(q_counts[,2])
 
 conf$overall
-View(conf_stats)
-View(round(confusion_table, 1))
+#View(conf_stats)
+#View(round(confusion_table, 1))
 ```
 
 ### GETTING TOP 5 STATS
-
-#```{r eval=FALSE}
 
 
   df.frame <- as.data.frame(matrix(ncol=7, nrow=nrow(results)))
