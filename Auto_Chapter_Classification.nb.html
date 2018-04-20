@@ -177,7 +177,7 @@ $(document).ready(function () {
 <h2>Reading data from CMS</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSgndGlkeXZlcnNlJylcbmxpYnJhcnkoJ2UxMDcxJylcbmxpYnJhcnkoJ1NwYXJzZU0nKVxubGlicmFyeSgndG0nKVxubGlicmFyeSgnY2FyZXQnKVxuI2xpYnJhcnkoJ1Nub3diYWxsQycpXG5saWJyYXJ5KCd3b3JkY2xvdWQnKVxubGlicmFyeSgnanNvbmxpdGUnKVxuUXMgPC0ganNvbmxpdGU6OmZyb21KU09OKCdxc190b3BpY3dpc2UuanNvbicpXG5RcyA8LSBmbGF0dGVuKFFzKVxuI1FzIDwtIHJlYWRfdHN2KFwicXNfdG9waWN3aXNlX2R1bXAudHN2XCIpXG5oZWFkKFFzKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSgndGlkeXZlcnNlJylcbmxpYnJhcnkoJ2UxMDcxJylcbmxpYnJhcnkoJ1NwYXJzZU0nKVxubGlicmFyeSgndG0nKVxubGlicmFyeSgnY2FyZXQnKVxuI2xpYnJhcnkoJ1Nub3diYWxsQycpXG5saWJyYXJ5KCd3b3JkY2xvdWQnKVxubGlicmFyeSgnanNvbmxpdGUnKVxuXG5RcyA8LSBqc29ubGl0ZTo6ZnJvbUpTT04oJ3FzX3RvcGljd2lzZS5qc29uJylcblFzIDwtIGZsYXR0ZW4oUXMpXG5cbiNRcyA8LSByZWFkX3RzdihcInFzX3RvcGljd2lzZV9kdW1wLnRzdlwiKVxuXG5oZWFkKFFzKVxuYGBgIn0= -->
 <pre class="r"><code>library('tidyverse')
 library('e1071')
 library('SparseM')
@@ -186,176 +186,34 @@ library('caret')
 #library('SnowballC')
 library('wordcloud')
 library('jsonlite')
+
 Qs &lt;- jsonlite::fromJSON('qs_topicwise.json')
 Qs &lt;- flatten(Qs)
+
 #Qs &lt;- read_tsv(&quot;qs_topicwise_dump.tsv&quot;)
+
 head(Qs)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6OSwibnJvdyI6Nn0sInJkZiI6Ikg0c0lBQUFBQUFBQUE5MVYzV29UUVJUZXBPbFBndFdDQ0Y3T2hSZXRtTEM3MmMyUElDSmF0SUlnbW90ZUxBMlQyVWt5ZEhkbTNaazBMU1ZRNzNxcmw0SlFMM3lSUGtxZndDZW96aVE3YVdhUmdpZ29EaVE3NTV6NXpqbmZPZlB6NXRtdVc5bXRXSlpWdEpaS0phdTRKS2Vsb3Z3cldDV3JyTDZIbHJWMFcwNlVzQ0YvSzVsaDQxWG5SZFZ4cXkrM3Q2dE9xMm83ZjAxdjVuVm5oeDdnbEdQUVNjbUFVUlpqa1I2QmY4OW9abjF2aDRxVWhTTWtDS05BTVBBejBIKzkxcXhId2ZtMWlZbGVmVzNiZHQxMUZrUy83YlpNc1cySWRkc1VUV3pkelVWWTdoTUtvOThYVEs5M2ZkK0RHSHV0UnJ0cHUyR2pDZHROWkx1MlBiYzMrbTdkYTZHNjMzRERkdE5ydHlYUlZoMGFkdC96VGJ2bm1QYlF5OWxiaTNiUDdXSFQ3bnVHdlk1eWVMK1g0MUY1eWlqQ1NRZHprV25LYnhNbXdCOVRtT0dhVDJKR0IwQU1NZUFDQ2h4aktqZ1lrQU5NUVE5SGJQd0FqSWNFRFFHakdCQU9FRXRUak1Sanl6cFI4RWF3R1hCQzk0NHZUajg2a3lEQ2ZiRjU4ZjVMMEU4aE9uWW1VdjNKblFSeXJ3N0YxcU5ncTV1TkROM3F5TEJKU2lnaUNZeEF5R0pJS0dCOUlMMGl4cVdqYjU4L2ZBMjJWT0R1MVRnL3kvQVB6OCt1OFNBZ3ZjYkRqUDc5MmJxOTQ2ck9YdEdacFI4a1pPSmU1WjdGZkc0d1Zsem5NQjB0ZytqSUtoazF2emc5dmFwQU4vZFdMRk1ZWTU0MXA2ejNnbUFKUVYzRVFxeVBGQnJDUk9CVW82WUw5T3FROVBzRWpTS2hiNDhiU2NwNkVZNFhQZHpVT3RYdUVkY3ZnOWFxM2NDNkpNeDdFRWVKOXJEK2JpVDNrYnlQdWdJZmloeVBjc3JHTmMxbFhUMk9KOVowck9RSm93aHlUYmd3cHdBRnJNbnF4MWhLbHpuSUtrdFVXQWtxcWxkMUxRY3VwRG5GclJGVm1ZUlZOQnpSL2FxNjZTcFQ4MndzTGkxQlRuak9ydWVGakVsaHhtSStMOC9TSzM3UGZLMWx2bFl3SFJDcXE3VWNRWG1PTkFOWkZ3NEg4MjZtbU10MjZTYXNqbUZLQ1Izb1RzbFNUaXRaVXh0Y24rU0sxUEthWUdKK0hWWVFpN1JtV2pUcjhnZTZqK1FJbkFnQUFBPT0ifQ== -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["topic_code"],"name":[1],"type":["chr"],"align":["left"]},{"label":["chapter"],"name":[2],"type":["chr"],"align":["left"]},{"label":["topic"],"name":[3],"type":["chr"],"align":["left"]},{"label":["difficulty"],"name":[4],"type":["chr"],"align":["left"]},{"label":["problem_code"],"name":[5],"type":["chr"],"align":["left"]},{"label":["problem_status"],"name":[6],"type":["chr"],"align":["left"]},{"label":["problem_mongo_id"],"name":[7],"type":["chr"],"align":["left"]},{"label":["problem_type"],"name":[8],"type":["chr"],"align":["left"]},{"label":["question_text"],"name":[9],"type":["chr"],"align":["left"]}],"data":[{"1":"MTH-12-JEE-18-01","2":"Inverse Trigonometry","3":"Introduction to Inverse Trigonometry","4":"1","5":"P000321","6":"final","7":"554aee4869702d67a97c0200","8":"ConcepTest","9":"Among the statements given below, which one is correct?","_rn_":"1"},{"1":"MTH-12-JEE-18-01","2":"Inverse Trigonometry","3":"Introduction to Inverse Trigonometry","4":"1","5":"P005928","6":"final","7":"56f2348c3562d9749900083a","8":"Spot Test","9":"\\\\(\\\\sin^{−1}\\\\left(⁡\\\\frac{1}{√2}\\\\right)=\\\\)________","_rn_":"2"},{"1":"MTH-12-JEE-18-01","2":"Inverse Trigonometry","3":"Introduction to Inverse Trigonometry","4":"1","5":"P005929","6":"final","7":"56f235453562d97499000841","8":"Spot Test","9":"The principal domain of \\\\(\\\\cos⁡𝑥\\\\) is ___________","_rn_":"3"},{"1":"MTH-12-JEE-18-01","2":"Inverse Trigonometry","3":"Introduction to Inverse Trigonometry","4":"1","5":"P005930","6":"final","7":"56f235d43562d97499000848","8":"Spot Test","9":"The principal domain of \\\\(\\\\tan⁡𝑥\\\\) is ___________","_rn_":"4"},{"1":"MTH-12-JEE-18-01","2":"Inverse Trigonometry","3":"Introduction to Inverse Trigonometry","4":"1","5":"P005931","6":"final","7":"56f242be3562d97499000854","8":"Spot Test","9":"\\\\(\\\\tan^{-1}\\\\left(\\\\sin\\\\frac{\\\\pi}2\\\\right)=\\\\)","_rn_":"5"},{"1":"MTH-12-JEE-18-01","2":"Inverse Trigonometry","3":"Introduction to Inverse Trigonometry","4":"1","5":"P005932","6":"final","7":"56f243c43562d9749900085b","8":"Spot Test","9":"\\\\(\\\\sin^{−1}⁡\\\\left(\\\\sin⁡𝑥\\\\right)=𝑥\\\\) if \\\\(𝑥∈\\\\)_________","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10],"total":[9]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="cleaning-and-adding-grade-subject-curriculum-and-chapter-no" class="section level3">
 <h3>Cleaning and adding Grade, Subject, Curriculum and Chapter No</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBOZWVkIHRvIGNsZWFuIHRoZSBvdmVyZmxvdyBvZiB0ZXh0XG5Rc19jbGVhbiA8LSBRcyAgJT4lXG4gIGRwbHlyOjpzZWxlY3QoMTo5KSAlPiUgICAgICAgICAgICAgICAgICAgICMgS2VlcGluZyBvbmx5IHRoZSBmaXJzdCAxMiBjb2x1bW5zXG4gIGRwbHlyOjpmaWx0ZXIoIWlzLm5hKGRpZmZpY3VsdHkpKSAgJT4lICAgICAgICAgICAjIENsZWFuaW5nIG92ZXJmbG93XG4gIGRwbHlyOjptdXRhdGUoR3JhZGUgPSBzdHJfc3ViKHRvcGljX2NvZGUsIDUsIDYpLCBTdWJqZWN0ID0gc3RyX3N1Yih0b3BpY19jb2RlLCAxLCAzKSwgQ3VycmljdWx1bSA9IHN0cl9zdWIodG9waWNfY29kZSwgOCwgMTApLCBDaF9ObyA9IHN0cl9zdWIodG9waWNfY29kZSwgMTIsIDEzKSlcbiMgUmVtb3Zpbmcgbm9uLVVURiBjaGFyYWN0ZXJzXG5Rc19jbGVhbiRUZXh0IDwtIGxhcHBseShRc19jbGVhbiRxdWVzdGlvbl90ZXh0LGdzdWIsIHBhdHRlcm4gPSBcIlteWzphbG51bTpdXVwiLCByZXBsYWNlbWVudCA9IFwiIFwiKVxuUXNfY2xlYW4kcXVlc3Rpb25fdGV4dCA8LSBsYXBwbHkoUXNfY2xlYW4kcXVlc3Rpb25fdGV4dCxnc3ViLCBwYXR0ZXJuID0gXCI8Lio/PlwiLCByZXBsYWNlbWVudD0gXCIgXCIpXG5rbml0cjo6a2FibGUoaGVhZChRc19jbGVhbikpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBOZWVkIHRvIGNsZWFuIHRoZSBvdmVyZmxvdyBvZiB0ZXh0XG5Rc19jbGVhbiA8LSBRcyAgJT4lXG4gIGRwbHlyOjpzZWxlY3QoMTo5KSAlPiUgICAgICAgICAgICAgICAgICAgICMgS2VlcGluZyBvbmx5IHRoZSBmaXJzdCAxMiBjb2x1bW5zXG4gIGRwbHlyOjpmaWx0ZXIoIWlzLm5hKGRpZmZpY3VsdHkpKSAgJT4lICAgICAgICAgICAjIENsZWFuaW5nIG92ZXJmbG93XG4gIGRwbHlyOjptdXRhdGUoR3JhZGUgPSBzdHJfc3ViKHRvcGljX2NvZGUsIDUsIDYpLCBTdWJqZWN0ID0gc3RyX3N1Yih0b3BpY19jb2RlLCAxLCAzKSwgQ3VycmljdWx1bSA9IHN0cl9zdWIodG9waWNfY29kZSwgOCwgMTApLCBDaF9ObyA9IHN0cl9zdWIodG9waWNfY29kZSwgMTIsIDEzKSlcblxuIyBSZW1vdmluZyBub24tVVRGIGNoYXJhY3RlcnNcblFzX2NsZWFuJFRleHQgPC0gbGFwcGx5KFFzX2NsZWFuJHF1ZXN0aW9uX3RleHQsZ3N1YiwgcGF0dGVybiA9IFwiW15bOmFsbnVtOl1dXCIsIHJlcGxhY2VtZW50ID0gXCIgXCIpXG5Rc19jbGVhbiRxdWVzdGlvbl90ZXh0IDwtIGxhcHBseShRc19jbGVhbiRxdWVzdGlvbl90ZXh0LGdzdWIsIHBhdHRlcm4gPSBcIjwuKj8+XCIsIHJlcGxhY2VtZW50PSBcIiBcIilcblxua25pdHI6OmthYmxlKGhlYWQoUXNfY2xlYW4pKVxuXG5gYGAifQ== -->
 <pre class="r"><code># Need to clean the overflow of text
 Qs_clean &lt;- Qs  %&gt;%
   dplyr::select(1:9) %&gt;%                    # Keeping only the first 12 columns
   dplyr::filter(!is.na(difficulty))  %&gt;%           # Cleaning overflow
   dplyr::mutate(Grade = str_sub(topic_code, 5, 6), Subject = str_sub(topic_code, 1, 3), Curriculum = str_sub(topic_code, 8, 10), Ch_No = str_sub(topic_code, 12, 13))
+
 # Removing non-UTF characters
 Qs_clean$Text &lt;- lapply(Qs_clean$question_text,gsub, pattern = &quot;[^[:alnum:]]&quot;, replacement = &quot; &quot;)
 Qs_clean$question_text &lt;- lapply(Qs_clean$question_text,gsub, pattern = &quot;&lt;.*?&gt;&quot;, replacement= &quot; &quot;)
-knitr::kable(head(Qs_clean))</code></pre>
+
+knitr::kable(head(Qs_clean))
+</code></pre>
 <!-- rnb-source-end -->
-
-<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImtuaXRfYXNpcyJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
-
-<table style="width:100%;">
-<colgroup>
-<col width="5%" />
-<col width="7%" />
-<col width="12%" />
-<col width="3%" />
-<col width="4%" />
-<col width="5%" />
-<col width="8%" />
-<col width="4%" />
-<col width="18%" />
-<col width="2%" />
-<col width="2%" />
-<col width="3%" />
-<col width="2%" />
-<col width="18%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">topic_code</th>
-<th align="left">chapter</th>
-<th align="left">topic</th>
-<th align="left">difficulty</th>
-<th align="left">problem_code</th>
-<th align="left">problem_status</th>
-<th align="left">problem_mongo_id</th>
-<th align="left">problem_type</th>
-<th align="left">question_text</th>
-<th align="left">Grade</th>
-<th align="left">Subject</th>
-<th align="left">Curriculum</th>
-<th align="left">Ch_No</th>
-<th align="left">Text</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">MTH-12-JEE-18-01</td>
-<td align="left">Inverse Trigonometry</td>
-<td align="left">Introduction to Inverse Trigonometry</td>
-<td align="left">1</td>
-<td align="left">P000321</td>
-<td align="left">final</td>
-<td align="left">554aee4869702d67a97c0200</td>
-<td align="left">ConcepTest</td>
-<td align="left">Among the statements given below, which one is correct?</td>
-<td align="left">12</td>
-<td align="left">MTH</td>
-<td align="left">JEE</td>
-<td align="left">18</td>
-<td align="left">Among the statements given below which one is correct</td>
-</tr>
-<tr class="even">
-<td align="left">MTH-12-JEE-18-01</td>
-<td align="left">Inverse Trigonometry</td>
-<td align="left">Introduction to Inverse Trigonometry</td>
-<td align="left">1</td>
-<td align="left">P005928</td>
-<td align="left">final</td>
-<td align="left">56f2348c3562d9749900083a</td>
-<td align="left">Spot Test</td>
-<td align="left">(^{−1}(⁡)=)________</td>
-<td align="left">12</td>
-<td align="left">MTH</td>
-<td align="left">JEE</td>
-<td align="left">18</td>
-<td align="left">sin 1 left frac 1 2 right</td>
-</tr>
-<tr class="odd">
-<td align="left">MTH-12-JEE-18-01</td>
-<td align="left">Inverse Trigonometry</td>
-<td align="left">Introduction to Inverse Trigonometry</td>
-<td align="left">1</td>
-<td align="left">P005929</td>
-<td align="left">final</td>
-<td align="left">56f235453562d97499000841</td>
-<td align="left">Spot Test</td>
-<td align="left">The principal domain of (⁡𝑥) is ___________</td>
-<td align="left">12</td>
-<td align="left">MTH</td>
-<td align="left">JEE</td>
-<td align="left">18</td>
-<td align="left">The principal domain of cos 𝑥 is</td>
-</tr>
-<tr class="even">
-<td align="left">MTH-12-JEE-18-01</td>
-<td align="left">Inverse Trigonometry</td>
-<td align="left">Introduction to Inverse Trigonometry</td>
-<td align="left">1</td>
-<td align="left">P005930</td>
-<td align="left">final</td>
-<td align="left">56f235d43562d97499000848</td>
-<td align="left">Spot Test</td>
-<td align="left">The principal domain of (⁡𝑥) is ___________</td>
-<td align="left">12</td>
-<td align="left">MTH</td>
-<td align="left">JEE</td>
-<td align="left">18</td>
-<td align="left">The principal domain of tan 𝑥 is</td>
-</tr>
-<tr class="odd">
-<td align="left">MTH-12-JEE-18-01</td>
-<td align="left">Inverse Trigonometry</td>
-<td align="left">Introduction to Inverse Trigonometry</td>
-<td align="left">1</td>
-<td align="left">P005931</td>
-<td align="left">final</td>
-<td align="left">56f242be3562d97499000854</td>
-<td align="left">Spot Test</td>
-<td align="left">(^{-1}(2)=)</td>
-<td align="left">12</td>
-<td align="left">MTH</td>
-<td align="left">JEE</td>
-<td align="left">18</td>
-<td align="left">tan 1 left sin frac pi 2 right</td>
-</tr>
-<tr class="even">
-<td align="left">MTH-12-JEE-18-01</td>
-<td align="left">Inverse Trigonometry</td>
-<td align="left">Introduction to Inverse Trigonometry</td>
-<td align="left">1</td>
-<td align="left">P005932</td>
-<td align="left">final</td>
-<td align="left">56f243c43562d9749900085b</td>
-<td align="left">Spot Test</td>
-<td align="left">(^{−1}⁡(⁡𝑥)=𝑥) if (𝑥∈)_________</td>
-<td align="left">12</td>
-<td align="left">MTH</td>
-<td align="left">JEE</td>
-<td align="left">18</td>
-<td align="left">sin 1 left sin 𝑥 right 𝑥 if 𝑥</td>
-</tr>
-</tbody>
-</table>
-
-
-<!-- rnb-html-end -->
-
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -363,41 +221,34 @@ knitr::kable(head(Qs_clean))</code></pre>
 <h3>Summarizing Chapter wise # Qs in the entire JEE dataset</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuUXNfdGVzdCA8LSBRc19jbGVhbiAlPiUgZmlsdGVyKEN1cnJpY3VsdW0gPT1cIkpFRVwiKVxuY2hhcHRlcnNfdG9fcmVtb3ZlID0gYygnU2VsZWN0aW9uIFRlc3QnLCAnUmVwb3NpdG9yeScsICdCcmlkZ2UgSW50ZXJ2ZW50aW9uIEN1cnJpY3VsdW0nLCAnTTEuMSBTY2FmZm9sZCB0ZXN0JywgJ00xLjEgU2NhZmZvbGQgdGVzdCcpXG5Rc190ZXN0IDwtIFFzX3Rlc3QgJT4lIGZpbHRlcighY2hhcHRlciAlaW4lICBjaGFwdGVyc190b19yZW1vdmUpXG5Rc190ZXN0ICU+JSBncm91cF9ieShjaGFwdGVyKSAlPiUgc3VtbWFyaXplKGNvdW50X3FzID1uKCkpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuUXNfdGVzdCA8LSBRc19jbGVhbiAlPiUgZmlsdGVyKEN1cnJpY3VsdW0gPT1cIkpFRVwiKVxuXG5jaGFwdGVyc190b19yZW1vdmUgPSBjKCdTZWxlY3Rpb24gVGVzdCcsICdSZXBvc2l0b3J5JywgJ0JyaWRnZSBJbnRlcnZlbnRpb24gQ3VycmljdWx1bScsICdNMS4xIFNjYWZmb2xkIHRlc3QnLCAnTTEuMSBTY2FmZm9sZCB0ZXN0JylcblxuUXNfdGVzdCA8LSBRc190ZXN0ICU+JSBmaWx0ZXIoIWNoYXB0ZXIgJWluJSAgY2hhcHRlcnNfdG9fcmVtb3ZlKVxuXG5Rc190ZXN0ICU+JSBncm91cF9ieShjaGFwdGVyKSAlPiUgc3VtbWFyaXplKGNvdW50X3FzID1uKCkpXG5cbmBgYCJ9 -->
 <pre class="r"><code>Qs_test &lt;- Qs_clean %&gt;% filter(Curriculum ==&quot;JEE&quot;)
+
 chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test', 'M1.1 Scaffold test')
+
 Qs_test &lt;- Qs_test %&gt;% filter(!chapter %in%  chapters_to_remove)
-Qs_test %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())</code></pre>
+
+Qs_test %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MiwibnJvdyI6ODh9LCJyZGYiOiJINHNJQUFBQUFBQUFBNFZYVFd3Y05SU2ViSkwrYk5JMGFmcERWYXE2QXZXQWFDcGFDWWtibTkxdEc3VnBsMnhLSTNGQVhvOTMxOHFNdmZWNDB1d0pKQTRnQkJKM0RnZ2hBUklIamh4QmdNUWRDWWtMRnhEaVZBN2NBS25oODR3OU83c0xvdEpYeno0LzIrL25lOC9PVm1QbmFuV25HZ1JCSlppZG13c3FzL2ljcStDL21XQXVPR3JIL1NDWVhjMFVnbUFaMkhFVHA2K1Job2k1VElTU05DSTN1SXE1MFVNM3UxQ3JrN3JRTEJVbWNhSW5heEZUZlJVbHo1S202WE9kRUNwRDB1cHpDWm5UT1ZXTFF0NGZoanlmdk1XTmt0eFBIcXJGWXZUclhHMHdpQVNqQnVjblJIVkpnMnV4aDU5N2hjcEt6YWhZTU5JMk9tVW0xWno0dGVzMGdieXVKT01EazYydTkza3NrcEVEeSt0Q1lqRTgyKzV6cFhuczVNK3ZDeFdyaUxNMDR2Q2twYUpoN0gwcDlpQkNrdVllMThPUURra2t1c1hCMVRvZFVDYU0wdDVHVXFlNm8vYUhjSVhVbUFqem5mN0ZsMnh6Qm52V2xReUY3UGt0VHhZVHpRZXBpRVJIaXpTZVduUUxrVE9DK2QyTzExVThpUGcrdVpQR0hWNFljd0lSc2ZIaUxJL3FaYkxoWmxhblp6WUtENVEwUWlMVHc5eDIwZTF5elNHakhkaGpmRVJQMTVYU3NEekxHTEVHcUZTR1NYRkFxdTBpMGtSc2pSYXN0TENSN1h1ZHJFZUs3Vm9GMEs2ZzFja0c3d29wRENjYjB2Q2V6cll2Vm81c3llS1RzOFY3MnhoS2l2QmsrZDlVcFhYTHVSR0tUWkRpckpQSHRKZUZFMGVHS1NzdHZES3BjSi91T1M3RDRUaVZqckNrUFV3TWo3MGxTMjVaWW1ncFNXZWFjazlvSmEyM01IK1NvYXZOL1FGbzRtYmJ1eUlxeW1qaGVpcGRvcTU2eWtNVTBsdzVkNWlpQ09QeWVRczNOTjBUcGh6QWt6ZHBwSHBjbGducGliZDRjeGdpUkphK1JVaVBaRElzOEFsQWdQNDdQWXNia2lNbjRJZ29lSDRSYWxxNXFCS2p5RjNkbzVaNmsrNmYycENvc0lTVGJTMTZTdWJkeDl1MnNwSFJkYm9pRHQwVzhhZ2xQYjNwODlRRVQxamVDVHdCaVdPa1o0dlRUV0p5eVFiUGNPMmRISVVTaWRqaU5NSGhzdWM1ZzFuc3huMWhZeDNhR0IwUitNSW1aMzNySWhhM3RFSk9iVGlzSmRlalZJVC9yOVpXMFVpdHVzbVI0U2pWUFIrb3BVMFZjaTNSYVlmSktObUxPZUZ0cDNxdTRXUlBqR1RiRDlXb3ZSYzk2RTdLSWs3MVZDNFc3eVlNOUJ1cnJqTXROSW54aWkxM2pZVVc2V1NUb3g1enJsVkRnNG55RmtPMmVXTHNEa0tCZ2Y2Z0N5M3dVSVZJem5nSUpuckNlYWpGcVhGM2c2dStqbXM5WHVtcGxoYVNDYlRCOFhKQWZDZkxlZ0duZGNhNzJlcExLUTB0bTlsVVg2bHVvZXZmSFpUYjdSWVAxYjZsQmlzckh0bFNZOVcyM0hZeDRlUHVuRzNiTHE0eW81UjJCTFVFTDVwbkczWEVjWmxsdnJZUm82S2V6cmU1d1QyMXhhTlNOSXIyNFAzTEtJUjdraHJ1UkVjaFNzczZ5OW1zYngwajlwOW9tendLVTMyN21zMGtwVGdzNFNhbW90YzM1SGJwSmw5cHA3cExZZndrclJhMndlUWhqdE83eFNNQ3Q3R09wMHBnektLbFRFZUZycnM3NlRQajB2eDlrZCtLK1JVL3RCdmRvRWxoMTJLNXMvaXVjdys5TEYrOGlVTEhteUlldFlpbGwzbVdvRnJVNHgxTlBjOXlhYjZvOUdqSlhoMDB3a01pTGZKZ3I0dHg2c3huTjRpL2F1OHJ2V3NmSFErNXhpdEtjbFI1Ym91eVpxRExCY0d4N0kwV0JHOENQd0lENEJId0J2QVgzbk52QTFlQmE4QnR5TDRBZXZqK0d1TnZ3QU9uY3hINEhEZ0Z2QWhjd2h3RHZnRmFlQTYraHZFOTRIdmdGdVpmd0hqWVJnMzRBTC9md3ZnSElQRDlKY1pQZ0YzZ2IveCtCMk9Lc1lieFczZnVQZUJkNEgzSUk0eS9BckJ2NWhYZ05MQ00zM1BBVjI0ZmJTOEw0QWZNOWQzWkgrSWJ2czljQWV3KzMwSDJHZkE2dmp2QXh5NDIwSjlaY1dzK3d2Y2RqQ0V3Ni9iN0JUaVh2MzJEMzNPZDRFL2dKK0JueUhzVGorUjVGdEVrQ2ZJSHNoZFdRMnJvV2xmajBwMVVCd1c1VjY4NDRXRjA5OEdJeEVjWVhrZm0xUWZKeE5xaldqMWM4K3R0cml0d0xqZzRPUGdVdytNSjVjTnFrSmR3VUxGUCtQa0pDMmYwaE9CNEt1M1c0V1hXVCtYdTVXdldpMnc2LzNmTWZlK1V2aXY1a2JNSGJxdDVmOUZ5MlVOMWVZOGoydUdSTHhPNGtIbXdOa0FIOXNWVGhUUlpNK2lJWHEvSzhJZUJrMlMrQlkvL0FmRG1ObXl3REFBQSJ9 -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["chapter"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count_qs"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"3 Dimensional Geometry","2":"135"},{"1":"AC Circuits","2":"216"},{"1":"Alcohols, Ethers and Phenols","2":"112"},{"1":"Aldehydes and Ketones","2":"237"},{"1":"Amines","2":"131"},{"1":"Applications of Derivatives","2":"250"},{"1":"Atomic Structure","2":"394"},{"1":"Basic Concepts of Chemistry","2":"306"},{"1":"Binomial Theorem","2":"307"},{"1":"Biomolecules, Polymers and Chemistry in Everyday life","2":"332"},{"1":"Capacitors","2":"183"},{"1":"Carboxylic Acids and Derivatives","2":"103"},{"1":"Chemical Bonding","2":"450"},{"1":"Chemical Equilibrium","2":"231"},{"1":"Chemical Kinetics","2":"113"},{"1":"Complex Numbers","2":"394"},{"1":"Conic Sections - I","2":"289"},{"1":"Conic Sections - II","2":"431"},{"1":"Continuity and Differentiability","2":"277"},{"1":"Coordination Compounds","2":"320"},{"1":"Current Electricity","2":"294"},{"1":"D and F Block Elements","2":"99"},{"1":"Definite Integration","2":"195"},{"1":"Differential Equations","2":"80"},{"1":"Dynamics of Motion","2":"639"},{"1":"Electrochemistry","2":"144"},{"1":"Electromagnetic Induction","2":"210"},{"1":"Electromagnetic Waves and Communication Systems","2":"75"},{"1":"Electrostatics","2":"313"},{"1":"Environmental Chemistry","2":"7"},{"1":"Experimental Skills","2":"12"},{"1":"Functions 2","2":"159"},{"1":"Fundamentals of Mathematics","2":"392"},{"1":"Gravitation","2":"242"},{"1":"Halogen Derivatives","2":"105"},{"1":"Hydrocarbons","2":"447"},{"1":"Hydrogen","2":"167"},{"1":"Indefinite Integration","2":"107"},{"1":"Inequalities","2":"251"},{"1":"Introduction to Organic Chemistry","2":"396"},{"1":"Inverse Trigonometry","2":"117"},{"1":"Ionic Equilibrium","2":"321"},{"1":"Limits","2":"196"},{"1":"Magnetic Effects of Electric Current","2":"231"},{"1":"Magnetism & Matter","2":"85"},{"1":"Mathematical Reasoning","2":"141"},{"1":"Matrices and Determinants","2":"155"},{"1":"Mechanical Properties of Fluids","2":"364"},{"1":"Mechanical Properties of Solids","2":"229"},{"1":"Metallurgy","2":"76"},{"1":"Modern Physics","2":"347"},{"1":"Motion in 1D","2":"278"},{"1":"Motion in Two Dimensions","2":"272"},{"1":"Nuclear Chemistry","2":"4"},{"1":"Oscillations","2":"192"},{"1":"P - Block Elements - II","2":"107"},{"1":"P block - I","2":"114"},{"1":"PA Selection Test - Biology","2":"33"},{"1":"Periodic Properties of Elements","2":"213"},{"1":"Permutations and Combinations","2":"360"},{"1":"Principle of Mathematical Induction","2":"7"},{"1":"Probability","2":"161"},{"1":"Quadratic Equations","2":"344"},{"1":"Ray Optics","2":"303"},{"1":"Redox Reactions","2":"411"},{"1":"Rotation","2":"455"},{"1":"S block elements","2":"171"},{"1":"Semiconductor Electronics","2":"128"},{"1":"Sequence and Series","2":"354"},{"1":"Sets, Relations and Functions","2":"422"},{"1":"Solid State","2":"88"},{"1":"Solutions","2":"104"},{"1":"States of Matter","2":"273"},{"1":"Static Electricity","2":"7"},{"1":"Statistics","2":"163"},{"1":"Straight Lines","2":"334"},{"1":"Surface Chemistry","2":"100"},{"1":"Tally Marks","2":"3"},{"1":"Thermal Properties of Matter","2":"213"},{"1":"Thermodynamics","2":"483"},{"1":"Thermodynamics and Kinetic Theory of Gases","2":"283"},{"1":"Trigonometry","2":"376"},{"1":"Units and Measurement","2":"238"},{"1":"Vector Algebra","2":"163"},{"1":"Vectors and Application of Calculus","2":"249"},{"1":"Wave Optics","2":"221"},{"1":"Waves","2":"226"},{"1":"Work, Power, Energy and Momentum","2":"359"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[88]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="picking-3-chapters-for-classification" class="section level3">
-<h3>Picking 3 chapters for classification</h3>
+<div id="picking-chapters-for-classification-from-the-cms-repo" class="section level3">
+<h3>Picking chapters for classification from the CMS repo</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBtdWx0aSA8LSAgZmlsdGVyKFFzX3Rlc3QsIGNoYXB0ZXIgJWluJSBjKFwiQWxkZWh5ZGVzIGFuZCBLZXRvbmVzXCIsIFwiQ29vcmRpbmF0aW9uIENvbXBvdW5kc1wiLCBcIkJpb21vbGVjdWxlcywgUG9seW1lcnMgYW5kIENoZW1pc3RyeSBpbiBFdmVyeWRheSBsaWZlXCIsIFwiRWxlY3Ryb2NoZW1pc3RyeVwiLCBcIkFtaW5lc1wiKSkgXG4jIFVzaW5nIGNoYXB0ZXIgbmFtZXMgZm9yIGZpbHRlcmluZyBnYXZlIHRoZSBlcnJvciBtZXNzYWdlIDpcbiMgbG9uZ2VyIG9iamVjdCBsZW5ndGggaXMgbm90IGEgbXVsdGlwbGUgb2Ygc2hvcnRlciBvYmplY3QgbGVuZ3RoXG5tdWx0aSA8LSBRc190ZXN0XG4jbXVsdGkgPC0gYXJyYW5nZShtdWx0aSwgQ29kZSkgICAgICAjIyBUbyByZWFycmFuZ2UgYW5kIHJhbmRvbWl6ZSBjaGFwdGVycyBieSByb3cgbm9cbm11bHRpICU+JSBncm91cF9ieShjaGFwdGVyKSAlPiUgc3VtbWFyaXplKGNvdW50X3FzID1uKCkpXG5gYGAifQ== -->
-<pre class="r"><code># multi &lt;-  filter(Qs_test, chapter %in% c(&quot;Aldehydes and Ketones&quot;, &quot;Coordination Compounds&quot;, &quot;Biomolecules, Polymers and Chemistry in Everyday life&quot;, &quot;Electrochemistry&quot;, &quot;Amines&quot;)) 
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jIG11bHRpIDwtICBmaWx0ZXIoUXNfdGVzdCwgY2hhcHRlciAlaW4lIGMoXCJBbGRlaHlkZXMgYW5kIEtldG9uZXNcIiwgXCJDb29yZGluYXRpb24gQ29tcG91bmRzXCIsIFwiQmlvbW9sZWN1bGVzLCBQb2x5bWVycyBhbmQgQ2hlbWlzdHJ5IGluIEV2ZXJ5ZGF5IGxpZmVcIiwgXCJFbGVjdHJvY2hlbWlzdHJ5XCIsIFwiQW1pbmVzXCIpKSBcbiMgVXNpbmcgY2hhcHRlciBuYW1lcyBmb3IgZmlsdGVyaW5nIGdhdmUgdGhlIGVycm9yIG1lc3NhZ2UgOlxuIyBsb25nZXIgb2JqZWN0IGxlbmd0aCBpcyBub3QgYSBtdWx0aXBsZSBvZiBzaG9ydGVyIG9iamVjdCBsZW5ndGhcbm11bHRpIDwtIFFzX3Rlc3RcbiNtdWx0aSA8LSBhcnJhbmdlKG11bHRpLCBDb2RlKSAgICAgICMjIFRvIHJlYXJyYW5nZSBhbmQgcmFuZG9taXplIGNoYXB0ZXJzIGJ5IHJvdyBub1xuXG5tdWx0aSAlPiUgZ3JvdXBfYnkoY2hhcHRlcikgJT4lIHN1bW1hcml6ZShjb3VudF9xcyA9bigpKVxuXG5gYGAifQ== -->
+<pre class="r"><code>
+# multi &lt;-  filter(Qs_test, chapter %in% c(&quot;Aldehydes and Ketones&quot;, &quot;Coordination Compounds&quot;, &quot;Biomolecules, Polymers and Chemistry in Everyday life&quot;, &quot;Electrochemistry&quot;, &quot;Amines&quot;)) 
 # Using chapter names for filtering gave the error message :
 # longer object length is not a multiple of shorter object length
 multi &lt;- Qs_test
 #multi &lt;- arrange(multi, Code)      ## To rearrange and randomize chapters by row no
-multi %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())</code></pre>
+
+multi %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MiwibnJvdyI6ODh9LCJyZGYiOiJINHNJQUFBQUFBQUFBNFZYVFd3YlJSVGVPR25hT2lGTm12NVFsWXFwUUQwZ21vb1dJWEhEc2QwMmF0T2FPS1dWT0tEeDdOZ2VaWGZHbloxMTR4TklIRUFJSk80Y0VFSUNKQTRjT1lJQWlUc1NFaGN1SU1RSkR0d0FxZUdiM1puMTJnWngrRExyTisvTnZQZm1lMjhtTzQxN2w2djNxa0VRVklMNWhZV2dNby9QaFFyK3pBVUx3VkU3N2dmQi9IcW1FQVNyd0QwM2Nlb0thWWlZeTBRb1NTTnlqYXVZR3oxeXMwdTFPcWtMelZKaEVpZDZyQll4MVZkUjhqUnBtajdYQ2FFeUpLMCtsNUE1blpPMUtPVDlVY2p6eVJ2Y0tNbjk1R0l0RnVOZloydURRU1FZTmRnL0lhcExHbHlMSVg0T0M1VzFtbEd4WUtSdGRNcE1xam54dHBzMGdieXVKT01EazFuWCt6d1d5VGlBMVUwaFlZeklkdnRjYVI0NytYT2JRc1VxNGl5Tk9DSnBxV2dVKzFpS05ZaVFwRG5rZWhUU0VZbEV0OWk0V3FjRHlvUlIydnRJNmxSMzFQNElvWkFhRTJHKzByL0VraTNPNE0rbWtxR1FQYi9raVdLaWVUOFZrZWhva2NZelJqZVFPU09ZWCsxWVhjV0RpTytUVzJuYzRZVXp4NUVSbXkvTzhxeGVKRnR1Wm4xMlpxdUlRRWtqSkU1NmxQc3V1bDJ1T1dTMEEzK016K2lwdWxJYW5tY25ScXdES3BWaFVteVFhbXRFbXNpdDBZS1ZEQnZadWxmSlpxVFlubFVBN1FwYW5XandycERDY0xJbERlL3BiUG5DY3V4TGxwK2NMVDdheGtoU3BDYzcvMjFWc2x2Tm5WQnNpaFJubkR5bXZTeWQyREpNV2NudzByVENYVHAwWEViQWNTb2RZVWw3bEJnZWUwOVduRmxpYU9tUVRqZmxVR2dsYmJSd2Y1cWg2ODM5QVdqaVp0dDdJaXJLYU9scUt0MUJYZmFVaHlpa3VYSWVNRVVSeHVYOWxxNXBPaFNtbk1BVDEybWtlbHlXQ2VtSnQzeDlGQ0pGbHI1RlNvOWtNaGo0QTBDQy92dDRscmNreDVtQUk2TGcrWG1vYWVXeVNvd2l0M1dQV3VwTmgzOXlTNkxDRWs1MnRlZ3BtWGNmNzl2YVZrYlgyWXBZdkNuaWNVdDZjdHVmVXhNOFlYa244QVFranBHZUxVNDNpY2tGbXp6RHRROXluRW9jeEE2bkNUYVhQYzhaekdJMTdnc2JkbWhqZEV6Z3g3YzU2OXNRWWR6U0NtZHEwMkU5dVJxbEl2eC90YmFLeG1yVmJZNFRqbExkODRsYTJWWWgxeEtkZHBTTUQzczVKN3p0Vk04MG5PelJzV3ozZ1JxMzk2SUgzVXBaeEttZU9Zdmwyd2tEL1NhcTYzUUxUV0t5WXN0ZFk2bEZPdG5rdU1lY2JkWFFZS0s4eFpCZG5oaTdnbEJnb04vbzhSWjRxRUljem1RS3BuckNPYWpGcVhGM2c2dStqbXM5WHVtSmxoYVNDYlRCeVhKQWZxZkxlZ203ZFNhNzJmcUxLUTB0bTlsTVg2bnVvT3ZmSHBUYjdRNFAxYjZsQmlzckh0bFJFOVcyMm5ZNTRaUGhuR25iTHE0eXA1UjJCTFVFTDVwbkczWEVjWmxsc2JhUm82S2V6clc1d1QyMXc2TlNOb3IyNE9QTEtJUjdraHJ1UkVjaFNzczZxOW1zYngxajloOXZtendMTTMyN21zMGtwVHlzNENhbW90YzM1R2JwSmw5cnA3cEw0ZncwclpaMndlUVJ0dE43eFNNQ3Q3R09aMHBnd3FPVlRFZUZycnM3NlZPVDB2eDlrZCtLK1JVL3NndGRvMG5oMTNLNXMvaXVjd2U5TERmZVJxSGpUUkdQVzhUS1N6dzdvRnJVNHgxTlBjOXlhVzVVZXJSa3J3NGE0U0dSRnVkZ3I0dEo2aHpLYmhCLzFkNVZlczgrT2g1d2pWZVU1S2p5M0JkbDNVQ1hDNEpIc2pkYUVMd0IvQUFNZ04rQTE0Ry84SjU3QzdnTVhBRnVRdlk1ME1QM1Z4aC9CZTQ3bmZQQVo4Qko0QVhnQXVZWThEWFF3blB3Vll6dkF0OEJOekQvUE1iRE5tdkErL2o5SnNZL0FJSHZMekIrRE93QmYrUDMyeGhUakRXTTM3aDk3d0R2QU85QkhtSDhCWUIvY3k4RHA0QlYvRjRBdm5UcmFIdFpBTjlqcnUvMi9nRGZpSDN1RW1EWCtSYXlUNEhYOE4wQlBuSzVnZjdjbXJQNUVOKzNNSWJBdkZ2dlorQnMvdllOZnM5MWdqK0JINEdmSU85TlBaSVBzWWdtU1pBL2tMMndHbEpETjdvYWwrNjBPaWpJdlhyRkNRK2p1dy9HSkQ3QzhEb3lyOXhQcG15UGF2Vmd3OXZiczY0Z3VPRGc0T0FUREErbmxBK3JRVjdDUWNVKzRSZW5QSnl6T2F4bWdoemx5V09wdE51RUYxay9sWHNYbnkycEJtN3JPWmRPLzEzSnQ1OC9jRXN0K2t1WHl4NHF6ZjFhNEVNYStVeEV0TVA5anhXRWxrVzJNVUJuOWtWVmhUVFpNT2lVWHEvSzhBK0RrMlF4QncvL0FUR3NIYmpJREFBQSJ9 -->
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["chapter"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count_qs"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"3 Dimensional Geometry","2":"135"},{"1":"AC Circuits","2":"216"},{"1":"Alcohols, Ethers and Phenols","2":"112"},{"1":"Aldehydes and Ketones","2":"237"},{"1":"Amines","2":"131"},{"1":"Applications of Derivatives","2":"250"},{"1":"Atomic Structure","2":"394"},{"1":"Basic Concepts of Chemistry","2":"306"},{"1":"Binomial Theorem","2":"307"},{"1":"Biomolecules, Polymers and Chemistry in Everyday life","2":"332"},{"1":"Capacitors","2":"183"},{"1":"Carboxylic Acids and Derivatives","2":"103"},{"1":"Chemical Bonding","2":"450"},{"1":"Chemical Equilibrium","2":"231"},{"1":"Chemical Kinetics","2":"113"},{"1":"Complex Numbers","2":"394"},{"1":"Conic Sections - I","2":"289"},{"1":"Conic Sections - II","2":"431"},{"1":"Continuity and Differentiability","2":"277"},{"1":"Coordination Compounds","2":"320"},{"1":"Current Electricity","2":"294"},{"1":"D and F Block Elements","2":"99"},{"1":"Definite Integration","2":"195"},{"1":"Differential Equations","2":"80"},{"1":"Dynamics of Motion","2":"639"},{"1":"Electrochemistry","2":"144"},{"1":"Electromagnetic Induction","2":"210"},{"1":"Electromagnetic Waves and Communication Systems","2":"75"},{"1":"Electrostatics","2":"313"},{"1":"Environmental Chemistry","2":"7"},{"1":"Experimental Skills","2":"12"},{"1":"Functions 2","2":"159"},{"1":"Fundamentals of Mathematics","2":"392"},{"1":"Gravitation","2":"242"},{"1":"Halogen Derivatives","2":"105"},{"1":"Hydrocarbons","2":"447"},{"1":"Hydrogen","2":"167"},{"1":"Indefinite Integration","2":"107"},{"1":"Inequalities","2":"251"},{"1":"Introduction to Organic Chemistry","2":"396"},{"1":"Inverse Trigonometry","2":"117"},{"1":"Ionic Equilibrium","2":"321"},{"1":"Limits","2":"196"},{"1":"Magnetic Effects of Electric Current","2":"231"},{"1":"Magnetism & Matter","2":"85"},{"1":"Mathematical Reasoning","2":"141"},{"1":"Matrices and Determinants","2":"155"},{"1":"Mechanical Properties of Fluids","2":"364"},{"1":"Mechanical Properties of Solids","2":"229"},{"1":"Metallurgy","2":"76"},{"1":"Modern Physics","2":"347"},{"1":"Motion in 1D","2":"278"},{"1":"Motion in Two Dimensions","2":"272"},{"1":"Nuclear Chemistry","2":"4"},{"1":"Oscillations","2":"192"},{"1":"P - Block Elements - II","2":"107"},{"1":"P block - I","2":"114"},{"1":"PA Selection Test - Biology","2":"33"},{"1":"Periodic Properties of Elements","2":"213"},{"1":"Permutations and Combinations","2":"360"},{"1":"Principle of Mathematical Induction","2":"7"},{"1":"Probability","2":"161"},{"1":"Quadratic Equations","2":"344"},{"1":"Ray Optics","2":"303"},{"1":"Redox Reactions","2":"411"},{"1":"Rotation","2":"455"},{"1":"S block elements","2":"171"},{"1":"Semiconductor Electronics","2":"128"},{"1":"Sequence and Series","2":"354"},{"1":"Sets, Relations and Functions","2":"422"},{"1":"Solid State","2":"88"},{"1":"Solutions","2":"104"},{"1":"States of Matter","2":"273"},{"1":"Static Electricity","2":"7"},{"1":"Statistics","2":"163"},{"1":"Straight Lines","2":"334"},{"1":"Surface Chemistry","2":"100"},{"1":"Tally Marks","2":"3"},{"1":"Thermal Properties of Matter","2":"213"},{"1":"Thermodynamics","2":"483"},{"1":"Thermodynamics and Kinetic Theory of Gases","2":"283"},{"1":"Trigonometry","2":"376"},{"1":"Units and Measurement","2":"238"},{"1":"Vector Algebra","2":"163"},{"1":"Vectors and Application of Calculus","2":"249"},{"1":"Wave Optics","2":"221"},{"1":"Waves","2":"226"},{"1":"Work, Power, Energy and Momentum","2":"359"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[88]},"pages":{}}}
-  </script>
-</div>
-<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -410,9 +261,6 @@ multi %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())</code></pre>
 <pre class="r"><code>multi$chapter &lt;- factor(multi$chapter)
 str(multi$chapter)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIEZhY3RvciB3LyA4OCBsZXZlbHMgXCIzIERpbWVuc2lvbmFsIEdlb21ldHJ5XCIsLi46IDQxIDQxIDQxIDQxIDQxIDQxIDQxIDQxIDQxIDQxIC4uLlxuIn0= -->
-<pre><code> Factor w/ 88 levels &quot;3 Dimensional Geometry&quot;,..: 41 41 41 41 41 41 41 41 41 41 ...</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -421,8 +269,9 @@ str(multi$chapter)</code></pre>
 <h2>Create text corpus</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVsdGk8LW11bHRpW3NhbXBsZShucm93KG11bHRpKSksXVxudGV4dF9jb3JwdXMgPC0gVkNvcnB1cyhWZWN0b3JTb3VyY2UobXVsdGkkcXVlc3Rpb25fdGV4dCkpIFxuIyNpbmNsdWRlIGJvdGggYW5kIHRlc3QgYW5kIHRyYWluaW5nIHNldCB0byBidWlsZCB0aGUgY29ycHVzXG4jaW5zcGVjdCAodGV4dF9jb3JwdXMpXG5gYGAifQ== -->
-<pre class="r"><code>multi&lt;-multi[sample(nrow(multi)),]
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5tdWx0aTwtbXVsdGlbc2FtcGxlKG5yb3cobXVsdGkpKSxdXG50ZXh0X2NvcnB1cyA8LSBWQ29ycHVzKFZlY3RvclNvdXJjZShtdWx0aSRxdWVzdGlvbl90ZXh0KSkgXG4jI2luY2x1ZGUgYm90aCBhbmQgdGVzdCBhbmQgdHJhaW5pbmcgc2V0IHRvIGJ1aWxkIHRoZSBjb3JwdXNcbiNpbnNwZWN0ICh0ZXh0X2NvcnB1cylcbmBgYCJ9 -->
+<pre class="r"><code>
+multi&lt;-multi[sample(nrow(multi)),]
 text_corpus &lt;- VCorpus(VectorSource(multi$question_text)) 
 ##include both and test and training set to build the corpus
 #inspect (text_corpus)</code></pre>
@@ -436,16 +285,6 @@ text_corpus &lt;- VCorpus(VectorSource(multi$question_text))
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGFwcGx5KHRleHRfY29ycHVzWzI6NF0sIGFzLmNoYXJhY3RlcikgICAgICAgIyBNdWx0aXBsZSBkb2NzXG5gYGAifQ== -->
 <pre class="r"><code>lapply(text_corpus[2:4], as.character)       # Multiple docs</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiJGAyYFxuWzFdIFwiUmF0ZSBvZiBcXFxcKFNfTjJcXFxcKcKgcmVhY3Rpb24gaXMgX19fX19fXyAoaGlnaGVzdC9sb3dlc3QpIGZvciBwcmltYXJ5IGhhbGlkZXMuXCJcblxuJGAzYFxuWzFdIFwiQSB1bmlmb3JtIHNvbGlkIGN5bGluZGVyIG9mIG1hc3MgXFxcXChtXFxcXCkgYW5kIHJhZGl1cyBcXFxcKHJcXFxcKSB1bmRlcmdvZXMgcHVyZSByb2xsaW5nIG9uIGEgaG9yaXpvbnRhbCBwbGFuZSB1bmRlciB0aGUgYWN0aW9uIG9mIGEgaG9yaXpvbnRhbCBmb3JjZSBGIHB1bGxpbmcgaXQgYXQgaXRzIHRvcG1vc3QgcG9pbnQgYXMgc2hvd24gaW4gdGhlIGFkam9pbmluZyBkaWFncmFtLiBJZiB0aGUgY3lsaW5kZXIgaXMgZGlzcGxhY2VkIGJ5IFxcXFwoeFxcXFwpLCB3aGF0IGlzIHRoZSB3b3JrIGRvbmUgYnkgXFxcXChGXFxcXCk/IEZpbmQgdGhlIHdvcmsgZG9uZSBieSBmcmljdGlvbiBhcyB3ZWxsLsKgXCJcblxuJGA0YFxuWzFdIFwiSWYgcmFkaXVzIG9mIGd5cmF0aW9uIG9mIGRpc2MgYWJvdXQgaXPCoFxcXFwoS1xcXFwpIHRoZW4gd2hhdCB3aWxsIGJlIHRoZSByYWRpdXMgb2YgZ3lyYXRpb24gcXVhcnRlciBkaXNjID9cIlxuIn0= -->
-<pre><code>$`2`
-[1] &quot;Rate of \\(S_N2\\) reaction is _______ (highest/lowest) for primary halides.&quot;
-
-$`3`
-[1] &quot;A uniform solid cylinder of mass \\(m\\) and radius \\(r\\) undergoes pure rolling on a horizontal plane under the action of a horizontal force F pulling it at its topmost point as shown in the adjoining diagram. If the cylinder is displaced by \\(x\\), what is the work done by \\(F\\)? Find the work done by friction as well. &quot;
-
-$`4`
-[1] &quot;If radius of gyration of disc about is \\(K\\) then what will be the radius of gyration quarter disc ?&quot;</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -455,13 +294,16 @@ $`4`
 <p>Removing punctuations, numbers and stop words Converting to lower case Stemming words - learned, learning, and learns are transformed into the base form, learn Removing additional white spaces</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTb3VyY2UgOiBbMl0gUmVtb3Zpbmcgbm9uLVVURjggY2hhcmFjdGVyc1xudGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzLCBjb250ZW50X3RyYW5zZm9ybWVyKGdzdWIpLCBwYXR0ZXJuID1cIlteWzphbG51bTpdXVwiICwgcmVwbGFjZW1lbnQgPSBcIiBcIilcbnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgY29udGVudF90cmFuc2Zvcm1lcihnc3ViKSwgcGF0dGVybiA9XCJbXFx1MDA4MC1cXHVmZmZmXVwiICwgcmVwbGFjZW1lbnQgPSBcIiBcIilcbiMjIE5vdyBub24tVVRGIGNoYXJhY3RlcnMgYXJlIHJlbW92ZWQuIFdlIGNhbiBkbyByZWd1bGFyIHRhc2tzIG9uIHRoZSBjbGVhbiBjb3JwdXMuXG50ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHJlbW92ZU51bWJlcnMpXG50ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIGNvbnRlbnRfdHJhbnNmb3JtZXIodG9sb3dlcikpXG4jIyBBZGQgc3RvcHdvcmRzIGxpa2UgbGVmdCwgcmlnaHQgKGZyYWMgPylcbnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgcmVtb3ZlV29yZHMsIGMoc3RvcHdvcmRzKCksIFwibGVmdFwiLFwicmlnaHRcIikpXG50ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHJlbW92ZVB1bmN0dWF0aW9uKVxuI3RleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgc3RlbURvY3VtZW50KVxudGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBzdHJpcFdoaXRlc3BhY2UpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTb3VyY2UgOiBbMl0gUmVtb3Zpbmcgbm9uLVVURjggY2hhcmFjdGVyc1xudGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzLCBjb250ZW50X3RyYW5zZm9ybWVyKGdzdWIpLCBwYXR0ZXJuID1cIlteWzphbG51bTpdXVwiICwgcmVwbGFjZW1lbnQgPSBcIiBcIilcbnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgY29udGVudF90cmFuc2Zvcm1lcihnc3ViKSwgcGF0dGVybiA9XCJbXFx1MDA4MC1cXHVmZmZmXVwiICwgcmVwbGFjZW1lbnQgPSBcIiBcIilcblxuIyMgTm93IG5vbi1VVEYgY2hhcmFjdGVycyBhcmUgcmVtb3ZlZC4gV2UgY2FuIGRvIHJlZ3VsYXIgdGFza3Mgb24gdGhlIGNsZWFuIGNvcnB1cy5cblxudGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCByZW1vdmVOdW1iZXJzKVxudGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBjb250ZW50X3RyYW5zZm9ybWVyKHRvbG93ZXIpKVxuXG4jIyBBZGQgc3RvcHdvcmRzIGxpa2UgbGVmdCwgcmlnaHQgKGZyYWMgPylcbnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgcmVtb3ZlV29yZHMsIGMoc3RvcHdvcmRzKCksIFwibGVmdFwiLFwicmlnaHRcIikpXG50ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHJlbW92ZVB1bmN0dWF0aW9uKVxuI3RleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgc3RlbURvY3VtZW50KVxudGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBzdHJpcFdoaXRlc3BhY2UpXG5gYGAifQ== -->
 <pre class="r"><code># Source : [2] Removing non-UTF8 characters
 text_corpus_clean &lt;- tm_map(text_corpus, content_transformer(gsub), pattern =&quot;[^[:alnum:]]&quot; , replacement = &quot; &quot;)
 text_corpus_clean &lt;- tm_map(text_corpus_clean, content_transformer(gsub), pattern =&quot;[\u0080-\uffff]&quot; , replacement = &quot; &quot;)
+
 ## Now non-UTF characters are removed. We can do regular tasks on the clean corpus.
+
 text_corpus_clean &lt;- tm_map(text_corpus_clean, removeNumbers)
 text_corpus_clean &lt;- tm_map(text_corpus_clean, content_transformer(tolower))
+
 ## Add stopwords like left, right (frac ?)
 text_corpus_clean &lt;- tm_map(text_corpus_clean, removeWords, c(stopwords(), &quot;left&quot;,&quot;right&quot;))
 text_corpus_clean &lt;- tm_map(text_corpus_clean, removePunctuation)
@@ -477,16 +319,6 @@ text_corpus_clean &lt;- tm_map(text_corpus_clean, stripWhitespace)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGFwcGx5KHRleHRfY29ycHVzX2NsZWFuWzI6NF0sIGFzLmNoYXJhY3RlcikgICAgICAgXG5gYGAifQ== -->
 <pre class="r"><code>lapply(text_corpus_clean[2:4], as.character)       </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiJGAyYFxuWzFdIFwicmF0ZSBzIG4gcmVhY3Rpb24gaGlnaGVzdCBsb3dlc3QgcHJpbWFyeSBoYWxpZGVzIFwiXG5cbiRgM2BcblsxXSBcIiB1bmlmb3JtIHNvbGlkIGN5bGluZGVyIG1hc3MgbSByYWRpdXMgciB1bmRlcmdvZXMgcHVyZSByb2xsaW5nIGhvcml6b250YWwgcGxhbmUgYWN0aW9uIGhvcml6b250YWwgZm9yY2UgZiBwdWxsaW5nIHRvcG1vc3QgcG9pbnQgc2hvd24gYWRqb2luaW5nIGRpYWdyYW0gY3lsaW5kZXIgZGlzcGxhY2VkIHggd29yayBkb25lIGYgZmluZCB3b3JrIGRvbmUgZnJpY3Rpb24gd2VsbCBcIlxuXG4kYDRgXG5bMV0gXCIgcmFkaXVzIGd5cmF0aW9uIGRpc2MgayB3aWxsIHJhZGl1cyBneXJhdGlvbiBxdWFydGVyIGRpc2MgXCJcbiJ9 -->
-<pre><code>$`2`
-[1] &quot;rate s n reaction highest lowest primary halides &quot;
-
-$`3`
-[1] &quot; uniform solid cylinder mass m radius r undergoes pure rolling horizontal plane action horizontal force f pulling topmost point shown adjoining diagram cylinder displaced x work done f find work done friction well &quot;
-
-$`4`
-[1] &quot; radius gyration disc k will radius gyration quarter disc &quot;</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -495,19 +327,11 @@ $`4`
 <h2>Bag of words - Tokenization</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dF9kdG0gPC0gRG9jdW1lbnRUZXJtTWF0cml4KHRleHRfY29ycHVzX2NsZWFuKVxudGV4dF9kdG1cbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dF9kdG0gPC0gRG9jdW1lbnRUZXJtTWF0cml4KHRleHRfY29ycHVzX2NsZWFuKVxudGV4dF9kdG1cblxuIyBBZGQgYSBkaWN0aW9uYXJ5IHRvIERUTSA/XG5gYGAifQ== -->
 <pre class="r"><code>text_dtm &lt;- DocumentTermMatrix(text_corpus_clean)
-text_dtm</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiPDxEb2N1bWVudFRlcm1NYXRyaXggKGRvY3VtZW50czogMjAwMTksIHRlcm1zOiA5NjUxKT4+XG5Ob24tL3NwYXJzZSBlbnRyaWVzOiAxOTE4NTMvMTkzMDExNTE2XG5TcGFyc2l0eSAgICAgICAgICAgOiAxMDAlXG5NYXhpbWFsIHRlcm0gbGVuZ3RoOiA4N1xuV2VpZ2h0aW5nICAgICAgICAgIDogdGVybSBmcmVxdWVuY3kgKHRmKVxuIn0= -->
-<pre><code>&lt;&lt;DocumentTermMatrix (documents: 20019, terms: 9651)&gt;&gt;
-Non-/sparse entries: 191853/193011516
-Sparsity           : 100%
-Maximal term length: 87
-Weighting          : term frequency (tf)</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBBZGQgYSBkaWN0aW9uYXJ5IHRvIERUTSA/XG5gYGAifQ== -->
-<pre class="r"><code># Add a dictionary to DTM ?</code></pre>
+text_dtm
+
+# Add a dictionary to DTM ?</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -516,194 +340,21 @@ Weighting          : term frequency (tf)</code></pre>
 <h2>Data preparation - Creating training and test datasets</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9sZHMgPC0gY3V0KHNlcSgxLG5yb3cobXVsdGkpKSxicmVha3M9NSxsYWJlbHM9RkFMU0UpXG50ZXN0X2luZGljZXMgPSB3aGljaChmb2xkcz09MSwgYXJyLmluZD1UUlVFKVxudGV4dF9kdG1fdHJhaW4gPC0gdGV4dF9kdG1bLXRlc3RfaW5kaWNlcywgIF1cbnRleHRfZHRtX3Rlc3QgPC0gdGV4dF9kdG1bdGVzdF9pbmRpY2VzLCAgXVxudGV4dF90cmFpbl9sYWJlbHMgPC0gbXVsdGlbLXRlc3RfaW5kaWNlcywgIF0kY2hhcHRlclxudGV4dF90ZXN0X2xhYmVscyA8LSBtdWx0aVt0ZXN0X2luZGljZXMsICBdJGNoYXB0ZXIgXG5wcm9wLnRhYmxlKHRhYmxlKHRleHRfdHJhaW5fbGFiZWxzKSlcbmBgYCJ9 -->
-<pre class="r"><code>folds &lt;- cut(seq(1,nrow(multi)),breaks=5,labels=FALSE)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5mb2xkcyA8LSBjdXQoc2VxKDEsbnJvdyhtdWx0aSkpLGJyZWFrcz01LGxhYmVscz1GQUxTRSlcbnRlc3RfaW5kaWNlcyA9IHdoaWNoKGZvbGRzPT0xLCBhcnIuaW5kPVRSVUUpXG5cbnRleHRfZHRtX3RyYWluIDwtIHRleHRfZHRtWy10ZXN0X2luZGljZXMsICBdXG5cbnRleHRfZHRtX3Rlc3QgPC0gdGV4dF9kdG1bdGVzdF9pbmRpY2VzLCAgXVxuXG5cbnRleHRfdHJhaW5fbGFiZWxzIDwtIG11bHRpWy10ZXN0X2luZGljZXMsICBdJGNoYXB0ZXJcbnRleHRfdGVzdF9sYWJlbHMgPC0gbXVsdGlbdGVzdF9pbmRpY2VzLCAgXSRjaGFwdGVyIFxuXG5wcm9wLnRhYmxlKHRhYmxlKHRleHRfdHJhaW5fbGFiZWxzKSlcbmBgYCJ9 -->
+<pre class="r"><code>
+folds &lt;- cut(seq(1,nrow(multi)),breaks=5,labels=FALSE)
 test_indices = which(folds==1, arr.ind=TRUE)
+
 text_dtm_train &lt;- text_dtm[-test_indices,  ]
+
 text_dtm_test &lt;- text_dtm[test_indices,  ]
+
+
 text_train_labels &lt;- multi[-test_indices,  ]$chapter
 text_test_labels &lt;- multi[test_indices,  ]$chapter 
+
 prop.table(table(text_train_labels))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoidGV4dF90cmFpbl9sYWJlbHNcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMyBEaW1lbnNpb25hbCBHZW9tZXRyeSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA3NDMwNTMzOSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBBQyBDaXJjdWl0cyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEwNDI3NzI0MCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgQWxjb2hvbHMsIEV0aGVycyBhbmQgUGhlbm9scyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1NDMyNDA3MSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEFsZGVoeWRlcyBhbmQgS2V0b25lcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDExMzY0MzQ1OSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEFtaW5lcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA2NTU2MzUzNCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIEFwcGxpY2F0aW9ucyBvZiBEZXJpdmF0aXZlcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEyNDg4MjkyMiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBBdG9taWMgU3RydWN0dXJlICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDIwMjMxMDMzNCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIEJhc2ljIENvbmNlcHRzIG9mIENoZW1pc3RyeSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE1NDIzMDQwOSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQmlub21pYWwgVGhlb3JlbSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE1MjM1NzE2NSBcbkJpb21vbGVjdWxlcywgUG9seW1lcnMgYW5kIENoZW1pc3RyeSBpbiBFdmVyeWRheSBsaWZlICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE3MTA4OTYwMyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ2FwYWNpdG9ycyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA4Njc5MzYzMSBcbiAgICAgICAgICAgICAgICAgICAgICBDYXJib3h5bGljIEFjaWRzIGFuZCBEZXJpdmF0aXZlcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1NDMyNDA3MSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDaGVtaWNhbCBCb25kaW5nICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDIzNDE1NTQ3OSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDaGVtaWNhbCBFcXVpbGlicml1bSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDExNjE0MTExOCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDaGVtaWNhbCBLaW5ldGljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1OTk0MzgwMyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENvbXBsZXggTnVtYmVycyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE5MDQ0NjQ1NiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENvbmljIFNlY3Rpb25zIC0gSSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE0NTQ4ODYwNCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ29uaWMgU2VjdGlvbnMgLSBJSSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDIxNjA0NzQ1NiBcbiAgICAgICAgICAgICAgICAgICAgICBDb250aW51aXR5IGFuZCBEaWZmZXJlbnRpYWJpbGl0eSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEzNTQ5Nzk3MSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ29vcmRpbmF0aW9uIENvbXBvdW5kcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE2NDg0NTQ1NyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ3VycmVudCBFbGVjdHJpY2l0eSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE0Mjk5MDk0NiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRCBhbmQgRiBCbG9jayBFbGVtZW50cyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1MTIwMTk5OCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBEZWZpbml0ZSBJbnRlZ3JhdGlvbiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA5ODAzMzA5NCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRGlmZmVyZW50aWFsIEVxdWF0aW9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAzOTk2MjUzNSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIER5bmFtaWNzIG9mIE1vdGlvbiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDMyMjE5NzkzOSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRWxlY3Ryb2NoZW1pc3RyeSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA3NDMwNTMzOSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRWxlY3Ryb21hZ25ldGljIEluZHVjdGlvbiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEwMzY1MjgyNSBcbiAgICAgICBFbGVjdHJvbWFnbmV0aWMgV2F2ZXMgYW5kIENvbW11bmljYXRpb24gU3lzdGVtcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAzMjQ2OTU2MCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFbGVjdHJvc3RhdGljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE2MjM0Nzc5OSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFbnZpcm9ubWVudGFsIENoZW1pc3RyeSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAwMzc0NjQ4OCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRXhwZXJpbWVudGFsIFNraWxscyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAwNjI0NDE0NiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBGdW5jdGlvbnMgMiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA4MTc5ODMxNCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIEZ1bmRhbWVudGFscyBvZiBNYXRoZW1hdGljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE5MjMxOTcwMCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBHcmF2aXRhdGlvbiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEyNjEzMTc1MSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBIYWxvZ2VuIERlcml2YXRpdmVzICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1NDMyNDA3MSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEh5ZHJvY2FyYm9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDIxMjkyNTM4MiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBIeWRyb2dlbiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA4MTE3Mzg5OSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSW5kZWZpbml0ZSBJbnRlZ3JhdGlvbiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA0OTk1MzE2OSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEluZXF1YWxpdGllcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDExODAxNDM2MiBcbiAgICAgICAgICAgICAgICAgICAgIEludHJvZHVjdGlvbiB0byBPcmdhbmljIENoZW1pc3RyeSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE5OTgxMjY3NiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEludmVyc2UgVHJpZ29ub21ldHJ5ICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1NjgyMTczMCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBJb25pYyBFcXVpbGlicml1bSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE1NzM1MjQ4MiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIExpbWl0cyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEwMTE1NTE2NyBcbiAgICAgICAgICAgICAgICAgIE1hZ25ldGljIEVmZmVjdHMgb2YgRWxlY3RyaWMgQ3VycmVudCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDExOTI2MzE5MSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1hZ25ldGlzbSAmIE1hdHRlciBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAzODcxMzcwNiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWF0aGVtYXRpY2FsIFJlYXNvbmluZyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA2OTkzNDQzNiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWF0cmljZXMgYW5kIERldGVybWluYW50cyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA3ODA1MTgyNiBcbiAgICAgICAgICAgICAgICAgICAgICAgTWVjaGFuaWNhbCBQcm9wZXJ0aWVzIG9mIEZsdWlkcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE3Nzk1ODE2NCBcbiAgICAgICAgICAgICAgICAgICAgICAgTWVjaGFuaWNhbCBQcm9wZXJ0aWVzIG9mIFNvbGlkcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDExMzY0MzQ1OSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWV0YWxsdXJneSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAzODcxMzcwNiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNb2Rlcm4gUGh5c2ljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE4MDQ1NTgyMyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1vdGlvbiBpbiAxRCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE0NDIzOTc3NSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1vdGlvbiBpbiBUd28gRGltZW5zaW9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEzMjM3NTg5OCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOdWNsZWFyIENoZW1pc3RyeSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAwMTg3MzI0NCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE9zY2lsbGF0aW9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA5Njc4NDI2NSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBQIC0gQmxvY2sgRWxlbWVudHMgLSBJSSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1MDU3NzU4NCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBQIGJsb2NrIC0gSSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA2MTgxNzA0NyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgIFBBIFNlbGVjdGlvbiBUZXN0IC0gQmlvbG9neSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAxNjg1OTE5NSBcbiAgICAgICAgICAgICAgICAgICAgICAgUGVyaW9kaWMgUHJvcGVydGllcyBvZiBFbGVtZW50cyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA5NTUzNTQzNiBcbiAgICAgICAgICAgICAgICAgICAgICAgICBQZXJtdXRhdGlvbnMgYW5kIENvbWJpbmF0aW9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE3NTQ2MDUwNiBcbiAgICAgICAgICAgICAgICAgICBQcmluY2lwbGUgb2YgTWF0aGVtYXRpY2FsIEluZHVjdGlvbiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAwMzEyMjA3MyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBQcm9iYWJpbGl0eSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA3ODA1MTgyNiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUXVhZHJhdGljIEVxdWF0aW9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE3NjcwOTMzNSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUmF5IE9wdGljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE1NDg1NDgyNCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFJlZG94IFJlYWN0aW9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDIxMzU0OTc5NyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBSb3RhdGlvbiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDIyNzI4NjkxOSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUyBibG9jayBlbGVtZW50cyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA4NTU0NDgwMiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU2VtaWNvbmR1Y3RvciBFbGVjdHJvbmljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA2MzA2NTg3NiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU2VxdWVuY2UgYW5kIFNlcmllcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE3MzU4NzI2MiBcbiAgICAgICAgICAgICAgICAgICAgICAgICBTZXRzLCBSZWxhdGlvbnMgYW5kIEZ1bmN0aW9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDIwNDE4MzU3OCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTb2xpZCBTdGF0ZSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA0NDk1Nzg1MiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNvbHV0aW9ucyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1MTIwMTk5OCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU3RhdGVzIG9mIE1hdHRlciBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEzNDg3MzU1NiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFN0YXRpYyBFbGVjdHJpY2l0eSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAwNDM3MDkwMiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU3RhdGlzdGljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA4NDkyMDM4NyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTdHJhaWdodCBMaW5lcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE3NTQ2MDUwNiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTdXJmYWNlIENoZW1pc3RyeSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA1MTgyNjQxMyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBUYWxseSBNYXJrcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDAwMTg3MzI0NCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgVGhlcm1hbCBQcm9wZXJ0aWVzIG9mIE1hdHRlciBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEwNTUyNjA2OSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBUaGVybW9keW5hbWljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDI0NDE0NjExMyBcbiAgICAgICAgICAgIFRoZXJtb2R5bmFtaWNzIGFuZCBLaW5ldGljIFRoZW9yeSBvZiBHYXNlcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE0Mjk5MDk0NiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRyaWdvbm9tZXRyeSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE4NjY5OTk2OSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFVuaXRzIGFuZCBNZWFzdXJlbWVudCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDExNDg5MjI4OCBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBWZWN0b3IgQWxnZWJyYSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDA4MTE3Mzg5OSBcbiAgICAgICAgICAgICAgICAgICBWZWN0b3JzIGFuZCBBcHBsaWNhdGlvbiBvZiBDYWxjdWx1cyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEyMzYzNDA5MyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBXYXZlIE9wdGljcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEwOTI3MjU1NyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBXYXZlcyBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDEwODAyMzcyOCBcbiAgICAgICAgICAgICAgICAgICAgICBXb3JrLCBQb3dlciwgRW5lcmd5IGFuZCBNb21lbnR1bSBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuMDE3MjMzODQzMyBcbiJ9 -->
-<pre><code>text_train_labels
-                                3 Dimensional Geometry 
-                                          0.0074305339 
-                                           AC Circuits 
-                                          0.0104277240 
-                          Alcohols, Ethers and Phenols 
-                                          0.0054324071 
-                                 Aldehydes and Ketones 
-                                          0.0113643459 
-                                                Amines 
-                                          0.0065563534 
-                           Applications of Derivatives 
-                                          0.0124882922 
-                                     Atomic Structure  
-                                          0.0202310334 
-                           Basic Concepts of Chemistry 
-                                          0.0154230409 
-                                      Binomial Theorem 
-                                          0.0152357165 
-Biomolecules, Polymers and Chemistry in Everyday life  
-                                          0.0171089603 
-                                            Capacitors 
-                                          0.0086793631 
-                      Carboxylic Acids and Derivatives 
-                                          0.0054324071 
-                                     Chemical Bonding  
-                                          0.0234155479 
-                                  Chemical Equilibrium 
-                                          0.0116141118 
-                                     Chemical Kinetics 
-                                          0.0059943803 
-                                       Complex Numbers 
-                                          0.0190446456 
-                                    Conic Sections - I 
-                                          0.0145488604 
-                                   Conic Sections - II 
-                                          0.0216047456 
-                      Continuity and Differentiability 
-                                          0.0135497971 
-                                Coordination Compounds 
-                                          0.0164845457 
-                                   Current Electricity 
-                                          0.0142990946 
-                                D and F Block Elements 
-                                          0.0051201998 
-                                  Definite Integration 
-                                          0.0098033094 
-                                Differential Equations 
-                                          0.0039962535 
-                                    Dynamics of Motion 
-                                          0.0322197939 
-                                      Electrochemistry 
-                                          0.0074305339 
-                             Electromagnetic Induction 
-                                          0.0103652825 
-       Electromagnetic Waves and Communication Systems 
-                                          0.0032469560 
-                                        Electrostatics 
-                                          0.0162347799 
-                               Environmental Chemistry 
-                                          0.0003746488 
-                                   Experimental Skills 
-                                          0.0006244146 
-                                           Functions 2 
-                                          0.0081798314 
-                           Fundamentals of Mathematics 
-                                          0.0192319700 
-                                           Gravitation 
-                                          0.0126131751 
-                                  Halogen Derivatives  
-                                          0.0054324071 
-                                          Hydrocarbons 
-                                          0.0212925382 
-                                              Hydrogen 
-                                          0.0081173899 
-                                Indefinite Integration 
-                                          0.0049953169 
-                                          Inequalities 
-                                          0.0118014362 
-                     Introduction to Organic Chemistry 
-                                          0.0199812676 
-                                 Inverse Trigonometry  
-                                          0.0056821730 
-                                     Ionic Equilibrium 
-                                          0.0157352482 
-                                                Limits 
-                                          0.0101155167 
-                  Magnetic Effects of Electric Current 
-                                          0.0119263191 
-                                    Magnetism &amp; Matter 
-                                          0.0038713706 
-                                Mathematical Reasoning 
-                                          0.0069934436 
-                             Matrices and Determinants 
-                                          0.0078051826 
-                       Mechanical Properties of Fluids 
-                                          0.0177958164 
-                       Mechanical Properties of Solids 
-                                          0.0113643459 
-                                            Metallurgy 
-                                          0.0038713706 
-                                        Modern Physics 
-                                          0.0180455823 
-                                          Motion in 1D 
-                                          0.0144239775 
-                              Motion in Two Dimensions 
-                                          0.0132375898 
-                                     Nuclear Chemistry 
-                                          0.0001873244 
-                                          Oscillations 
-                                          0.0096784265 
-                               P - Block Elements - II 
-                                          0.0050577584 
-                                           P block - I 
-                                          0.0061817047 
-                           PA Selection Test - Biology 
-                                          0.0016859195 
-                       Periodic Properties of Elements 
-                                          0.0095535436 
-                         Permutations and Combinations 
-                                          0.0175460506 
-                   Principle of Mathematical Induction 
-                                          0.0003122073 
-                                           Probability 
-                                          0.0078051826 
-                                   Quadratic Equations 
-                                          0.0176709335 
-                                            Ray Optics 
-                                          0.0154854824 
-                                       Redox Reactions 
-                                          0.0213549797 
-                                              Rotation 
-                                          0.0227286919 
-                                      S block elements 
-                                          0.0085544802 
-                             Semiconductor Electronics 
-                                          0.0063065876 
-                                   Sequence and Series 
-                                          0.0173587262 
-                         Sets, Relations and Functions 
-                                          0.0204183578 
-                                           Solid State 
-                                          0.0044957852 
-                                             Solutions 
-                                          0.0051201998 
-                                      States of Matter 
-                                          0.0134873556 
-                                    Static Electricity 
-                                          0.0004370902 
-                                            Statistics 
-                                          0.0084920387 
-                                        Straight Lines 
-                                          0.0175460506 
-                                     Surface Chemistry 
-                                          0.0051826413 
-                                           Tally Marks 
-                                          0.0001873244 
-                          Thermal Properties of Matter 
-                                          0.0105526069 
-                                        Thermodynamics 
-                                          0.0244146113 
-            Thermodynamics and Kinetic Theory of Gases 
-                                          0.0142990946 
-                                          Trigonometry 
-                                          0.0186699969 
-                                 Units and Measurement 
-                                          0.0114892288 
-                                        Vector Algebra 
-                                          0.0081173899 
-                   Vectors and Application of Calculus 
-                                          0.0123634093 
-                                           Wave Optics 
-                                          0.0109272557 
-                                                 Waves 
-                                          0.0108023728 
-                      Work, Power, Energy and Momentum 
-                                          0.0172338433 </code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="distribution-of-labels-in-test-set" class="section level3">
@@ -713,185 +364,6 @@ Biomolecules, Polymers and Chemistry in Everyday life
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJvcC50YWJsZSh0YWJsZSh0ZXh0X3Rlc3RfbGFiZWxzKSlcbmBgYCJ9 -->
 <pre class="r"><code>prop.table(table(text_test_labels))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoidGV4dF90ZXN0X2xhYmVsc1xuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAzIERpbWVuc2lvbmFsIEdlb21ldHJ5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDM5OTYwMDQwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEFDIENpcmN1aXRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTIyMzc3NjIyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICBBbGNvaG9scywgRXRoZXJzIGFuZCBQaGVub2xzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDYyNDM3NTYyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQWxkZWh5ZGVzIGFuZCBLZXRvbmVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTM3MzYyNjM3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQW1pbmVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDY0OTM1MDY1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgQXBwbGljYXRpb25zIG9mIERlcml2YXRpdmVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTI0ODc1MTI1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEF0b21pYyBTdHJ1Y3R1cmUgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTc0ODI1MTc1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgQmFzaWMgQ29uY2VwdHMgb2YgQ2hlbWlzdHJ5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTQ3MzUyNjQ3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBCaW5vbWlhbCBUaGVvcmVtIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTU3MzQyNjU3IFxuQmlvbW9sZWN1bGVzLCBQb2x5bWVycyBhbmQgQ2hlbWlzdHJ5IGluIEV2ZXJ5ZGF5IGxpZmUgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTQ0ODU1MTQ1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDYXBhY2l0b3JzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTA5ODkwMTEwIFxuICAgICAgICAgICAgICAgICAgICAgIENhcmJveHlsaWMgQWNpZHMgYW5kIERlcml2YXRpdmVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDM5OTYwMDQwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENoZW1pY2FsIEJvbmRpbmcgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTg3MzEyNjg3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENoZW1pY2FsIEVxdWlsaWJyaXVtIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTEyMzg3NjEyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIENoZW1pY2FsIEtpbmV0aWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDQyNDU3NTQyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ29tcGxleCBOdW1iZXJzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMjIyMjc3NzIyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ29uaWMgU2VjdGlvbnMgLSBJIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTM5ODYwMTQwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDb25pYyBTZWN0aW9ucyAtIElJIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMjEyMjg3NzEyIFxuICAgICAgICAgICAgICAgICAgICAgIENvbnRpbnVpdHkgYW5kIERpZmZlcmVudGlhYmlsaXR5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTQ5ODUwMTUwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDb29yZGluYXRpb24gQ29tcG91bmRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTM5ODYwMTQwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDdXJyZW50IEVsZWN0cmljaXR5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTYyMzM3NjYyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBEIGFuZCBGIEJsb2NrIEVsZW1lbnRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDQyNDU3NTQyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIERlZmluaXRlIEludGVncmF0aW9uIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDk0OTA1MDk1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBEaWZmZXJlbnRpYWwgRXF1YXRpb25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDM5OTYwMDQwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRHluYW1pY3Mgb2YgTW90aW9uIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMzA3MTkyODA3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFbGVjdHJvY2hlbWlzdHJ5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDYyNDM3NTYyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFbGVjdHJvbWFnbmV0aWMgSW5kdWN0aW9uIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTA5ODkwMTEwIFxuICAgICAgIEVsZWN0cm9tYWduZXRpYyBXYXZlcyBhbmQgQ29tbXVuaWNhdGlvbiBTeXN0ZW1zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDU3NDQyNTU3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVsZWN0cm9zdGF0aWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTMyMzY3NjMyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVudmlyb25tZW50YWwgQ2hlbWlzdHJ5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDAyNDk3NTAyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFeHBlcmltZW50YWwgU2tpbGxzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDA0OTk1MDA1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEZ1bmN0aW9ucyAyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDY5OTMwMDcwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgRnVuZGFtZW50YWxzIG9mIE1hdGhlbWF0aWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMjA5NzkwMjEwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEdyYXZpdGF0aW9uIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDk5OTAwMTAwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEhhbG9nZW4gRGVyaXZhdGl2ZXMgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDQ0OTU1MDQ1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSHlkcm9jYXJib25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMjY0NzM1MjY1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEh5ZHJvZ2VuIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDkyNDA3NTkyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBJbmRlZmluaXRlIEludGVncmF0aW9uIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDY3NDMyNTY3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSW5lcXVhbGl0aWVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTU0ODQ1MTU1IFxuICAgICAgICAgICAgICAgICAgICAgSW50cm9kdWN0aW9uIHRvIE9yZ2FuaWMgQ2hlbWlzdHJ5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTg5ODEwMTkwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgSW52ZXJzZSBUcmlnb25vbWV0cnkgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDY0OTM1MDY1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIElvbmljIEVxdWlsaWJyaXVtIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTcyMzI3NjcyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTGltaXRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDg0OTE1MDg1IFxuICAgICAgICAgICAgICAgICAgTWFnbmV0aWMgRWZmZWN0cyBvZiBFbGVjdHJpYyBDdXJyZW50IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDk5OTAwMTAwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWFnbmV0aXNtICYgTWF0dGVyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDU3NDQyNTU3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNYXRoZW1hdGljYWwgUmVhc29uaW5nIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDcyNDI3NTcyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNYXRyaWNlcyBhbmQgRGV0ZXJtaW5hbnRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDc0OTI1MDc1IFxuICAgICAgICAgICAgICAgICAgICAgICBNZWNoYW5pY2FsIFByb3BlcnRpZXMgb2YgRmx1aWRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTk3MzAyNjk3IFxuICAgICAgICAgICAgICAgICAgICAgICBNZWNoYW5pY2FsIFByb3BlcnRpZXMgb2YgU29saWRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTE3MzgyNjE3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNZXRhbGx1cmd5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDM0OTY1MDM1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1vZGVybiBQaHlzaWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTQ0ODU1MTQ1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTW90aW9uIGluIDFEIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTE3MzgyNjE3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTW90aW9uIGluIFR3byBEaW1lbnNpb25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTQ5ODUwMTUwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE51Y2xlYXIgQ2hlbWlzdHJ5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDAyNDk3NTAyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgT3NjaWxsYXRpb25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDkyNDA3NTkyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFAgLSBCbG9jayBFbGVtZW50cyAtIElJIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDY0OTM1MDY1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFAgYmxvY2sgLSBJIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDM3NDYyNTM3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgUEEgU2VsZWN0aW9uIFRlc3QgLSBCaW9sb2d5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDE0OTg1MDE1IFxuICAgICAgICAgICAgICAgICAgICAgICBQZXJpb2RpYyBQcm9wZXJ0aWVzIG9mIEVsZW1lbnRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTQ5ODUwMTUwIFxuICAgICAgICAgICAgICAgICAgICAgICAgIFBlcm11dGF0aW9ucyBhbmQgQ29tYmluYXRpb25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTk3MzAyNjk3IFxuICAgICAgICAgICAgICAgICAgIFByaW5jaXBsZSBvZiBNYXRoZW1hdGljYWwgSW5kdWN0aW9uIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDA0OTk1MDA1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFByb2JhYmlsaXR5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDg5OTEwMDkwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBRdWFkcmF0aWMgRXF1YXRpb25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTUyMzQ3NjUyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBSYXkgT3B0aWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTM3MzYyNjM3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUmVkb3ggUmVhY3Rpb25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTcyMzI3NjcyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFJvdGF0aW9uIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMjI3MjcyNzI3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTIGJsb2NrIGVsZW1lbnRzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDg0OTE1MDg1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTZW1pY29uZHVjdG9yIEVsZWN0cm9uaWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDY3NDMyNTY3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTZXF1ZW5jZSBhbmQgU2VyaWVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTg5ODEwMTkwIFxuICAgICAgICAgICAgICAgICAgICAgICAgIFNldHMsIFJlbGF0aW9ucyBhbmQgRnVuY3Rpb25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMjM3MjYyNzM3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNvbGlkIFN0YXRlIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDM5OTYwMDQwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU29sdXRpb25zIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDU0OTQ1MDU1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTdGF0ZXMgb2YgTWF0dGVyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTQyMzU3NjQyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU3RhdGljIEVsZWN0cmljaXR5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDAwMDAwMDAwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTdGF0aXN0aWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDY3NDMyNTY3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFN0cmFpZ2h0IExpbmVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTMyMzY3NjMyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFN1cmZhY2UgQ2hlbWlzdHJ5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDQyNDU3NTQyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRhbGx5IE1hcmtzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDAwMDAwMDAwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICBUaGVybWFsIFByb3BlcnRpZXMgb2YgTWF0dGVyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTA5ODkwMTEwIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRoZXJtb2R5bmFtaWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMjI5NzcwMjMwIFxuICAgICAgICAgICAgVGhlcm1vZHluYW1pY3MgYW5kIEtpbmV0aWMgVGhlb3J5IG9mIEdhc2VzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTM0ODY1MTM1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVHJpZ29ub21ldHJ5IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTkyMzA3NjkyIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVW5pdHMgYW5kIE1lYXN1cmVtZW50IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTM0ODY1MTM1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFZlY3RvciBBbGdlYnJhIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMDgyNDE3NTgyIFxuICAgICAgICAgICAgICAgICAgIFZlY3RvcnMgYW5kIEFwcGxpY2F0aW9uIG9mIENhbGN1bHVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTI3MzcyNjI3IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFdhdmUgT3B0aWNzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTE0ODg1MTE1IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFdhdmVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMTMyMzY3NjMyIFxuICAgICAgICAgICAgICAgICAgICAgIFdvcmssIFBvd2VyLCBFbmVyZ3kgYW5kIE1vbWVudHVtIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMC4wMjA3MjkyNzA3IFxuIn0= -->
-<pre><code>text_test_labels
-                                3 Dimensional Geometry 
-                                          0.0039960040 
-                                           AC Circuits 
-                                          0.0122377622 
-                          Alcohols, Ethers and Phenols 
-                                          0.0062437562 
-                                 Aldehydes and Ketones 
-                                          0.0137362637 
-                                                Amines 
-                                          0.0064935065 
-                           Applications of Derivatives 
-                                          0.0124875125 
-                                     Atomic Structure  
-                                          0.0174825175 
-                           Basic Concepts of Chemistry 
-                                          0.0147352647 
-                                      Binomial Theorem 
-                                          0.0157342657 
-Biomolecules, Polymers and Chemistry in Everyday life  
-                                          0.0144855145 
-                                            Capacitors 
-                                          0.0109890110 
-                      Carboxylic Acids and Derivatives 
-                                          0.0039960040 
-                                     Chemical Bonding  
-                                          0.0187312687 
-                                  Chemical Equilibrium 
-                                          0.0112387612 
-                                     Chemical Kinetics 
-                                          0.0042457542 
-                                       Complex Numbers 
-                                          0.0222277722 
-                                    Conic Sections - I 
-                                          0.0139860140 
-                                   Conic Sections - II 
-                                          0.0212287712 
-                      Continuity and Differentiability 
-                                          0.0149850150 
-                                Coordination Compounds 
-                                          0.0139860140 
-                                   Current Electricity 
-                                          0.0162337662 
-                                D and F Block Elements 
-                                          0.0042457542 
-                                  Definite Integration 
-                                          0.0094905095 
-                                Differential Equations 
-                                          0.0039960040 
-                                    Dynamics of Motion 
-                                          0.0307192807 
-                                      Electrochemistry 
-                                          0.0062437562 
-                             Electromagnetic Induction 
-                                          0.0109890110 
-       Electromagnetic Waves and Communication Systems 
-                                          0.0057442557 
-                                        Electrostatics 
-                                          0.0132367632 
-                               Environmental Chemistry 
-                                          0.0002497502 
-                                   Experimental Skills 
-                                          0.0004995005 
-                                           Functions 2 
-                                          0.0069930070 
-                           Fundamentals of Mathematics 
-                                          0.0209790210 
-                                           Gravitation 
-                                          0.0099900100 
-                                  Halogen Derivatives  
-                                          0.0044955045 
-                                          Hydrocarbons 
-                                          0.0264735265 
-                                              Hydrogen 
-                                          0.0092407592 
-                                Indefinite Integration 
-                                          0.0067432567 
-                                          Inequalities 
-                                          0.0154845155 
-                     Introduction to Organic Chemistry 
-                                          0.0189810190 
-                                 Inverse Trigonometry  
-                                          0.0064935065 
-                                     Ionic Equilibrium 
-                                          0.0172327672 
-                                                Limits 
-                                          0.0084915085 
-                  Magnetic Effects of Electric Current 
-                                          0.0099900100 
-                                    Magnetism &amp; Matter 
-                                          0.0057442557 
-                                Mathematical Reasoning 
-                                          0.0072427572 
-                             Matrices and Determinants 
-                                          0.0074925075 
-                       Mechanical Properties of Fluids 
-                                          0.0197302697 
-                       Mechanical Properties of Solids 
-                                          0.0117382617 
-                                            Metallurgy 
-                                          0.0034965035 
-                                        Modern Physics 
-                                          0.0144855145 
-                                          Motion in 1D 
-                                          0.0117382617 
-                              Motion in Two Dimensions 
-                                          0.0149850150 
-                                     Nuclear Chemistry 
-                                          0.0002497502 
-                                          Oscillations 
-                                          0.0092407592 
-                               P - Block Elements - II 
-                                          0.0064935065 
-                                           P block - I 
-                                          0.0037462537 
-                           PA Selection Test - Biology 
-                                          0.0014985015 
-                       Periodic Properties of Elements 
-                                          0.0149850150 
-                         Permutations and Combinations 
-                                          0.0197302697 
-                   Principle of Mathematical Induction 
-                                          0.0004995005 
-                                           Probability 
-                                          0.0089910090 
-                                   Quadratic Equations 
-                                          0.0152347652 
-                                            Ray Optics 
-                                          0.0137362637 
-                                       Redox Reactions 
-                                          0.0172327672 
-                                              Rotation 
-                                          0.0227272727 
-                                      S block elements 
-                                          0.0084915085 
-                             Semiconductor Electronics 
-                                          0.0067432567 
-                                   Sequence and Series 
-                                          0.0189810190 
-                         Sets, Relations and Functions 
-                                          0.0237262737 
-                                           Solid State 
-                                          0.0039960040 
-                                             Solutions 
-                                          0.0054945055 
-                                      States of Matter 
-                                          0.0142357642 
-                                    Static Electricity 
-                                          0.0000000000 
-                                            Statistics 
-                                          0.0067432567 
-                                        Straight Lines 
-                                          0.0132367632 
-                                     Surface Chemistry 
-                                          0.0042457542 
-                                           Tally Marks 
-                                          0.0000000000 
-                          Thermal Properties of Matter 
-                                          0.0109890110 
-                                        Thermodynamics 
-                                          0.0229770230 
-            Thermodynamics and Kinetic Theory of Gases 
-                                          0.0134865135 
-                                          Trigonometry 
-                                          0.0192307692 
-                                 Units and Measurement 
-                                          0.0134865135 
-                                        Vector Algebra 
-                                          0.0082417582 
-                   Vectors and Application of Calculus 
-                                          0.0127372627 
-                                           Wave Optics 
-                                          0.0114885115 
-                                                 Waves 
-                                          0.0132367632 
-                      Work, Power, Energy and Momentum 
-                                          0.0207292707 </code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -905,8 +377,8 @@ Biomolecules, Polymers and Chemistry in Everyday life
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<div id="word-cloud-from-chapter---applications-of-derivatives" class="section level3">
-<h3>Word Cloud from chapter - Applications of Derivatives</h3>
+<div id="word-cloud-from-chapter-1" class="section level3">
+<h3>Word Cloud from chapter 1</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB3b3JkY2xvdWQodGV4dF9jb3JwdXNfY2xlYW5bbXVsdGkkY2hhcHRlciA9PSBcIkFwcGxpY2F0aW9ucyBvZiBEZXJpdmF0aXZlc1wiXSwgbWF4LndvcmRzID0gNDAsIHNjYWxlID0gYygzLCAwLjUpKVxuYGBgIn0= -->
@@ -915,8 +387,8 @@ Biomolecules, Polymers and Chemistry in Everyday life
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
-<div id="word-cloud-from-the-chapter---fundamentals-of-mathematics" class="section level3">
-<h3>Word cloud from the chapter - Fundamentals of Mathematics</h3>
+<div id="word-cloud-from-the-chapter-2" class="section level3">
+<h3>Word cloud from the chapter 2</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-chunk-end -->
@@ -934,10 +406,12 @@ Biomolecules, Polymers and Chemistry in Everyday life
 <p>Words appearing at least a specified number of times.Filter our DTM to include only the terms appearing in a specified vector.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dF9mcmVxX3dvcmRzIDwtIGZpbmRGcmVxVGVybXModGV4dF9kdG0sIDI1KVxuIyB0Zi1pZGYgP1xuIyBVc2VmdWwgdG8gcmVtb3ZlIHdvcmRzIHdoaWNoIG1heWJlIGluIHRyYWluaW5nIHNldCBidXQgbm90IGluIHRlc3Qgc2V0IGxlYWRpbmcgdG8gYW4gb3V0IG9mIGJvdW5kcyBlcnJvclxudGV4dF9kdG1fZnJlcV90cmFpbiA8LSB0ZXh0X2R0bV90cmFpblsgLCB0ZXh0X2ZyZXFfd29yZHNdXG50ZXh0X2R0bV9mcmVxX3Rlc3QgPC0gdGV4dF9kdG1fdGVzdFsgLCB0ZXh0X2ZyZXFfd29yZHNdXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dF9mcmVxX3dvcmRzIDwtIGZpbmRGcmVxVGVybXModGV4dF9kdG0sIDI1KVxuXG4jIHRmLWlkZiA/XG4jIFVzZWZ1bCB0byByZW1vdmUgd29yZHMgd2hpY2ggbWF5YmUgaW4gdHJhaW5pbmcgc2V0IGJ1dCBub3QgaW4gdGVzdCBzZXQgbGVhZGluZyB0byBhbiBvdXQgb2YgYm91bmRzIGVycm9yXG5cbnRleHRfZHRtX2ZyZXFfdHJhaW4gPC0gdGV4dF9kdG1fdHJhaW5bICwgdGV4dF9mcmVxX3dvcmRzXVxudGV4dF9kdG1fZnJlcV90ZXN0IDwtIHRleHRfZHRtX3Rlc3RbICwgdGV4dF9mcmVxX3dvcmRzXVxuYGBgIn0= -->
 <pre class="r"><code>text_freq_words &lt;- findFreqTerms(text_dtm, 25)
+
 # tf-idf ?
 # Useful to remove words which maybe in training set but not in test set leading to an out of bounds error
+
 text_dtm_freq_train &lt;- text_dtm_train[ , text_freq_words]
 text_dtm_freq_test &lt;- text_dtm_test[ , text_freq_words]</code></pre>
 <!-- rnb-source-end -->
@@ -946,21 +420,16 @@ text_dtm_freq_test &lt;- text_dtm_test[ , text_freq_words]</code></pre>
 <p>The Naive Bayes classifier is typically trained on data with categorical features. This poses a problem, since the cells in the sparse matrix are numeric and measure the number of times a word appears in a message. We need to change this to a categorical variable that simply indicates yes or no depending on whether the word appears at all. Train matrix :</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29udmVydF9jb3VudHMgPC0gZnVuY3Rpb24oeCkge1xueCA8LSBpZmVsc2UoeCA+IDAsIFwiWWVzXCIsIFwiTm9cIilcbn1cbiMgTUFSR0lOID0gMSBpcyB1c2VkIGZvciByb3dzXG50ZXh0X3RyYWluIDwtIGFwcGx5KHRleHRfZHRtX2ZyZXFfdHJhaW4sIE1BUkdJTiA9IDIsIGNvbnZlcnRfY291bnRzKVxudGV4dF90ZXN0IDwtIGFwcGx5KHRleHRfZHRtX2ZyZXFfdGVzdCwgTUFSR0lOID0gMiwgY29udmVydF9jb3VudHMpXG5zdHIodGV4dF90cmFpbilcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29udmVydF9jb3VudHMgPC0gZnVuY3Rpb24oeCkge1xueCA8LSBpZmVsc2UoeCA+IDAsIFwiWWVzXCIsIFwiTm9cIilcbn1cblxuIyBNQVJHSU4gPSAxIGlzIHVzZWQgZm9yIHJvd3NcbnRleHRfdHJhaW4gPC0gYXBwbHkodGV4dF9kdG1fZnJlcV90cmFpbiwgTUFSR0lOID0gMiwgY29udmVydF9jb3VudHMpXG50ZXh0X3Rlc3QgPC0gYXBwbHkodGV4dF9kdG1fZnJlcV90ZXN0LCBNQVJHSU4gPSAyLCBjb252ZXJ0X2NvdW50cylcbnN0cih0ZXh0X3RyYWluKVxuYGBgIn0= -->
 <pre class="r"><code>convert_counts &lt;- function(x) {
 x &lt;- ifelse(x &gt; 0, &quot;Yes&quot;, &quot;No&quot;)
 }
+
 # MARGIN = 1 is used for rows
 text_train &lt;- apply(text_dtm_freq_train, MARGIN = 2, convert_counts)
 text_test &lt;- apply(text_dtm_freq_test, MARGIN = 2, convert_counts)
 str(text_train)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIGNociBbMToxNjAxNSwgMToxMzk1XSBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiAuLi5cbiAtIGF0dHIoKiwgXCJkaW1uYW1lc1wiKT1MaXN0IG9mIDJcbiAgLi4kIERvY3MgOiBjaHIgWzE6MTYwMTVdIFwiNDAwNVwiIFwiNDAwNlwiIFwiNDAwN1wiIFwiNDAwOFwiIC4uLlxuICAuLiQgVGVybXM6IGNociBbMToxMzk1XSBcImFiY1wiIFwiYWJjZFwiIFwiYWJzb2x1dGVcIiBcImFic29yYmVkXCIgLi4uXG4ifQ== -->
-<pre><code> chr [1:16015, 1:1395] &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; ...
- - attr(*, &quot;dimnames&quot;)=List of 2
-  ..$ Docs : chr [1:16015] &quot;4005&quot; &quot;4006&quot; &quot;4007&quot; &quot;4008&quot; ...
-  ..$ Terms: chr [1:1395] &quot;abc&quot; &quot;abcd&quot; &quot;absolute&quot; &quot;absorbed&quot; ...</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Test matrix :</p>
@@ -969,12 +438,6 @@ str(text_train)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKHRleHRfdGVzdClcbmBgYCJ9 -->
 <pre class="r"><code>str(text_test)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIGNociBbMTo0MDA0LCAxOjEzOTVdIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIk5vXCIgXCJOb1wiIFwiTm9cIiAuLi5cbiAtIGF0dHIoKiwgXCJkaW1uYW1lc1wiKT1MaXN0IG9mIDJcbiAgLi4kIERvY3MgOiBjaHIgWzE6NDAwNF0gXCIxXCIgXCIyXCIgXCIzXCIgXCI0XCIgLi4uXG4gIC4uJCBUZXJtczogY2hyIFsxOjEzOTVdIFwiYWJjXCIgXCJhYmNkXCIgXCJhYnNvbHV0ZVwiIFwiYWJzb3JiZWRcIiAuLi5cbiJ9 -->
-<pre><code> chr [1:4004, 1:1395] &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; ...
- - attr(*, &quot;dimnames&quot;)=List of 2
-  ..$ Docs : chr [1:4004] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
-  ..$ Terms: chr [1:1395] &quot;abc&quot; &quot;abcd&quot; &quot;absolute&quot; &quot;absorbed&quot; ...</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -983,8 +446,9 @@ str(text_train)</code></pre>
 <h2>TRAIN NAIVE BAYES MODEL</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dF9jbGFzc2lmaWVyIDwtIG5haXZlQmF5ZXModGV4dF90cmFpbiwgdGV4dF90cmFpbl9sYWJlbHMsIGxhcGxhY2UgPSAxKVxuIyBMYXBsYWNlIC0gVGhpcyBhbGxvd3Mgd29yZHMgdGhhdCBkaWQgbm90IGFwcGVhciBlYXJsaWVyIHRvIGhhdmUgYW4gaW5kaXNwdXRhYmxlIHNheSBpbiB0aGUgY2xhc3NpZmljYXRpb24gcHJvY2Vzcy4gSnVzdCBiZWNhdXNlIHRoZSB3b3JkIFwicmluZ3RvbmVcIiBvbmx5IGFwcGVhcmVkIGluIHRoZSBzcGFtIG1lc3NhZ2VzIGluIHRoZSB0cmFpbmluZyBkYXRhLCBpdCBkb2VzIG5vdCBtZWFuIHRoYXQgZXZlcnkgbWVzc2FnZSB3aXRoIHRoaXMgd29yZCBzaG91bGQgYmUgY2xhc3NpZmllZCBhcyBzcGFtXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dF9jbGFzc2lmaWVyIDwtIG5haXZlQmF5ZXModGV4dF90cmFpbiwgdGV4dF90cmFpbl9sYWJlbHMsIGxhcGxhY2UgPSAxKVxuXG4jIExhcGxhY2UgLSBUaGlzIGFsbG93cyB3b3JkcyB0aGF0IGRpZCBub3QgYXBwZWFyIGVhcmxpZXIgdG8gaGF2ZSBhbiBpbmRpc3B1dGFibGUgc2F5IGluIHRoZSBjbGFzc2lmaWNhdGlvbiBwcm9jZXNzLiBKdXN0IGJlY2F1c2UgdGhlIHdvcmQgXCJyaW5ndG9uZVwiIG9ubHkgYXBwZWFyZWQgaW4gdGhlIHNwYW0gbWVzc2FnZXMgaW4gdGhlIHRyYWluaW5nIGRhdGEsIGl0IGRvZXMgbm90IG1lYW4gdGhhdCBldmVyeSBtZXNzYWdlIHdpdGggdGhpcyB3b3JkIHNob3VsZCBiZSBjbGFzc2lmaWVkIGFzIHNwYW1cbmBgYCJ9 -->
 <pre class="r"><code>text_classifier &lt;- naiveBayes(text_train, text_train_labels, laplace = 1)
+
 # Laplace - This allows words that did not appear earlier to have an indisputable say in the classification process. Just because the word &quot;ringtone&quot; only appeared in the spam messages in the training data, it does not mean that every message with this word should be classified as spam</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
@@ -994,14 +458,65 @@ str(text_train)</code></pre>
 <h2>PREDICTION</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3Jlc3VsdHMgPC0gcHJlZGljdCh0ZXh0X2NsYXNzaWZpZXIsYXMubWF0cml4KHRleHRfZHRtX3Rlc3QpKVxucmVzdWx0cyA8LSBwcmVkaWN0KHRleHRfY2xhc3NpZmllcix0ZXh0X3Rlc3QpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3Jlc3VsdHMgPC0gcHJlZGljdCh0ZXh0X2NsYXNzaWZpZXIsYXMubWF0cml4KHRleHRfZHRtX3Rlc3QpKVxucmVzdWx0cyA8LSBwcmVkaWN0KHRleHRfY2xhc3NpZmllcix0ZXh0X3Rlc3QpXG50cnVlX3ZhbHVlcyA8LSBtdWx0aVt0ZXN0X2luZGljZXMsIF0kY2hhcHRlclxuXG5jb25mID0gY29uZnVzaW9uTWF0cml4KHJlc3VsdHMsIHRleHRfdGVzdF9sYWJlbHMpXG5jb25mdXNpb25fdGFibGUgPSBhcy5kYXRhLmZyYW1lLm1hdHJpeCggY29uZiR0YWJsZSAgKVxuY29uZl9zdGF0cyA9IGFzLmRhdGEuZnJhbWUoY29uZiRieUNsYXNzKVxuY29uZnVzaW9uX3RhYmxlW25yb3coY29uZnVzaW9uX3RhYmxlKSArIDEsIF0gPC0gY29uZl9zdGF0cyRTZW5zaXRpdml0eVxucV9jb3VudHMgPSBtdWx0aSAlPiUgZ3JvdXBfYnkoY2hhcHRlcikgJT4lIHN1bW1hcml6ZShjb3VudF9xcyA9bigpKVxuY29uZnVzaW9uX3RhYmxlW25yb3coY29uZnVzaW9uX3RhYmxlKSArIDEsIF0gPC0gdChxX2NvdW50c1ssMl0pXG5cbiNWaWV3KHJlc3VsdHMpXG5gYGAifQ== -->
 <pre class="r"><code>#results &lt;- predict(text_classifier,as.matrix(text_dtm_test))
-results &lt;- predict(text_classifier,text_test)</code></pre>
+results &lt;- predict(text_classifier,text_test)
+true_values &lt;- multi[test_indices, ]$chapter
+
+conf = confusionMatrix(results, text_test_labels)
+confusion_table = as.data.frame.matrix( conf$table  )
+conf_stats = as.data.frame(conf$byClass)
+confusion_table[nrow(confusion_table) + 1, ] &lt;- conf_stats$Sensitivity
+q_counts = multi %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())
+confusion_table[nrow(confusion_table) + 1, ] &lt;- t(q_counts[,2])
+
+#View(results)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<div id="getting-top-5-stats" class="section level3">
+<h3>GETTING TOP 5 STATS</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbiAgZGYuZnJhbWUgPC0gYXMuZGF0YS5mcmFtZShtYXRyaXgobmNvbD03LCBucm93PW5yb3cocmVzdWx0cykpKVxuICBcbiAgbGFiZWxzID0gY29sbmFtZXMocmVzdWx0cylcbiAgZm9yIChpIGluIDE6bnJvdyhyZXN1bHRzKSkge1xuICAgIHRydWVfdmFsdWUgPSB0cnVlX3ZhbHVlc1tpXVxuICAgIHByb2JzID0gcmVzdWx0c1tpLCBdXG4gICAgZ29vZFByZWQgPSBGQUxTRVxuICAgIHByZWRzID0gdmVjdG9yKClcbiAgICBwcmVkX3Byb2JzID0gdmVjdG9yKClcbiAgICBpbmQgPSB3aGljaC5tYXgocHJvYnMpXG4gICAgcHJlZGljdGlvbiA9IGxhYmVsc1tpbmRdXG4gICAgZm9yIChqIGluIDE6NSkge1xuICAgICAgaW5kID0gd2hpY2gubWF4KHByb2JzKVxuICAgICAgcHJvYiA9IG1heChwcm9icylcbiAgICAgIHByb2JzIDwtIHByb2JzWy1pbmRdXG4gICAgICB4IDwtIG1hdGNoKHByb2IsIHJlc3VsdHNbaSwgXSlcbiAgICBwcmVkcyA8LSBjKHByZWRzLCBsYWJlbHNbeF0pXG4gICAgIHByZWRfcHJvYnMgPC0gYyhwcmVkX3Byb2JzLCBwcm9iKVxuICAgfVxuICAgaWYgKGxhYmVsc1t0cnVlX3ZhbHVlXSAlaW4lIHByZWRpY3Rpb24pIHtcbiAgICAgZ29vZFByZWQgPSBUUlVFXG4gICB9XG4gICBkZi5mcmFtZVtpLCBdID0gYyhsYWJlbHNbdHJ1ZV92YWx1ZV0sIGdvb2RQcmVkLCBwcmVkX3Byb2JzKVxuIH1cblxuIHRvcF9maXZlX3N0YXRzID0gZGYuZnJhbWUgJT4lIGdyb3VwX2J5KFYyKSAlPiUgc3VtbWFyaXplKG4oKSlcbiB0b3BfZml2ZV9hY2N1cmFjeSA9IHRvcF9maXZlX3N0YXRzWzIsMl0gLyAodG9wX2ZpdmVfc3RhdHNbMSwyXSArIHRvcF9maXZlX3N0YXRzWzIsMl0pXG5cbmBgYCJ9 -->
+<pre class="r"><code>
+
+  df.frame &lt;- as.data.frame(matrix(ncol=7, nrow=nrow(results)))
+  
+  labels = colnames(results)
+  for (i in 1:nrow(results)) {
+    true_value = true_values[i]
+    probs = results[i, ]
+    goodPred = FALSE
+    preds = vector()
+    pred_probs = vector()
+    ind = which.max(probs)
+    prediction = labels[ind]
+    for (j in 1:5) {
+      ind = which.max(probs)
+      prob = max(probs)
+      probs &lt;- probs[-ind]
+      x &lt;- match(prob, results[i, ])
+    preds &lt;- c(preds, labels[x])
+     pred_probs &lt;- c(pred_probs, prob)
+   }
+   if (labels[true_value] %in% prediction) {
+     goodPred = TRUE
+   }
+   df.frame[i, ] = c(labels[true_value], goodPred, pred_probs)
+ }
+
+ top_five_stats = df.frame %&gt;% group_by(V2) %&gt;% summarize(n())
+ top_five_accuracy = top_five_stats[2,2] / (top_five_stats[1,2] + top_five_stats[2,2])
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+</div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQojIyBSZWFkaW5nIGRhdGEgZnJvbSBDTVMKCmBgYHtyIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2FzaXMnfQpsaWJyYXJ5KCd0aWR5dmVyc2UnKQpsaWJyYXJ5KCdlMTA3MScpCmxpYnJhcnkoJ1NwYXJzZU0nKQpsaWJyYXJ5KCd0bScpCmxpYnJhcnkoJ2NhcmV0JykKI2xpYnJhcnkoJ1Nub3diYWxsQycpCmxpYnJhcnkoJ3dvcmRjbG91ZCcpCmxpYnJhcnkoJ2pzb25saXRlJykKClFzIDwtIGpzb25saXRlOjpmcm9tSlNPTigncXNfdG9waWN3aXNlLmpzb24nKQpRcyA8LSBmbGF0dGVuKFFzKQoKI1FzIDwtIHJlYWRfdHN2KCJxc190b3BpY3dpc2VfZHVtcC50c3YiKQoKaGVhZChRcykKYGBgCgojIyMgQ2xlYW5pbmcgYW5kIGFkZGluZyBHcmFkZSwgU3ViamVjdCwgQ3VycmljdWx1bSBhbmQgQ2hhcHRlciBObyAKCmBgYHtyIHJlc3VsdHM9J2FzaXMnfQojIE5lZWQgdG8gY2xlYW4gdGhlIG92ZXJmbG93IG9mIHRleHQKUXNfY2xlYW4gPC0gUXMgICU+JQogIGRwbHlyOjpzZWxlY3QoMTo5KSAlPiUgICAgICAgICAgICAgICAgICAgICMgS2VlcGluZyBvbmx5IHRoZSBmaXJzdCAxMiBjb2x1bW5zCiAgZHBseXI6OmZpbHRlcighaXMubmEoZGlmZmljdWx0eSkpICAlPiUgICAgICAgICAgICMgQ2xlYW5pbmcgb3ZlcmZsb3cKICBkcGx5cjo6bXV0YXRlKEdyYWRlID0gc3RyX3N1Yih0b3BpY19jb2RlLCA1LCA2KSwgU3ViamVjdCA9IHN0cl9zdWIodG9waWNfY29kZSwgMSwgMyksIEN1cnJpY3VsdW0gPSBzdHJfc3ViKHRvcGljX2NvZGUsIDgsIDEwKSwgQ2hfTm8gPSBzdHJfc3ViKHRvcGljX2NvZGUsIDEyLCAxMykpCgojIFJlbW92aW5nIG5vbi1VVEYgY2hhcmFjdGVycwpRc19jbGVhbiRUZXh0IDwtIGxhcHBseShRc19jbGVhbiRxdWVzdGlvbl90ZXh0LGdzdWIsIHBhdHRlcm4gPSAiW15bOmFsbnVtOl1dIiwgcmVwbGFjZW1lbnQgPSAiICIpClFzX2NsZWFuJHF1ZXN0aW9uX3RleHQgPC0gbGFwcGx5KFFzX2NsZWFuJHF1ZXN0aW9uX3RleHQsZ3N1YiwgcGF0dGVybiA9ICI8Lio/PiIsIHJlcGxhY2VtZW50PSAiICIpCgprbml0cjo6a2FibGUoaGVhZChRc19jbGVhbikpCgpgYGAKCiMjIyBTdW1tYXJpemluZyBDaGFwdGVyIHdpc2UgIyBRcyBpbiB0aGUgZW50aXJlIEpFRSBkYXRhc2V0CgpgYGB7cn0KUXNfdGVzdCA8LSBRc19jbGVhbiAlPiUgZmlsdGVyKEN1cnJpY3VsdW0gPT0iSkVFIikKCmNoYXB0ZXJzX3RvX3JlbW92ZSA9IGMoJ1NlbGVjdGlvbiBUZXN0JywgJ1JlcG9zaXRvcnknLCAnQnJpZGdlIEludGVydmVudGlvbiBDdXJyaWN1bHVtJywgJ00xLjEgU2NhZmZvbGQgdGVzdCcsICdNMS4xIFNjYWZmb2xkIHRlc3QnKQoKUXNfdGVzdCA8LSBRc190ZXN0ICU+JSBmaWx0ZXIoIWNoYXB0ZXIgJWluJSAgY2hhcHRlcnNfdG9fcmVtb3ZlKQoKUXNfdGVzdCAlPiUgZ3JvdXBfYnkoY2hhcHRlcikgJT4lIHN1bW1hcml6ZShjb3VudF9xcyA9bigpKQoKYGBgCgoKIyMjIFBpY2tpbmcgMyBjaGFwdGVycyBmb3IgY2xhc3NpZmljYXRpb24KCmBgYHtyIGV2YWw9IFRSVUV9CgojIG11bHRpIDwtICBmaWx0ZXIoUXNfdGVzdCwgY2hhcHRlciAlaW4lIGMoIkFsZGVoeWRlcyBhbmQgS2V0b25lcyIsICJDb29yZGluYXRpb24gQ29tcG91bmRzIiwgIkJpb21vbGVjdWxlcywgUG9seW1lcnMgYW5kIENoZW1pc3RyeSBpbiBFdmVyeWRheSBsaWZlIiwgIkVsZWN0cm9jaGVtaXN0cnkiLCAiQW1pbmVzIikpIAojIFVzaW5nIGNoYXB0ZXIgbmFtZXMgZm9yIGZpbHRlcmluZyBnYXZlIHRoZSBlcnJvciBtZXNzYWdlIDoKIyBsb25nZXIgb2JqZWN0IGxlbmd0aCBpcyBub3QgYSBtdWx0aXBsZSBvZiBzaG9ydGVyIG9iamVjdCBsZW5ndGgKbXVsdGkgPC0gUXNfdGVzdAojbXVsdGkgPC0gYXJyYW5nZShtdWx0aSwgQ29kZSkgICAgICAjIyBUbyByZWFycmFuZ2UgYW5kIHJhbmRvbWl6ZSBjaGFwdGVycyBieSByb3cgbm8KCm11bHRpICU+JSBncm91cF9ieShjaGFwdGVyKSAlPiUgc3VtbWFyaXplKGNvdW50X3FzID1uKCkpCgpgYGAKCiMjIyBDaGFuZ2luZyBDaGFwdGVyIGxhYmVscyB0byBmYWN0b3JzCgpUaGUgQ2hhcHRlciB2YXJpYWJsZSBpcyBjdXJyZW50bHkgYSBjaGFyYWN0ZXIgdmVjdG9yLiBTaW5jZSB0aGlzIGlzIGEgY2F0ZWdvcmljYWwgdmFyaWFibGUsIGl0IHdvdWxkIGJlIGJldHRlciB0byBjb252ZXJ0IGl0IHRvIGEgZmFjdG9yLgpgYGB7cn0KbXVsdGkkY2hhcHRlciA8LSBmYWN0b3IobXVsdGkkY2hhcHRlcikKc3RyKG11bHRpJGNoYXB0ZXIpCmBgYAoKIyMgQ3JlYXRlIHRleHQgY29ycHVzCgpgYGB7cn0KCm11bHRpPC1tdWx0aVtzYW1wbGUobnJvdyhtdWx0aSkpLF0KdGV4dF9jb3JwdXMgPC0gVkNvcnB1cyhWZWN0b3JTb3VyY2UobXVsdGkkcXVlc3Rpb25fdGV4dCkpIAojI2luY2x1ZGUgYm90aCBhbmQgdGVzdCBhbmQgdHJhaW5pbmcgc2V0IHRvIGJ1aWxkIHRoZSBjb3JwdXMKI2luc3BlY3QgKHRleHRfY29ycHVzKQpgYGAKCiMjIyBMZXQncyB2aWV3IHNvbWUgUXMKYGBge3J9CmxhcHBseSh0ZXh0X2NvcnB1c1syOjRdLCBhcy5jaGFyYWN0ZXIpICAgICAgICMgTXVsdGlwbGUgZG9jcwpgYGAKCiMjIENsZWFuaW5nIHRleHQgClJlbW92aW5nIHB1bmN0dWF0aW9ucywgbnVtYmVycyBhbmQgc3RvcCB3b3JkcwpDb252ZXJ0aW5nIHRvIGxvd2VyIGNhc2UKU3RlbW1pbmcgd29yZHMgLSBsZWFybmVkLCBsZWFybmluZywgYW5kIGxlYXJucyBhcmUgdHJhbnNmb3JtZWQgaW50byB0aGUgYmFzZSBmb3JtLCBsZWFybgpSZW1vdmluZyBhZGRpdGlvbmFsIHdoaXRlIHNwYWNlcwoKYGBge3J9CiMgU291cmNlIDogWzJdIFJlbW92aW5nIG5vbi1VVEY4IGNoYXJhY3RlcnMKdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzLCBjb250ZW50X3RyYW5zZm9ybWVyKGdzdWIpLCBwYXR0ZXJuID0iW15bOmFsbnVtOl1dIiAsIHJlcGxhY2VtZW50ID0gIiAiKQp0ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIGNvbnRlbnRfdHJhbnNmb3JtZXIoZ3N1YiksIHBhdHRlcm4gPSJbXHUwMDgwLVx1ZmZmZl0iICwgcmVwbGFjZW1lbnQgPSAiICIpCgojIyBOb3cgbm9uLVVURiBjaGFyYWN0ZXJzIGFyZSByZW1vdmVkLiBXZSBjYW4gZG8gcmVndWxhciB0YXNrcyBvbiB0aGUgY2xlYW4gY29ycHVzLgoKdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCByZW1vdmVOdW1iZXJzKQp0ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIGNvbnRlbnRfdHJhbnNmb3JtZXIodG9sb3dlcikpCgojIyBBZGQgc3RvcHdvcmRzIGxpa2UgbGVmdCwgcmlnaHQgKGZyYWMgPykKdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCByZW1vdmVXb3JkcywgYyhzdG9wd29yZHMoKSwgImxlZnQiLCJyaWdodCIpKQp0ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHJlbW92ZVB1bmN0dWF0aW9uKQojdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBzdGVtRG9jdW1lbnQpCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgc3RyaXBXaGl0ZXNwYWNlKQpgYGAKCiMjIyBMZXQncyB2aWV3IHNvbWUgY2xlYW5lZCBRcwpgYGB7cn0KbGFwcGx5KHRleHRfY29ycHVzX2NsZWFuWzI6NF0sIGFzLmNoYXJhY3RlcikgICAgICAgCmBgYAoKIyMgQmFnIG9mIHdvcmRzIC0gVG9rZW5pemF0aW9uCmBgYHtyfQp0ZXh0X2R0bSA8LSBEb2N1bWVudFRlcm1NYXRyaXgodGV4dF9jb3JwdXNfY2xlYW4pCnRleHRfZHRtCgojIEFkZCBhIGRpY3Rpb25hcnkgdG8gRFRNID8KYGBgCgojIyBEYXRhIHByZXBhcmF0aW9uIC0gQ3JlYXRpbmcgdHJhaW5pbmcgYW5kIHRlc3QgZGF0YXNldHMKCmBgYHtyfQoKZm9sZHMgPC0gY3V0KHNlcSgxLG5yb3cobXVsdGkpKSxicmVha3M9NSxsYWJlbHM9RkFMU0UpCnRlc3RfaW5kaWNlcyA9IHdoaWNoKGZvbGRzPT0xLCBhcnIuaW5kPVRSVUUpCgp0ZXh0X2R0bV90cmFpbiA8LSB0ZXh0X2R0bVstdGVzdF9pbmRpY2VzLCAgXQoKdGV4dF9kdG1fdGVzdCA8LSB0ZXh0X2R0bVt0ZXN0X2luZGljZXMsICBdCgoKdGV4dF90cmFpbl9sYWJlbHMgPC0gbXVsdGlbLXRlc3RfaW5kaWNlcywgIF0kY2hhcHRlcgp0ZXh0X3Rlc3RfbGFiZWxzIDwtIG11bHRpW3Rlc3RfaW5kaWNlcywgIF0kY2hhcHRlciAKCnByb3AudGFibGUodGFibGUodGV4dF90cmFpbl9sYWJlbHMpKQpgYGAKCiMjIyBEaXN0cmlidXRpb24gb2YgbGFiZWxzIGluIHRlc3Qgc2V0CmBgYHtyfQpwcm9wLnRhYmxlKHRhYmxlKHRleHRfdGVzdF9sYWJlbHMpKQpgYGAKCiMjIFZpc3VhbGl6aW5nIHRleHQgZGF0YSAtIHdvcmQgY2xvdWRzCmBgYHtyfQojIHdvcmRjbG91ZCh0ZXh0X2NvcnB1c19jbGVhbiwgbWluLmZyZXE9MTAsIHJhbmRvbS5vcmRlciA9IEZBTFNFKQpgYGAKCiMjIyBXb3JkIENsb3VkIGZyb20gY2hhcHRlciAtIEFwcGxpY2F0aW9ucyBvZiBEZXJpdmF0aXZlcwpgYGB7cn0KIyB3b3JkY2xvdWQodGV4dF9jb3JwdXNfY2xlYW5bbXVsdGkkY2hhcHRlciA9PSAiQXBwbGljYXRpb25zIG9mIERlcml2YXRpdmVzIl0sIG1heC53b3JkcyA9IDQwLCBzY2FsZSA9IGMoMywgMC41KSkKYGBgCgojIyMgV29yZCBjbG91ZCBmcm9tIHRoZSBjaGFwdGVyIC0gRnVuZGFtZW50YWxzIG9mIE1hdGhlbWF0aWNzCmBgYHtyIGVjaG89RkFMU0UsIGV2YWw9VFJVRX0KIyB3b3JkY2xvdWQodGV4dF9jb3JwdXNfY2xlYW5bbXVsdGkkQ2hhcHRlciA9PSAiRnVuZGFtZW50YWxzIG9mIE1hdGhlbWF0aWNzIl0sIG1heC53b3JkcyA9IDQwLCBzY2FsZSA9IGMoMywgMC41KSkKYGBgCiMjIyBXb3JkIGNsb3VkIGZyb20gQ2hhcHRlciAzCmBgYHtyIGV2YWw9VFJVRX0KIyB3b3JkY2xvdWQodGV4dF9jb3JwdXNfY2xlYW5bbXVsdGkkQ2hhcHRlciA9PSAiQ29uaWMgU2VjdGlvbnMgLSBJIl0sIG1heC53b3JkcyA9IDQwLCBzY2FsZSA9IGMoMywgMC41KSkKYGBgCgpXb3JkcyBhcHBlYXJpbmcgYXQgbGVhc3QgYSBzcGVjaWZpZWQgbnVtYmVyIG9mIHRpbWVzLkZpbHRlciBvdXIgRFRNIHRvIGluY2x1ZGUgb25seSB0aGUgdGVybXMgYXBwZWFyaW5nIGluIGEgc3BlY2lmaWVkIHZlY3Rvci4KCmBgYHtyfQp0ZXh0X2ZyZXFfd29yZHMgPC0gZmluZEZyZXFUZXJtcyh0ZXh0X2R0bSwgMjUpCgojIHRmLWlkZiA/CiMgVXNlZnVsIHRvIHJlbW92ZSB3b3JkcyB3aGljaCBtYXliZSBpbiB0cmFpbmluZyBzZXQgYnV0IG5vdCBpbiB0ZXN0IHNldCBsZWFkaW5nIHRvIGFuIG91dCBvZiBib3VuZHMgZXJyb3IKCnRleHRfZHRtX2ZyZXFfdHJhaW4gPC0gdGV4dF9kdG1fdHJhaW5bICwgdGV4dF9mcmVxX3dvcmRzXQp0ZXh0X2R0bV9mcmVxX3Rlc3QgPC0gdGV4dF9kdG1fdGVzdFsgLCB0ZXh0X2ZyZXFfd29yZHNdCmBgYAoKVGhlIE5haXZlIEJheWVzIGNsYXNzaWZpZXIgaXMgdHlwaWNhbGx5IHRyYWluZWQgb24gZGF0YSB3aXRoIGNhdGVnb3JpY2FsIGZlYXR1cmVzLiBUaGlzIHBvc2VzIGEgcHJvYmxlbSwgc2luY2UgdGhlIGNlbGxzIGluIHRoZSBzcGFyc2UgbWF0cml4IGFyZSBudW1lcmljIGFuZCBtZWFzdXJlIHRoZSBudW1iZXIgb2YgdGltZXMgYSB3b3JkIGFwcGVhcnMgaW4gYSBtZXNzYWdlLiBXZSBuZWVkIHRvIGNoYW5nZSB0aGlzIHRvIGEgY2F0ZWdvcmljYWwgdmFyaWFibGUgdGhhdCBzaW1wbHkgaW5kaWNhdGVzIHllcyBvciBubyBkZXBlbmRpbmcgb24gd2hldGhlciB0aGUgd29yZCBhcHBlYXJzIGF0IGFsbC4gVHJhaW4gbWF0cml4IDoKCmBgYHtyfQpjb252ZXJ0X2NvdW50cyA8LSBmdW5jdGlvbih4KSB7CnggPC0gaWZlbHNlKHggPiAwLCAiWWVzIiwgIk5vIikKfQoKIyBNQVJHSU4gPSAxIGlzIHVzZWQgZm9yIHJvd3MKdGV4dF90cmFpbiA8LSBhcHBseSh0ZXh0X2R0bV9mcmVxX3RyYWluLCBNQVJHSU4gPSAyLCBjb252ZXJ0X2NvdW50cykKdGV4dF90ZXN0IDwtIGFwcGx5KHRleHRfZHRtX2ZyZXFfdGVzdCwgTUFSR0lOID0gMiwgY29udmVydF9jb3VudHMpCnN0cih0ZXh0X3RyYWluKQpgYGAKClRlc3QgbWF0cml4IDoKYGBge3J9CnN0cih0ZXh0X3Rlc3QpCmBgYAoKCiMjIFRSQUlOIE5BSVZFIEJBWUVTIE1PREVMIApgYGB7cn0KdGV4dF9jbGFzc2lmaWVyIDwtIG5haXZlQmF5ZXModGV4dF90cmFpbiwgdGV4dF90cmFpbl9sYWJlbHMsIGxhcGxhY2UgPSAxKQoKIyBMYXBsYWNlIC0gVGhpcyBhbGxvd3Mgd29yZHMgdGhhdCBkaWQgbm90IGFwcGVhciBlYXJsaWVyIHRvIGhhdmUgYW4gaW5kaXNwdXRhYmxlIHNheSBpbiB0aGUgY2xhc3NpZmljYXRpb24gcHJvY2Vzcy4gSnVzdCBiZWNhdXNlIHRoZSB3b3JkICJyaW5ndG9uZSIgb25seSBhcHBlYXJlZCBpbiB0aGUgc3BhbSBtZXNzYWdlcyBpbiB0aGUgdHJhaW5pbmcgZGF0YSwgaXQgZG9lcyBub3QgbWVhbiB0aGF0IGV2ZXJ5IG1lc3NhZ2Ugd2l0aCB0aGlzIHdvcmQgc2hvdWxkIGJlIGNsYXNzaWZpZWQgYXMgc3BhbQpgYGAKCiMjIFBSRURJQ1RJT04KYGBge3J9CiNyZXN1bHRzIDwtIHByZWRpY3QodGV4dF9jbGFzc2lmaWVyLGFzLm1hdHJpeCh0ZXh0X2R0bV90ZXN0KSkKcmVzdWx0cyA8LSBwcmVkaWN0KHRleHRfY2xhc3NpZmllcix0ZXh0X3Rlc3QpCnRydWVfdmFsdWVzIDwtIG11bHRpW3Rlc3RfaW5kaWNlcywgXSRjaGFwdGVyCgojIyMgVU5DT01NRU5UIEJFTE9XIEZPUiBHRVRUSU5HIFRPUCA1IFNUQVRTCiMjIyBZb3Ugd2lsbCBoYXZlIHRvIGNvbW1lbnQgdGhlIGNvbmZ1c2lvbiBtYXRyaXggbGluZXMKCiAjIGRmLmZyYW1lIDwtIGFzLmRhdGEuZnJhbWUobWF0cml4KG5jb2w9NywgbnJvdz1ucm93KHJlc3VsdHMpKSkKICMgCiAjIGxhYmVscyA9IGNvbG5hbWVzKHJlc3VsdHMpCiAjIGZvciAoaSBpbiAxOm5yb3cocmVzdWx0cykpIHsKICMgICB0cnVlX3ZhbHVlID0gdHJ1ZV92YWx1ZXNbaV0KICMgICBwcm9icyA9IHJlc3VsdHNbaSwgXQogIyAgIGdvb2RQcmVkID0gRkFMU0UKICMgICBwcmVkcyA9IHZlY3RvcigpCiAjICAgcHJlZF9wcm9icyA9IHZlY3RvcigpCiAjICAgaW5kID0gd2hpY2gubWF4KHByb2JzKQogIyAgIHByZWRpY3Rpb24gPSBsYWJlbHNbaW5kXQogIyAgIGZvciAoaiBpbiAxOjUpIHsKICMgICAgIGluZCA9IHdoaWNoLm1heChwcm9icykKICMgICAgIHByb2IgPSBtYXgocHJvYnMpCiAjICAgICBwcm9icyA8LSBwcm9ic1staW5kXQogIyAgICAgeCA8LSBtYXRjaChwcm9iLCByZXN1bHRzW2ksIF0pCiAjICAgICBwcmVkcyA8LSBjKHByZWRzLCBsYWJlbHNbeF0pCiAjICAgICBwcmVkX3Byb2JzIDwtIGMocHJlZF9wcm9icywgcHJvYikKICMgICB9CiAjICAgaWYgKGxhYmVsc1t0cnVlX3ZhbHVlXSAlaW4lIHByZWRpY3Rpb24pIHsKICMgICAgIGdvb2RQcmVkID0gVFJVRQogIyAgIH0KICMgICBkZi5mcmFtZVtpLCBdID0gYyhsYWJlbHNbdHJ1ZV92YWx1ZV0sIGdvb2RQcmVkLCBwcmVkX3Byb2JzKQogIyB9CgojIHRvcF9maXZlX3N0YXRzID0gZGYuZnJhbWUgJT4lIGdyb3VwX2J5KFYyKSAlPiUgc3VtbWFyaXplKG4oKSkKIyB0b3BfZml2ZV9hY2N1cmFjeSA9IHRvcF9maXZlX3N0YXRzWzIsMl0gLyAodG9wX2ZpdmVfc3RhdHNbMSwyXSArIHRvcF9maXZlX3N0YXRzWzIsMl0pCiMgCmNvbmYgPSBjb25mdXNpb25NYXRyaXgocmVzdWx0cywgdGV4dF90ZXN0X2xhYmVscykKY29uZnVzaW9uX3RhYmxlID0gYXMuZGF0YS5mcmFtZS5tYXRyaXgoIGNvbmYkdGFibGUgICkKY29uZl9zdGF0cyA9IGFzLmRhdGEuZnJhbWUoY29uZiRieUNsYXNzKQpjb25mdXNpb25fdGFibGVbbnJvdyhjb25mdXNpb25fdGFibGUpICsgMSwgXSA8LSBjb25mX3N0YXRzJFNlbnNpdGl2aXR5CnFfY291bnRzID0gbXVsdGkgJT4lIGdyb3VwX2J5KGNoYXB0ZXIpICU+JSBzdW1tYXJpemUoY291bnRfcXMgPW4oKSkKY29uZnVzaW9uX3RhYmxlW25yb3coY29uZnVzaW9uX3RhYmxlKSArIDEsIF0gPC0gdChxX2NvdW50c1ssMl0pCgojVmlldyhyZXN1bHRzKQpgYGAK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQojIyBSZWFkaW5nIGRhdGEgZnJvbSBDTVMKCmBgYHtyIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0UsIHJlc3VsdHM9J2FzaXMnfQpsaWJyYXJ5KCd0aWR5dmVyc2UnKQpsaWJyYXJ5KCdlMTA3MScpCmxpYnJhcnkoJ1NwYXJzZU0nKQpsaWJyYXJ5KCd0bScpCmxpYnJhcnkoJ2NhcmV0JykKI2xpYnJhcnkoJ1Nub3diYWxsQycpCmxpYnJhcnkoJ3dvcmRjbG91ZCcpCmxpYnJhcnkoJ2pzb25saXRlJykKClFzIDwtIGpzb25saXRlOjpmcm9tSlNPTigncXNfdG9waWN3aXNlLmpzb24nKQpRcyA8LSBmbGF0dGVuKFFzKQoKI1FzIDwtIHJlYWRfdHN2KCJxc190b3BpY3dpc2VfZHVtcC50c3YiKQoKaGVhZChRcykKYGBgCgojIyMgQ2xlYW5pbmcgYW5kIGFkZGluZyBHcmFkZSwgU3ViamVjdCwgQ3VycmljdWx1bSBhbmQgQ2hhcHRlciBObyAKCmBgYHtyIHJlc3VsdHM9J2FzaXMnfQojIE5lZWQgdG8gY2xlYW4gdGhlIG92ZXJmbG93IG9mIHRleHQKUXNfY2xlYW4gPC0gUXMgICU+JQogIGRwbHlyOjpzZWxlY3QoMTo5KSAlPiUgICAgICAgICAgICAgICAgICAgICMgS2VlcGluZyBvbmx5IHRoZSBmaXJzdCAxMiBjb2x1bW5zCiAgZHBseXI6OmZpbHRlcighaXMubmEoZGlmZmljdWx0eSkpICAlPiUgICAgICAgICAgICMgQ2xlYW5pbmcgb3ZlcmZsb3cKICBkcGx5cjo6bXV0YXRlKEdyYWRlID0gc3RyX3N1Yih0b3BpY19jb2RlLCA1LCA2KSwgU3ViamVjdCA9IHN0cl9zdWIodG9waWNfY29kZSwgMSwgMyksIEN1cnJpY3VsdW0gPSBzdHJfc3ViKHRvcGljX2NvZGUsIDgsIDEwKSwgQ2hfTm8gPSBzdHJfc3ViKHRvcGljX2NvZGUsIDEyLCAxMykpCgojIFJlbW92aW5nIG5vbi1VVEYgY2hhcmFjdGVycwpRc19jbGVhbiRUZXh0IDwtIGxhcHBseShRc19jbGVhbiRxdWVzdGlvbl90ZXh0LGdzdWIsIHBhdHRlcm4gPSAiW15bOmFsbnVtOl1dIiwgcmVwbGFjZW1lbnQgPSAiICIpClFzX2NsZWFuJHF1ZXN0aW9uX3RleHQgPC0gbGFwcGx5KFFzX2NsZWFuJHF1ZXN0aW9uX3RleHQsZ3N1YiwgcGF0dGVybiA9ICI8Lio/PiIsIHJlcGxhY2VtZW50PSAiICIpCgprbml0cjo6a2FibGUoaGVhZChRc19jbGVhbikpCgpgYGAKCiMjIyBTdW1tYXJpemluZyBDaGFwdGVyIHdpc2UgIyBRcyBpbiB0aGUgZW50aXJlIEpFRSBkYXRhc2V0CgpgYGB7cn0KUXNfdGVzdCA8LSBRc19jbGVhbiAlPiUgZmlsdGVyKEN1cnJpY3VsdW0gPT0iSkVFIikKCmNoYXB0ZXJzX3RvX3JlbW92ZSA9IGMoJ1NlbGVjdGlvbiBUZXN0JywgJ1JlcG9zaXRvcnknLCAnQnJpZGdlIEludGVydmVudGlvbiBDdXJyaWN1bHVtJywgJ00xLjEgU2NhZmZvbGQgdGVzdCcsICdNMS4xIFNjYWZmb2xkIHRlc3QnKQoKUXNfdGVzdCA8LSBRc190ZXN0ICU+JSBmaWx0ZXIoIWNoYXB0ZXIgJWluJSAgY2hhcHRlcnNfdG9fcmVtb3ZlKQoKUXNfdGVzdCAlPiUgZ3JvdXBfYnkoY2hhcHRlcikgJT4lIHN1bW1hcml6ZShjb3VudF9xcyA9bigpKQoKYGBgCgoKIyMjIFBpY2tpbmcgY2hhcHRlcnMgZm9yIGNsYXNzaWZpY2F0aW9uIGZyb20gdGhlIENNUyByZXBvCgpgYGB7ciBldmFsPSBUUlVFfQoKIyBtdWx0aSA8LSAgZmlsdGVyKFFzX3Rlc3QsIGNoYXB0ZXIgJWluJSBjKCJBbGRlaHlkZXMgYW5kIEtldG9uZXMiLCAiQ29vcmRpbmF0aW9uIENvbXBvdW5kcyIsICJCaW9tb2xlY3VsZXMsIFBvbHltZXJzIGFuZCBDaGVtaXN0cnkgaW4gRXZlcnlkYXkgbGlmZSIsICJFbGVjdHJvY2hlbWlzdHJ5IiwgIkFtaW5lcyIpKSAKIyBVc2luZyBjaGFwdGVyIG5hbWVzIGZvciBmaWx0ZXJpbmcgZ2F2ZSB0aGUgZXJyb3IgbWVzc2FnZSA6CiMgbG9uZ2VyIG9iamVjdCBsZW5ndGggaXMgbm90IGEgbXVsdGlwbGUgb2Ygc2hvcnRlciBvYmplY3QgbGVuZ3RoCm11bHRpIDwtIFFzX3Rlc3QKI211bHRpIDwtIGFycmFuZ2UobXVsdGksIENvZGUpICAgICAgIyMgVG8gcmVhcnJhbmdlIGFuZCByYW5kb21pemUgY2hhcHRlcnMgYnkgcm93IG5vCgptdWx0aSAlPiUgZ3JvdXBfYnkoY2hhcHRlcikgJT4lIHN1bW1hcml6ZShjb3VudF9xcyA9bigpKQoKYGBgCgojIyMgQ2hhbmdpbmcgQ2hhcHRlciBsYWJlbHMgdG8gZmFjdG9ycwoKVGhlIENoYXB0ZXIgdmFyaWFibGUgaXMgY3VycmVudGx5IGEgY2hhcmFjdGVyIHZlY3Rvci4gU2luY2UgdGhpcyBpcyBhIGNhdGVnb3JpY2FsIHZhcmlhYmxlLCBpdCB3b3VsZCBiZSBiZXR0ZXIgdG8gY29udmVydCBpdCB0byBhIGZhY3Rvci4KYGBge3J9Cm11bHRpJGNoYXB0ZXIgPC0gZmFjdG9yKG11bHRpJGNoYXB0ZXIpCnN0cihtdWx0aSRjaGFwdGVyKQpgYGAKCiMjIENyZWF0ZSB0ZXh0IGNvcnB1cwoKYGBge3J9CgptdWx0aTwtbXVsdGlbc2FtcGxlKG5yb3cobXVsdGkpKSxdCnRleHRfY29ycHVzIDwtIFZDb3JwdXMoVmVjdG9yU291cmNlKG11bHRpJHF1ZXN0aW9uX3RleHQpKSAKIyNpbmNsdWRlIGJvdGggYW5kIHRlc3QgYW5kIHRyYWluaW5nIHNldCB0byBidWlsZCB0aGUgY29ycHVzCiNpbnNwZWN0ICh0ZXh0X2NvcnB1cykKYGBgCgojIyMgTGV0J3MgdmlldyBzb21lIFFzCmBgYHtyfQpsYXBwbHkodGV4dF9jb3JwdXNbMjo0XSwgYXMuY2hhcmFjdGVyKSAgICAgICAjIE11bHRpcGxlIGRvY3MKYGBgCgojIyBDbGVhbmluZyB0ZXh0IApSZW1vdmluZyBwdW5jdHVhdGlvbnMsIG51bWJlcnMgYW5kIHN0b3Agd29yZHMKQ29udmVydGluZyB0byBsb3dlciBjYXNlClN0ZW1taW5nIHdvcmRzIC0gbGVhcm5lZCwgbGVhcm5pbmcsIGFuZCBsZWFybnMgYXJlIHRyYW5zZm9ybWVkIGludG8gdGhlIGJhc2UgZm9ybSwgbGVhcm4KUmVtb3ZpbmcgYWRkaXRpb25hbCB3aGl0ZSBzcGFjZXMKCmBgYHtyfQojIFNvdXJjZSA6IFsyXSBSZW1vdmluZyBub24tVVRGOCBjaGFyYWN0ZXJzCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1cywgY29udGVudF90cmFuc2Zvcm1lcihnc3ViKSwgcGF0dGVybiA9IlteWzphbG51bTpdXSIgLCByZXBsYWNlbWVudCA9ICIgIikKdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBjb250ZW50X3RyYW5zZm9ybWVyKGdzdWIpLCBwYXR0ZXJuID0iW1x1MDA4MC1cdWZmZmZdIiAsIHJlcGxhY2VtZW50ID0gIiAiKQoKIyMgTm93IG5vbi1VVEYgY2hhcmFjdGVycyBhcmUgcmVtb3ZlZC4gV2UgY2FuIGRvIHJlZ3VsYXIgdGFza3Mgb24gdGhlIGNsZWFuIGNvcnB1cy4KCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgcmVtb3ZlTnVtYmVycykKdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCBjb250ZW50X3RyYW5zZm9ybWVyKHRvbG93ZXIpKQoKIyMgQWRkIHN0b3B3b3JkcyBsaWtlIGxlZnQsIHJpZ2h0IChmcmFjID8pCnRleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgcmVtb3ZlV29yZHMsIGMoc3RvcHdvcmRzKCksICJsZWZ0IiwicmlnaHQiKSkKdGV4dF9jb3JwdXNfY2xlYW4gPC0gdG1fbWFwKHRleHRfY29ycHVzX2NsZWFuLCByZW1vdmVQdW5jdHVhdGlvbikKI3RleHRfY29ycHVzX2NsZWFuIDwtIHRtX21hcCh0ZXh0X2NvcnB1c19jbGVhbiwgc3RlbURvY3VtZW50KQp0ZXh0X2NvcnB1c19jbGVhbiA8LSB0bV9tYXAodGV4dF9jb3JwdXNfY2xlYW4sIHN0cmlwV2hpdGVzcGFjZSkKYGBgCgojIyMgTGV0J3MgdmlldyBzb21lIGNsZWFuZWQgUXMKYGBge3J9CmxhcHBseSh0ZXh0X2NvcnB1c19jbGVhblsyOjRdLCBhcy5jaGFyYWN0ZXIpICAgICAgIApgYGAKCiMjIEJhZyBvZiB3b3JkcyAtIFRva2VuaXphdGlvbgpgYGB7cn0KdGV4dF9kdG0gPC0gRG9jdW1lbnRUZXJtTWF0cml4KHRleHRfY29ycHVzX2NsZWFuKQp0ZXh0X2R0bQoKIyBBZGQgYSBkaWN0aW9uYXJ5IHRvIERUTSA/CmBgYAoKIyMgRGF0YSBwcmVwYXJhdGlvbiAtIENyZWF0aW5nIHRyYWluaW5nIGFuZCB0ZXN0IGRhdGFzZXRzCgpgYGB7cn0KCmZvbGRzIDwtIGN1dChzZXEoMSxucm93KG11bHRpKSksYnJlYWtzPTUsbGFiZWxzPUZBTFNFKQp0ZXN0X2luZGljZXMgPSB3aGljaChmb2xkcz09MSwgYXJyLmluZD1UUlVFKQoKdGV4dF9kdG1fdHJhaW4gPC0gdGV4dF9kdG1bLXRlc3RfaW5kaWNlcywgIF0KCnRleHRfZHRtX3Rlc3QgPC0gdGV4dF9kdG1bdGVzdF9pbmRpY2VzLCAgXQoKCnRleHRfdHJhaW5fbGFiZWxzIDwtIG11bHRpWy10ZXN0X2luZGljZXMsICBdJGNoYXB0ZXIKdGV4dF90ZXN0X2xhYmVscyA8LSBtdWx0aVt0ZXN0X2luZGljZXMsICBdJGNoYXB0ZXIgCgpwcm9wLnRhYmxlKHRhYmxlKHRleHRfdHJhaW5fbGFiZWxzKSkKYGBgCgojIyMgRGlzdHJpYnV0aW9uIG9mIGxhYmVscyBpbiB0ZXN0IHNldApgYGB7cn0KcHJvcC50YWJsZSh0YWJsZSh0ZXh0X3Rlc3RfbGFiZWxzKSkKYGBgCgojIyBWaXN1YWxpemluZyB0ZXh0IGRhdGEgLSB3b3JkIGNsb3VkcwpgYGB7cn0KIyB3b3JkY2xvdWQodGV4dF9jb3JwdXNfY2xlYW4sIG1pbi5mcmVxPTEwLCByYW5kb20ub3JkZXIgPSBGQUxTRSkKYGBgCgojIyMgV29yZCBDbG91ZCBmcm9tIGNoYXB0ZXIgMQpgYGB7cn0KIyB3b3JkY2xvdWQodGV4dF9jb3JwdXNfY2xlYW5bbXVsdGkkY2hhcHRlciA9PSAiQXBwbGljYXRpb25zIG9mIERlcml2YXRpdmVzIl0sIG1heC53b3JkcyA9IDQwLCBzY2FsZSA9IGMoMywgMC41KSkKYGBgCgojIyMgV29yZCBjbG91ZCBmcm9tIHRoZSBjaGFwdGVyIDIKYGBge3IgZWNobz1GQUxTRSwgZXZhbD1UUlVFfQojIHdvcmRjbG91ZCh0ZXh0X2NvcnB1c19jbGVhblttdWx0aSRDaGFwdGVyID09ICJGdW5kYW1lbnRhbHMgb2YgTWF0aGVtYXRpY3MiXSwgbWF4LndvcmRzID0gNDAsIHNjYWxlID0gYygzLCAwLjUpKQpgYGAKIyMjIFdvcmQgY2xvdWQgZnJvbSBDaGFwdGVyIDMKYGBge3IgZXZhbD1UUlVFfQojIHdvcmRjbG91ZCh0ZXh0X2NvcnB1c19jbGVhblttdWx0aSRDaGFwdGVyID09ICJDb25pYyBTZWN0aW9ucyAtIEkiXSwgbWF4LndvcmRzID0gNDAsIHNjYWxlID0gYygzLCAwLjUpKQpgYGAKCldvcmRzIGFwcGVhcmluZyBhdCBsZWFzdCBhIHNwZWNpZmllZCBudW1iZXIgb2YgdGltZXMuRmlsdGVyIG91ciBEVE0gdG8gaW5jbHVkZSBvbmx5IHRoZSB0ZXJtcyBhcHBlYXJpbmcgaW4gYSBzcGVjaWZpZWQgdmVjdG9yLgoKYGBge3J9CnRleHRfZnJlcV93b3JkcyA8LSBmaW5kRnJlcVRlcm1zKHRleHRfZHRtLCAyNSkKCiMgdGYtaWRmID8KIyBVc2VmdWwgdG8gcmVtb3ZlIHdvcmRzIHdoaWNoIG1heWJlIGluIHRyYWluaW5nIHNldCBidXQgbm90IGluIHRlc3Qgc2V0IGxlYWRpbmcgdG8gYW4gb3V0IG9mIGJvdW5kcyBlcnJvcgoKdGV4dF9kdG1fZnJlcV90cmFpbiA8LSB0ZXh0X2R0bV90cmFpblsgLCB0ZXh0X2ZyZXFfd29yZHNdCnRleHRfZHRtX2ZyZXFfdGVzdCA8LSB0ZXh0X2R0bV90ZXN0WyAsIHRleHRfZnJlcV93b3Jkc10KYGBgCgpUaGUgTmFpdmUgQmF5ZXMgY2xhc3NpZmllciBpcyB0eXBpY2FsbHkgdHJhaW5lZCBvbiBkYXRhIHdpdGggY2F0ZWdvcmljYWwgZmVhdHVyZXMuIFRoaXMgcG9zZXMgYSBwcm9ibGVtLCBzaW5jZSB0aGUgY2VsbHMgaW4gdGhlIHNwYXJzZSBtYXRyaXggYXJlIG51bWVyaWMgYW5kIG1lYXN1cmUgdGhlIG51bWJlciBvZiB0aW1lcyBhIHdvcmQgYXBwZWFycyBpbiBhIG1lc3NhZ2UuIFdlIG5lZWQgdG8gY2hhbmdlIHRoaXMgdG8gYSBjYXRlZ29yaWNhbCB2YXJpYWJsZSB0aGF0IHNpbXBseSBpbmRpY2F0ZXMgeWVzIG9yIG5vIGRlcGVuZGluZyBvbiB3aGV0aGVyIHRoZSB3b3JkIGFwcGVhcnMgYXQgYWxsLiBUcmFpbiBtYXRyaXggOgoKYGBge3J9CmNvbnZlcnRfY291bnRzIDwtIGZ1bmN0aW9uKHgpIHsKeCA8LSBpZmVsc2UoeCA+IDAsICJZZXMiLCAiTm8iKQp9CgojIE1BUkdJTiA9IDEgaXMgdXNlZCBmb3Igcm93cwp0ZXh0X3RyYWluIDwtIGFwcGx5KHRleHRfZHRtX2ZyZXFfdHJhaW4sIE1BUkdJTiA9IDIsIGNvbnZlcnRfY291bnRzKQp0ZXh0X3Rlc3QgPC0gYXBwbHkodGV4dF9kdG1fZnJlcV90ZXN0LCBNQVJHSU4gPSAyLCBjb252ZXJ0X2NvdW50cykKc3RyKHRleHRfdHJhaW4pCmBgYAoKVGVzdCBtYXRyaXggOgpgYGB7cn0Kc3RyKHRleHRfdGVzdCkKYGBgCgoKIyMgVFJBSU4gTkFJVkUgQkFZRVMgTU9ERUwgCmBgYHtyfQp0ZXh0X2NsYXNzaWZpZXIgPC0gbmFpdmVCYXllcyh0ZXh0X3RyYWluLCB0ZXh0X3RyYWluX2xhYmVscywgbGFwbGFjZSA9IDEpCgojIExhcGxhY2UgLSBUaGlzIGFsbG93cyB3b3JkcyB0aGF0IGRpZCBub3QgYXBwZWFyIGVhcmxpZXIgdG8gaGF2ZSBhbiBpbmRpc3B1dGFibGUgc2F5IGluIHRoZSBjbGFzc2lmaWNhdGlvbiBwcm9jZXNzLiBKdXN0IGJlY2F1c2UgdGhlIHdvcmQgInJpbmd0b25lIiBvbmx5IGFwcGVhcmVkIGluIHRoZSBzcGFtIG1lc3NhZ2VzIGluIHRoZSB0cmFpbmluZyBkYXRhLCBpdCBkb2VzIG5vdCBtZWFuIHRoYXQgZXZlcnkgbWVzc2FnZSB3aXRoIHRoaXMgd29yZCBzaG91bGQgYmUgY2xhc3NpZmllZCBhcyBzcGFtCmBgYAoKIyMgUFJFRElDVElPTgpgYGB7cn0KI3Jlc3VsdHMgPC0gcHJlZGljdCh0ZXh0X2NsYXNzaWZpZXIsYXMubWF0cml4KHRleHRfZHRtX3Rlc3QpKQpyZXN1bHRzIDwtIHByZWRpY3QodGV4dF9jbGFzc2lmaWVyLHRleHRfdGVzdCkKdHJ1ZV92YWx1ZXMgPC0gbXVsdGlbdGVzdF9pbmRpY2VzLCBdJGNoYXB0ZXIKCmNvbmYgPSBjb25mdXNpb25NYXRyaXgocmVzdWx0cywgdGV4dF90ZXN0X2xhYmVscykKY29uZnVzaW9uX3RhYmxlID0gYXMuZGF0YS5mcmFtZS5tYXRyaXgoIGNvbmYkdGFibGUgICkKY29uZl9zdGF0cyA9IGFzLmRhdGEuZnJhbWUoY29uZiRieUNsYXNzKQpjb25mdXNpb25fdGFibGVbbnJvdyhjb25mdXNpb25fdGFibGUpICsgMSwgXSA8LSBjb25mX3N0YXRzJFNlbnNpdGl2aXR5CnFfY291bnRzID0gbXVsdGkgJT4lIGdyb3VwX2J5KGNoYXB0ZXIpICU+JSBzdW1tYXJpemUoY291bnRfcXMgPW4oKSkKY29uZnVzaW9uX3RhYmxlW25yb3coY29uZnVzaW9uX3RhYmxlKSArIDEsIF0gPC0gdChxX2NvdW50c1ssMl0pCgojVmlldyhyZXN1bHRzKQpgYGAKCiMjIyBHRVRUSU5HIFRPUCA1IFNUQVRTCgpgYGB7cn0KCgogIGRmLmZyYW1lIDwtIGFzLmRhdGEuZnJhbWUobWF0cml4KG5jb2w9NywgbnJvdz1ucm93KHJlc3VsdHMpKSkKICAKICBsYWJlbHMgPSBjb2xuYW1lcyhyZXN1bHRzKQogIGZvciAoaSBpbiAxOm5yb3cocmVzdWx0cykpIHsKICAgIHRydWVfdmFsdWUgPSB0cnVlX3ZhbHVlc1tpXQogICAgcHJvYnMgPSByZXN1bHRzW2ksIF0KICAgIGdvb2RQcmVkID0gRkFMU0UKICAgIHByZWRzID0gdmVjdG9yKCkKICAgIHByZWRfcHJvYnMgPSB2ZWN0b3IoKQogICAgaW5kID0gd2hpY2gubWF4KHByb2JzKQogICAgcHJlZGljdGlvbiA9IGxhYmVsc1tpbmRdCiAgICBmb3IgKGogaW4gMTo1KSB7CiAgICAgIGluZCA9IHdoaWNoLm1heChwcm9icykKICAgICAgcHJvYiA9IG1heChwcm9icykKICAgICAgcHJvYnMgPC0gcHJvYnNbLWluZF0KICAgICAgeCA8LSBtYXRjaChwcm9iLCByZXN1bHRzW2ksIF0pCiAgICBwcmVkcyA8LSBjKHByZWRzLCBsYWJlbHNbeF0pCiAgICAgcHJlZF9wcm9icyA8LSBjKHByZWRfcHJvYnMsIHByb2IpCiAgIH0KICAgaWYgKGxhYmVsc1t0cnVlX3ZhbHVlXSAlaW4lIHByZWRpY3Rpb24pIHsKICAgICBnb29kUHJlZCA9IFRSVUUKICAgfQogICBkZi5mcmFtZVtpLCBdID0gYyhsYWJlbHNbdHJ1ZV92YWx1ZV0sIGdvb2RQcmVkLCBwcmVkX3Byb2JzKQogfQoKIHRvcF9maXZlX3N0YXRzID0gZGYuZnJhbWUgJT4lIGdyb3VwX2J5KFYyKSAlPiUgc3VtbWFyaXplKG4oKSkKIHRvcF9maXZlX2FjY3VyYWN5ID0gdG9wX2ZpdmVfc3RhdHNbMiwyXSAvICh0b3BfZml2ZV9zdGF0c1sxLDJdICsgdG9wX2ZpdmVfc3RhdHNbMiwyXSkKCmBgYAoK</div>
 
 
 
