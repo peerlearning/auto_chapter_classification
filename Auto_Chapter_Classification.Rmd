@@ -201,7 +201,8 @@ confusion_table[nrow(confusion_table) + 1, ] <- conf_stats$Sensitivity
 q_counts = repo %>% group_by(chapter) %>% summarize(count_qs =n())
 confusion_table[nrow(confusion_table) + 1, ] <- t(q_counts[,2])
 
-View(round(confusion_table, 0))
+View(conf_stats)
+View(round(confusion_table, 1))
 ```
 
 ### GETTING TOP 5 STATS
