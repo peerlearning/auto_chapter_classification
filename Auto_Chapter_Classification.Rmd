@@ -132,16 +132,22 @@ text_dtm_freq_train <- text_dtm_train[ , text_freq_words]
 text_dtm_freq_test <- text_dtm_test[ , text_freq_words]
 
 convert_counts <- function(x) {
-x <- ifelse(x > 0, "Yes", "No")
+x <- ifelse(x > 0, 1, 0)
 }
 
 # MARGIN = 1 is used for rows
 text_train <- apply(text_dtm_freq_train, MARGIN = 2, convert_counts)
 text_test <- apply(text_dtm_freq_test, MARGIN = 2, convert_counts)
 
-text_classifier <- naiveBayes(as.matrix(text_train), text_train_labels, laplace=1)
 
 # Laplace - This allows words that did not appear earlier to have an indisputable say in the classification process. Just because the word "ringtone" only appeared in the spam messages in the training data, it does not mean that every message with this word should be classified as spam
+```
+
+## TRAINING
+```{r}
+#text_classifier <- naiveBayes(as.matrix(text_train), text_train_labels, laplace=1)
+text_classifier <- svm(as.matrix(text_train), text_train_labels)
+
 ```
 
 ## PREDICTION
