@@ -27,7 +27,7 @@ head(Qs)
 ```{r results='asis'}
 # Need to clean the overflow of text
 Qs_clean <- Qs  %>%
-  dplyr::select(1:12) %>%                    # Keeping only the first 12 columns
+  dplyr::select(1:9) %>%                    # Keeping only the first 12 columns
   dplyr::filter(!is.na(difficulty))  %>%           # Cleaning overflow
   dplyr::mutate(Grade = str_sub(topic_code, 5, 6), Subject = str_sub(topic_code, 1, 3), Curriculum = str_sub(topic_code, 8, 10), Ch_No = str_sub(topic_code, 12, 13))
 
@@ -42,7 +42,7 @@ knitr::kable(head(Qs_clean))
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
 ```{r}
-Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject == "MTH")
+Qs_test <- Qs_clean %>% filter(Curriculum =="JEE")
 
 chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test', 'M1.1 Scaffold test')
 
@@ -215,34 +215,34 @@ true_values <- multi[test_indices, ]$chapter
 ### UNCOMMENT BELOW FOR GETTING TOP 5 STATS
 ### You will have to comment the confusion matrix lines
 
-# df.frame <- as.data.frame(matrix(ncol=7, nrow=nrow(results)))
-# 
-# labels = colnames(results)
-# for (i in 1:nrow(results)) {
-#   true_value = true_values[i]
-#   probs = results[i, ]
-#   goodPred = FALSE
-#   preds = vector()
-#   pred_probs = vector()
-#   ind = max(probs)
-#   prediction = labels[ind]
-#   for (j in 1:5) {
-#     ind = which.max(probs)
-#     prob = max(probs)
-#     probs <- probs[-ind]
-#     x <- match(prob, results[i, ])
-#     preds <- c(preds, labels[x])
-#     pred_probs <- c(pred_probs, prob)
-#   }
-#   if (labels[true_value] %in% prediction) {
-#     goodPred = TRUE
-#   }
-#   df.frame[i, ] = c(labels[true_value], goodPred, pred_probs)
-# }
+ # df.frame <- as.data.frame(matrix(ncol=7, nrow=nrow(results)))
+ # 
+ # labels = colnames(results)
+ # for (i in 1:nrow(results)) {
+ #   true_value = true_values[i]
+ #   probs = results[i, ]
+ #   goodPred = FALSE
+ #   preds = vector()
+ #   pred_probs = vector()
+ #   ind = which.max(probs)
+ #   prediction = labels[ind]
+ #   for (j in 1:5) {
+ #     ind = which.max(probs)
+ #     prob = max(probs)
+ #     probs <- probs[-ind]
+ #     x <- match(prob, results[i, ])
+ #     preds <- c(preds, labels[x])
+ #     pred_probs <- c(pred_probs, prob)
+ #   }
+ #   if (labels[true_value] %in% prediction) {
+ #     goodPred = TRUE
+ #   }
+ #   df.frame[i, ] = c(labels[true_value], goodPred, pred_probs)
+ # }
 
 # top_five_stats = df.frame %>% group_by(V2) %>% summarize(n())
 # top_five_accuracy = top_five_stats[2,2] / (top_five_stats[1,2] + top_five_stats[2,2])
-
+# 
 conf = confusionMatrix(results, text_test_labels)
 confusion_table = as.data.frame.matrix( conf$table  )
 conf_stats = as.data.frame(conf$byClass)
