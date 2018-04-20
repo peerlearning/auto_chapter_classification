@@ -11,7 +11,7 @@ library('SparseM')
 library('tm')
 library('caret')
 #library('SnowballC')
-library('wordcloud')
+#library('wordcloud')
 library('jsonlite')
 
 Qs <- jsonlite::fromJSON('qs_topicwise.json')
@@ -42,9 +42,9 @@ knitr::kable(head(Qs_clean))
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
 ```{r}
-Qs_test <- Qs_clean %>% filter(Curriculum =="JEE")
+Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject =="MTH")
 
-chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test', 'M1.1 Scaffold test')
+chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test','Tally Marks')
 
 Qs_test <- Qs_test %>% filter(!chapter %in%  chapters_to_remove)
 
@@ -152,19 +152,9 @@ prop.table(table(text_test_labels))
 ## Visualizing text data - word clouds
 ```{r}
 # wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
-```
 
-### Word Cloud from chapter 1
-```{r}
 # wordcloud(text_corpus_clean[multi$chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
-```
-
-### Word cloud from the chapter 2
-```{r echo=FALSE, eval=TRUE}
 # wordcloud(text_corpus_clean[multi$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
-```
-### Word cloud from Chapter 3
-```{r eval=TRUE}
 # wordcloud(text_corpus_clean[multi$Chapter == "Conic Sections - I"], max.words = 40, scale = c(3, 0.5))
 ```
 
