@@ -24,69 +24,55 @@ head(Qs)
 
 ### Cleaning and adding Grade, Subject, Curriculum and Chapter No 
 
-```{r results='asis'}
+```{r}
 # Need to clean the overflow of text
 Qs_clean <- Qs  %>%
-  dplyr::select(1:9) %>%                    # Keeping only the first 12 columns
-  dplyr::filter(!is.na(difficulty))  %>%           # Cleaning overflow
+  #dplyr::select(1:9) %>%                    # Keeping only the first 9 columns
+  #dplyr::filter(!is.na(difficulty))  %>%    # No need to clean overflow
   dplyr::mutate(Grade = str_sub(topic_code, 5, 6), Subject = str_sub(topic_code, 1, 3), Curriculum = str_sub(topic_code, 8, 10), Ch_No = str_sub(topic_code, 12, 13))
+```
 
-# Removing non-UTF characters
+# Removing non-UTF characters for word clouds
+```{r eval=FALSE}
 Qs_clean$Text <- lapply(Qs_clean$question_text,gsub, pattern = "[^[:alnum:]]", replacement = " ")
 Qs_clean$question_text <- lapply(Qs_clean$question_text,gsub, pattern = "<.*?>", replacement= " ")
 
-knitr::kable(head(Qs_clean))
+head(Qs_clean)
 
 ```
 
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
 ```{r}
-Qs_test <- Qs_clean %>% filter(Curriculum =="JEE", Subject =="MTH")
+repo <- Qs_clean %>% filter(Curriculum =="JEE", Subject =="MTH")
 
 chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test','Tally Marks')
 
-Qs_test <- Qs_test %>% filter(!chapter %in%  chapters_to_remove)
+chapters_with_no_data = c('Principle of Mathematical Induction')
 
-Qs_test %>% group_by(chapter) %>% summarize(count_qs =n())
+repo <- repo %>% 
+  filter(!chapter %in%  chapters_to_remove) %>%
+  filter(!chapter %in%  chapters_with_no_data)
 
-```
-
-
-### Picking chapters for classification from the CMS repo
-
-```{r eval= TRUE}
-
-# multi <-  filter(Qs_test, chapter %in% c("Aldehydes and Ketones", "Coordination Compounds", "Biomolecules, Polymers and Chemistry in Everyday life", "Electrochemistry", "Amines")) 
-# Using chapter names for filtering gave the error message :
-# longer object length is not a multiple of shorter object length
-multi <- Qs_test
-#multi <- arrange(multi, Code)      ## To rearrange and randomize chapters by row no
-
-multi %>% group_by(chapter) %>% summarize(count_qs =n())
+repo %>% group_by(chapter) %>% summarize(count_qs =n())
 
 ```
+
 
 ### Changing Chapter labels to factors
 
 The Chapter variable is currently a character vector. Since this is a categorical variable, it would be better to convert it to a factor.
 ```{r}
-multi$chapter <- factor(multi$chapter)
-str(multi$chapter)
+repo$chapter <- factor(repo$chapter)
+str(repo$chapter)
 ```
 
 ## Create text corpus
 
 ```{r}
 
-multi<-multi[sample(nrow(multi)),]
-text_corpus <- VCorpus(VectorSource(multi$question_text)) 
-##include both and test and training set to build the corpus
-#inspect (text_corpus)
-```
-
-### Let's view some Qs
-```{r}
+repo<-repo[sample(nrow(repo)),]       ## Randomize row numbers
+text_corpus <- VCorpus(VectorSource(repo$question_text)) 
 lapply(text_corpus[2:4], as.character)       # Multiple docs
 ```
 
@@ -103,18 +89,15 @@ text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(gsub), patter
 
 ## Now non-UTF characters are removed. We can do regular tasks on the clean corpus.
 
-text_corpus_clean <- tm_map(text_corpus_clean, removeNumbers)
+#text_corpus_clean <- tm_map(text_corpus_clean, removeNumbers)
 text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(tolower))
 
 ## Add stopwords like left, right (frac ?)
-text_corpus_clean <- tm_map(text_corpus_clean, removeWords, c(stopwords(), "left","right"))
+#text_corpus_clean <- tm_map(text_corpus_clean, removeWords, c(stopwords(), "left","right"))
 text_corpus_clean <- tm_map(text_corpus_clean, removePunctuation)
 #text_corpus_clean <- tm_map(text_corpus_clean, stemDocument)
 text_corpus_clean <- tm_map(text_corpus_clean, stripWhitespace)
-```
 
-### Let's view some cleaned Qs
-```{r}
 lapply(text_corpus_clean[2:4], as.character)       
 ```
 
@@ -130,35 +113,37 @@ text_dtm
 
 ```{r}
 
-folds <- cut(seq(1,nrow(multi)),breaks=5,labels=FALSE)
+folds <- cut(seq(1,nrow(repo)),breaks=5,labels=FALSE)
 test_indices = which(folds==1, arr.ind=TRUE)
 
 text_dtm_train <- text_dtm[-test_indices,  ]
-
 text_dtm_test <- text_dtm[test_indices,  ]
 
+```
 
-text_train_labels <- multi[-test_indices,  ]$chapter
-text_test_labels <- multi[test_indices,  ]$chapter 
+## Setting Labels for prediction and checking their sample proportion (%)
+```{r}
+text_train_labels <- repo[-test_indices,  ]$chapter
+text_test_labels <- repo[test_indices,  ]$chapter 
 
-prop.table(table(text_train_labels))
+round(prop.table(table(text_train_labels))*100,2)
 ```
 
 ### Distribution of labels in test set
 ```{r}
-prop.table(table(text_test_labels))
+round(prop.table(table(text_test_labels))*100,2)
 ```
 
 ## Visualizing text data - word clouds
-```{r}
+```{r eval=FALSE}
 # wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
 
-# wordcloud(text_corpus_clean[multi$chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
-# wordcloud(text_corpus_clean[multi$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
-# wordcloud(text_corpus_clean[multi$Chapter == "Conic Sections - I"], max.words = 40, scale = c(3, 0.5))
+# wordcloud(text_corpus_clean[repo$chapter == "Applications of Derivatives"], max.words = 40, scale = c(3, 0.5))
+# wordcloud(text_corpus_clean[repo$Chapter == "Fundamentals of Mathematics"], max.words = 40, scale = c(3, 0.5))
+# wordcloud(text_corpus_clean[repo$Chapter == "Conic Sections - I"], max.words = 40, scale = c(3, 0.5))
 ```
 
-Words appearing at least a specified number of times.Filter our DTM to include only the terms appearing in a specified vector.
+## Filter features by selecting words appearing at least a specified number of times
 
 ```{r}
 text_freq_words <- findFreqTerms(text_dtm, 25)
@@ -170,6 +155,7 @@ text_dtm_freq_train <- text_dtm_train[ , text_freq_words]
 text_dtm_freq_test <- text_dtm_test[ , text_freq_words]
 ```
 
+## Converting DTM to a categorical data (T/F)
 The Naive Bayes classifier is typically trained on data with categorical features. This poses a problem, since the cells in the sparse matrix are numeric and measure the number of times a word appears in a message. We need to change this to a categorical variable that simply indicates yes or no depending on whether the word appears at all. Train matrix :
 
 ```{r}
@@ -183,7 +169,7 @@ text_test <- apply(text_dtm_freq_test, MARGIN = 2, convert_counts)
 str(text_train)
 ```
 
-Test matrix :
+### Categorical data for Test DTM :
 ```{r}
 str(text_test)
 ```
@@ -198,23 +184,29 @@ text_classifier <- naiveBayes(text_train, text_train_labels, laplace = 1)
 
 ## PREDICTION
 ```{r}
-#results <- predict(text_classifier,as.matrix(text_dtm_test))
-results <- predict(text_classifier,text_test)
-true_values <- multi[test_indices, ]$chapter
 
+results <- predict(text_classifier,text_test)
+true_values <- repo[test_indices, ]$chapter
+test_document <- repo[test_indices, ]$question_text
+
+## as.table((test_document,true_values, results)) ??
+```
+
+## Confusion Matrix
+```{r}
 conf = confusionMatrix(results, text_test_labels)
 confusion_table = as.data.frame.matrix( conf$table  )
 conf_stats = as.data.frame(conf$byClass)
 confusion_table[nrow(confusion_table) + 1, ] <- conf_stats$Sensitivity
-q_counts = multi %>% group_by(chapter) %>% summarize(count_qs =n())
+q_counts = repo %>% group_by(chapter) %>% summarize(count_qs =n())
 confusion_table[nrow(confusion_table) + 1, ] <- t(q_counts[,2])
 
-#View(results)
+View(round(confusion_table, 0))
 ```
 
 ### GETTING TOP 5 STATS
 
-```{r}
+```{r eval=FALSE}
 
 
   df.frame <- as.data.frame(matrix(ncol=7, nrow=nrow(results)))
