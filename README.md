@@ -55,3 +55,5 @@ Sources:
 [3] Python - http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html
 
 [4] Confusion Matrix - http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
+
+[5] Evaluation of text classification https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html
