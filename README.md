@@ -14,3 +14,5 @@ Sources:
 [2] tm, e1071, wordcloud - https://rstudio-pubs-static.s3.amazonaws.com/194717_4639802819a342eaa274067c9dbb657e.html
 
 [3] Python - http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html
+
+[4] Confusion Matrix - http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
