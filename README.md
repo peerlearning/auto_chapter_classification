@@ -17,13 +17,18 @@ You can directly work on the RStudio file and all everything will run **except t
 
 ### R and Python code
 
-Make all the changes you want, and run from the command line:
+
+Make all the changes you want, and then:
+
+1. "Source" the runRmd.R from within RStudio
+2. Run from the command line:
 
 ```
 Rscript runRmd.R
 ```
 
 This will generate a file called `report.html` with a nice output and all that.
+
 
 ## Parameters
 
