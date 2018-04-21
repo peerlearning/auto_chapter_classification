@@ -1,4 +1,4 @@
-# auto_chapter_classification
+# Automatic Chapter Classification
 
 **Goal**: Automatically tag Qs to respective chapters on CMS
 
@@ -8,6 +8,23 @@ To speed up our question creation process on CMS, we should be able to automatic
 
 **Great reference**: 
 A great reference for this problem is [this paper](https://github.com/peerlearning/auto_chapter_classification/blob/master/Useful_Literature/Question%20Topic%20Categorization.pdf) which goes over a lot of the choices that we have to make.
+
+## Running the code
+
+### R Code
+
+You can directly work on the RStudio file and all everything will run **except the python code**. There is an issue with RStudio that somehow doesn't let data be shared between R and python.
+
+### R and Python code
+
+Make all the changes you want, and run from the command line:
+
+```
+Rscript runRmd.R
+```
+
+This will generate a file called `report.html` with a nice output and all that.
+
 ## Parameters
 
 These are the choices we have to make while using this:

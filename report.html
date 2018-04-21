@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Configuration</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<pre><code class="r">library(&#39;tidyverse&#39;)
+library(&#39;e1071&#39;)
+library(&#39;SparseM&#39;)
+library(&#39;tm&#39;)
+library(&#39;caret&#39;)
+#library(&#39;SnowballC&#39;)
+#library(&#39;wordcloud&#39;)
+library(&#39;jsonlite&#39;)
+
+library(reticulate)
+path_to_python &lt;- &quot;/usr/local/bin/python3&quot;
+use_python(path_to_python)
+knitr::knit_engines$set(python = reticulate::eng_python)
+py_available(initialize = TRUE)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<h2>Configuration</h2>
+
+<pre><code class="r"># Algorithm. Choices: svm, naiveBayes, etc
+algorithm = naiveBayes
+
+# Categorical or not. Choices: TRUE or FALSE
+categorical = TRUE
+
+# Weighting function. Choices: weightTf, weightTfIdf
+# Whether to normalize terms of Document Matrix. Choices: TRUE, FALSE
+weightingFunction = weightTf
+normalize = FALSE
+
+# Whether to write to db
+writeToDb = TRUE
+</code></pre>
+
+<pre><code class="r">## Reading data from CMS
+Qs &lt;- jsonlite::fromJSON(&#39;qs_topicwise.json&#39;)
+Qs &lt;- flatten(Qs)
+
+#Qs &lt;- read_tsv(&quot;qs_topicwise_dump.tsv&quot;)
+
+head(Qs)
+</code></pre>
+
+<pre><code>##         topic_code               chapter
+## 1 MTH-12-JEE-18-01 Inverse Trigonometry 
+## 2 MTH-12-JEE-18-01 Inverse Trigonometry 
+## 3 MTH-12-JEE-18-01 Inverse Trigonometry 
+## 4 MTH-12-JEE-18-01 Inverse Trigonometry 
+## 5 MTH-12-JEE-18-01 Inverse Trigonometry 
+## 6 MTH-12-JEE-18-01 Inverse Trigonometry 
+##                                  topic difficulty problem_code
+## 1 Introduction to Inverse Trigonometry          1      P000321
+## 2 Introduction to Inverse Trigonometry          1      P005928
+## 3 Introduction to Inverse Trigonometry          1      P005929
+## 4 Introduction to Inverse Trigonometry          1      P005930
+## 5 Introduction to Inverse Trigonometry          1      P005931
+## 6 Introduction to Inverse Trigonometry          1      P005932
+##   problem_status         problem_mongo_id problem_type
+## 1          final 554aee4869702d67a97c0200   ConcepTest
+## 2          final 56f2348c3562d9749900083a    Spot Test
+## 3          final 56f235453562d97499000841    Spot Test
+## 4          final 56f235d43562d97499000848    Spot Test
+## 5          final 56f242be3562d97499000854    Spot Test
+## 6          final 56f243c43562d9749900085b    Spot Test
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           question_text
+## 1 Among the statements given below, which one is correct? \\({\\sin ^{ - 1}}x = {\\left( {\\sin x} \\right)^{ - 1}}\\) \\({\\sin ^{ - 1}}x = \\frac{1}{{\\sin x}}\\) \\({\\left( {\\sin x} \\right)^{ - 1}} = \\frac{1}{{\\sin x}}\\) None of the above It is important to understand that \\({\\sin ^{ - 1}}x\\) and \\({\\left( {\\sin x} \\right)^{ - 1}}\\) are two different functions. \\({\\left( {\\sin x} \\right)^{ - 1}}\\) is the reciprocal of \\(\\sin x\\), whereas \\({\\sin ^{ - 1}}x\\) is the inverse of \\(\\sin x\\)For eg. \tWhen \\(\\sin x = \\frac{1}{2}\\),\t\t\\({\\left( {\\sin x} \\right)^{ - 1}} = \\frac{1}{{\\sin x}} = 2\\)\t\t \\(x = {\\sin ^{ - 1}}\\left( {\\frac{1}{2}} \\right) = 30^\\circ \\)
+## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \\(\\sin^{−1}\\left(⁡\\frac{1}{√2}\\right)=\\)________ \\(\\frac{\\pi}2\\) \\(\\frac{\\pi}4\\) \\(\\frac{\\pi}3\\) \\(\\frac{\\pi}6\\) 
+## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              The principal domain of \\(\\cos⁡𝑥\\) is ___________  \\(\\left[0, 2𝜋\\right]\\) \\(\\left[−\\frac{𝜋}2,\\frac{𝜋}2\\right]\\) \\(\\left[0, 𝜋\\right]\\) \\(\\left[0,\\frac{𝜋}2\\right]\\) 
+## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             The principal domain of \\(\\tan⁡𝑥\\) is ___________  \\(\\left[0, 2\\pi\\right]\\) \\(\\left[-\\frac{\\pi}2, \\frac{\\pi}2\\right]\\) \\(\\left[0, \\pi\\right]\\) \\(\\left[0, \\frac{\\pi}2\\right]\\) 
+## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \\(\\tan^{-1}\\left(\\sin\\frac{\\pi}2\\right)=\\) \\(\\frac\\pi2\\) \\(\\frac\\pi4\\) \\(\\frac\\pi3\\) \\(\\frac\\pi6\\) 
+## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \\(\\sin^{−1}⁡\\left(\\sin⁡𝑥\\right)=𝑥\\) if \\(𝑥∈\\)_________ \\(\\left[0, 2𝜋\\right]\\) \\(\\left[-\\frac \\pi 2, \\frac \\pi 2\\right]\\) \\(\\left[0, 𝜋\\right]\\) \\(\\left[0, \\frac \\pi 2\\right]\\)
+</code></pre>
+
+<h3>Cleaning and adding Grade, Subject, Curriculum and Chapter No</h3>
+
+<pre><code class="r"># Need to clean the overflow of text
+Qs_clean &lt;- Qs  %&gt;%
+  #dplyr::select(1:9) %&gt;%                    # Keeping only the first 9 columns
+  #dplyr::filter(!is.na(difficulty))  %&gt;%    # No need to clean overflow
+  dplyr::mutate(Grade = str_sub(topic_code, 5, 6), Subject = str_sub(topic_code, 1, 3), Curriculum = str_sub(topic_code, 8, 10), Ch_No = str_sub(topic_code, 12, 13))
+</code></pre>
+
+<h3>Summarizing Chapter wise # Qs in the entire JEE dataset</h3>
+
+<pre><code class="r">repo &lt;- Qs_clean %&gt;% filter(Curriculum ==&quot;JEE&quot;, Subject ==&quot;MTH&quot;)
+
+chapters_to_remove = c(&#39;Selection Test&#39;, &#39;Repository&#39;, &#39;Bridge Intervention Curriculum&#39;, &#39;M1.1 Scaffold test&#39;,&#39;Tally Marks&#39;)
+
+chapters_with_no_data = c(&#39;Principle of Mathematical Induction&#39;)
+
+repo &lt;- repo %&gt;% 
+  filter(!chapter %in%  chapters_to_remove) %&gt;%
+  filter(!chapter %in%  chapters_with_no_data)
+
+repo %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())
+</code></pre>
+
+<pre><code>## # A tibble: 26 x 2
+##    chapter                          count_qs
+##    &lt;chr&gt;                               &lt;int&gt;
+##  1 3 Dimensional Geometry                135
+##  2 Applications of Derivatives           250
+##  3 Binomial Theorem                      307
+##  4 Complex Numbers                       394
+##  5 Conic Sections - I                    289
+##  6 Conic Sections - II                   431
+##  7 Continuity and Differentiability      277
+##  8 Definite Integration                  195
+##  9 Differential Equations                 80
+## 10 Functions 2                           159
+## # ... with 16 more rows
+</code></pre>
+
+<h2>Create text corpus</h2>
+
+<pre><code class="r">repo&lt;-repo[sample(nrow(repo)),]       ## Randomize row numbers
+text_corpus &lt;- VCorpus(VectorSource(repo$question_text)) 
+lapply(text_corpus[2:4], as.character)       # Multiple docs
+</code></pre>
+
+<pre><code>## $`2`
+## [1] &quot;The locus of a point \\(P(\\alpha,\\beta)\\) moving under the condition that the line \\(y=\\alpha x+\\beta \\) is a tangent to the hyperbola \\(\\frac{x^2}{a^2}-\\frac{y^2}{b^2}=1\\) is an ellipse a circle a parabola a hyperbola We know that if a line \\(y=mx+c\\) is a tangent to the hyperbola \\(\\frac{x^2}{a^2}-\\frac{y^2}{b^2}=1\\), then \\(c=±\\sqrt{(a^2 m^2-b^2 )}\\).Comparing this with the given equation, \\(y=\\alpha x+\\beta \\) is a tangent to \\(\\frac{x^2}{a^2}-\\frac{y^2}{b^2}=1\\)\\(\\Rightarrow\\beta^2=a^2\\alpha^2-b^2\\)\\(\\therefore\\) Locus of \\((\\alpha, \\beta )\\) is \\(y^2=a^2x^2-b^2\\)\\(\\Rightarrow x^2=\\frac{1}{a^2}(y^2+b^2)\\), which is a hyperbola.&quot;
+## 
+## $`3`
+## [1] &quot;Let  \\(v ⃗=2i ̂+j ̂-k ̂\\) and  \\(w ⃗=i ̂+3k ̂\\). If \\(u ̂\\) is a unit vector, then the maximum value of the scalar triple product \\([u  v  w]\\) is \\(-1\\) \\(\\sqrt{10}+\\sqrt{16}\\) \\(\\sqrt{59}\\) \\(\\sqrt{60}\\) \\(v ⃗×w ⃗=3i ̂-7j ̂-k ̂\\)Now \\([u ⃗   v ⃗   w ⃗ ]=u ⃗.(3i ̂-7j ̂-k ̂ )=|u ⃗ ||3i ̂-7j ̂-k ̂ |\\cos⁡θ\\)(where \\(θ\\) is the angle between \\(u ⃗\\) and \\(v ⃗×w ⃗\\))Because \\(|u ⃗ |=1\\), hence \\([u ⃗   v ⃗   w ⃗ ]=1.\\sqrt{59}\\cos⁡θ\\)Thus \\([u ⃗   v ⃗   w ⃗]\\) is maximum if \\(\\cos⁡θ=1\\), i.e. \\(θ=0\\).Hence, maximum value of  \\([u ⃗   v ⃗   w ⃗ ]=\\sqrt{59}\\)&quot;
+## 
+## $`4`
+## [1] &quot;Total number of ways in which \\(5\\) balls of different colours can be distributed among three persons so that each person gets at least one ball, is \\(75\\) \\(150\\) \\(210\\) \\(243\\) \\(5\\) balls can be distributed to \\(3\\) persons by giving \\((2, 2, 1)\\) balls or by giving \\((3, 1, 1)\\) balls. Each of the above distribution has three such ways. Thus, the required number of ways. \\(=(3) (^5C_2) (^3C_2) (^1C_1)+3(^5C_3) (^2C_1) (^1C_1)\\)\\(=(3) (10) (3) (1) +(3) (10) (2) (1)=150\\)&quot;
+</code></pre>
+
+<h2>Cleaning text</h2>
+
+<p>Removing punctuations, numbers and stop words
+Converting to lower case
+Stemming words - learned, learning, and learns are transformed into the base form, learn
+Removing additional white spaces</p>
+
+<pre><code class="r"># Source : [2] Removing non-UTF8 characters
+text_corpus_clean &lt;- tm_map(text_corpus, content_transformer(gsub), pattern =&quot;[^[:alnum:]]&quot; , replacement = &quot; &quot;)
+text_corpus_clean &lt;- tm_map(text_corpus_clean, content_transformer(gsub), pattern =&quot;[\u0080-\uffff]&quot; , replacement = &quot; &quot;)
+
+## Now non-UTF characters are removed. We can do regular tasks on the clean corpus.
+
+#text_corpus_clean &lt;- tm_map(text_corpus_clean, removeNumbers)
+text_corpus_clean &lt;- tm_map(text_corpus_clean, content_transformer(tolower))
+
+# Remove one letter words
+text_corpus_clean &lt;- tm_map(text_corpus_clean, content_transformer(gsub), pattern=&quot;\\b\\w{1,2}\\b&quot;, replacement = &quot;&quot;)
+
+## Add stopwords like left, right (frac ?)
+#text_corpus_clean &lt;- tm_map(text_corpus_clean, removeWords, c(stopwords(), &quot;left&quot;,&quot;right&quot;))
+text_corpus_clean &lt;- tm_map(text_corpus_clean, removePunctuation)
+#text_corpus_clean &lt;- tm_map(text_corpus_clean, stemDocument)
+text_corpus_clean &lt;- tm_map(text_corpus_clean, stripWhitespace)
+
+lapply(text_corpus_clean[2:4], as.character)       
+</code></pre>
+
+<pre><code>## $`2`
+## [1] &quot;the locus point alpha beta moving under the condition that the line alpha beta tangent the hyperbola frac frac ellipse circle parabola hyperbola know that line tangent the hyperbola frac frac then sqrt comparing this with the given equation alpha beta tangent frac frac rightarrow beta alpha therefore locus alpha beta rightarrow frac which hyperbola &quot;
+## 
+## $`3`
+## [1] &quot;let and unit vector then the maximum value the scalar triple product sqrt sqrt sqrt sqrt now cos where the angle between and because hence sqrt cos thus maximum cos hence maximum value sqrt &quot;
+## 
+## $`4`
+## [1] &quot;total number ways which balls different colours can distributed among three persons that each person gets least one ball 150 210 243 balls can distributed persons giving balls giving balls each the above distribution has three such ways thus the required number ways 150 &quot;
+</code></pre>
+
+<h2>Bag of words - Tokenization</h2>
+
+<pre><code class="r"># TF-IDF
+text_dtm &lt;- DocumentTermMatrix(text_corpus_clean, control = list(weighting = weightingFunction, normalize = normalize))
+
+# Add a dictionary to DTM ?
+</code></pre>
+
+<h2>Data preparation - Creating training and test datasets</h2>
+
+<pre><code class="r">folds &lt;- cut(seq(1,nrow(repo)),breaks=5,labels=FALSE)
+test_indices = which(folds==1, arr.ind=TRUE)
+
+text_dtm_train &lt;- text_dtm[-test_indices,  ]
+text_dtm_test &lt;- text_dtm[test_indices,  ]
+</code></pre>
+
+<h2>Setting Labels for prediction and checking their sample proportion (%)</h2>
+
+<pre><code class="r">text_train_labels &lt;- as.factor(repo[-test_indices,  ]$chapter)
+text_test_labels &lt;- as.factor(repo[test_indices,  ]$chapter) 
+
+round(prop.table(table(text_train_labels))*100,2)
+</code></pre>
+
+<pre><code>## text_train_labels
+##           3 Dimensional Geometry      Applications of Derivatives 
+##                             1.93                             3.87 
+##                 Binomial Theorem                  Complex Numbers 
+##                             4.69                             6.16 
+##               Conic Sections - I              Conic Sections - II 
+##                             4.14                             6.70 
+## Continuity and Differentiability             Definite Integration 
+##                             4.31                             3.03 
+##           Differential Equations                      Functions 2 
+##                             1.09                             2.61 
+##      Fundamentals of Mathematics           Indefinite Integration 
+##                             5.99                             1.64 
+##                     Inequalities            Inverse Trigonometry  
+##                             4.01                             1.79 
+##                           Limits           Mathematical Reasoning 
+##                             2.88                             2.02 
+##        Matrices and Determinants    Permutations and Combinations 
+##                             2.46                             5.46 
+##                      Probability              Quadratic Equations 
+##                             2.44                             5.30 
+##              Sequence and Series    Sets, Relations and Functions 
+##                             5.51                             6.22 
+##                       Statistics                   Straight Lines 
+##                             2.52                             4.96 
+##                     Trigonometry                   Vector Algebra 
+##                             5.74                             2.52
+</code></pre>
+
+<h2>Distribution of labels in test set</h2>
+
+<pre><code class="r">round(prop.table(table(text_test_labels))*100,2)
+</code></pre>
+
+<pre><code>## text_test_labels
+##           3 Dimensional Geometry      Applications of Derivatives 
+##                             2.59                             3.59 
+##                 Binomial Theorem                  Complex Numbers 
+##                             4.65                             5.42 
+##               Conic Sections - I              Conic Sections - II 
+##                             5.49                             6.10 
+## Continuity and Differentiability             Definite Integration 
+##                             3.89                             2.75 
+##           Differential Equations                      Functions 2 
+##                             1.75                             1.68 
+##      Fundamentals of Mathematics           Indefinite Integration 
+##                             5.95                             1.60 
+##                     Inequalities            Inverse Trigonometry  
+##                             3.13                             1.75 
+##                           Limits           Mathematical Reasoning 
+##                             3.43                             2.67 
+##        Matrices and Determinants    Permutations and Combinations 
+##                             1.98                             5.64 
+##                      Probability              Quadratic Equations 
+##                             2.52                             5.03 
+##              Sequence and Series    Sets, Relations and Functions 
+##                             4.96                             7.32 
+##                       Statistics                   Straight Lines 
+##                             2.36                             5.64 
+##                     Trigonometry                   Vector Algebra 
+##                             5.72                             2.36
+</code></pre>
+
+<h2>Visualizing text data - word clouds</h2>
+
+<p>wordcloud(text_corpus_clean, min.freq=10, random.order = FALSE)
+wordcloud(text_corpus_clean[repo$chapter == &quot;Applications of Derivatives&quot;], max.words = 40, scale = c(3, 0.5))</p>
+
+<h2>Converting DTM to a categorical data (T/F) for NB e1071 as it only takes categorical input</h2>
+
+<pre><code class="r">## Filter features by selecting words appearing at least a specified number of times
+text_freq_words &lt;- findFreqTerms(text_dtm, 25)
+
+# tf-idf ?
+# Useful to remove words which maybe in training set but not in test set leading to an out of bounds error
+
+text_dtm_freq_train &lt;- text_dtm_train[ , text_freq_words]
+text_dtm_freq_test &lt;- text_dtm_test[ , text_freq_words]
+
+convert_counts &lt;- function(x) {
+  if(categorical) {
+    x &lt;- ifelse(x &gt; 0, &quot;Yes&quot;, &quot;No&quot;)
+  } 
+  else {
+    x &lt;- x
+  }
+}
+
+# MARGIN = 1 is used for rows
+text_train &lt;- apply(text_dtm_freq_train, MARGIN = 2, convert_counts)
+text_test &lt;- apply(text_dtm_freq_test, MARGIN = 2, convert_counts)
+
+
+# Laplace - This allows words that did not appear earlier to have an indisputable say in the classification process. Just because the word &quot;ringtone&quot; only appeared in the spam messages in the training data, it does not mean that every message with this word should be classified as spam
+</code></pre>
+
+<h2>TRAINING</h2>
+
+<pre><code class="r">text_classifier &lt;- algorithm(as.matrix(text_train), text_train_labels)
+</code></pre>
+
+<h2>PREDICTION</h2>
+
+<pre><code class="r">rawResults &lt;- predict(text_classifier,as.matrix(text_test), &quot;raw&quot;)
+
+results &lt;- as.factor( colnames(rawResults)[apply(rawResults, 1, which.max)] )
+
+true_values &lt;- repo[test_indices, ]$chapter
+test_document &lt;- repo[test_indices, ]$question_text
+
+## as.table((test_document,true_values, results)) ??
+</code></pre>
+
+<h2>Confusion Matrix</h2>
+
+<pre><code class="r">conf = confusionMatrix(results, text_test_labels)
+confusion_table = as.data.frame.matrix( conf$table  )
+conf_stats = as.data.frame(conf$byClass)
+confusion_table[nrow(confusion_table) + 1, ] &lt;- conf_stats$Sensitivity
+q_counts = repo %&gt;% group_by(chapter) %&gt;% summarize(count_qs =n())
+confusion_table[nrow(confusion_table) + 1, ] &lt;- t(q_counts[,2])
+
+conf$overall
+</code></pre>
+
+<pre><code>##       Accuracy          Kappa  AccuracyLower  AccuracyUpper   AccuracyNull 
+##     0.69641495     0.68222092     0.67072347     0.72122267     0.07322654 
+## AccuracyPValue  McnemarPValue 
+##     0.00000000            NaN
+</code></pre>
+
+<pre><code class="r">#View(conf_stats)
+#View(round(confusion_table, 1))
+</code></pre>
+
+<pre><code class="python">x = 1
+print(r.results)
+</code></pre>
+
+<pre><code>## [&#39;Straight Lines&#39;, &#39;Conic Sections - II&#39;, &#39;Vector Algebra&#39;, &#39;Permutations and Combinations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Complex Numbers&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - I&#39;, &#39;Matrices and Determinants&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Definite Integration&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - I&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Permutations and Combinations&#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Limits&#39;, &#39;Conic Sections - II&#39;, &#39;Continuity and Differentiability&#39;, &#39;Permutations and Combinations&#39;, &#39;Complex Numbers&#39;, &#39;Applications of Derivatives&#39;, &#39;Complex Numbers&#39;, &#39;Indefinite Integration&#39;, &#39;Indefinite Integration&#39;, &#39;Indefinite Integration&#39;, &#39;Limits&#39;, &#39;Continuity and Differentiability&#39;, &#39;Functions 2&#39;, &#39;Inequalities&#39;, &#39;Definite Integration&#39;, &#39;Complex Numbers&#39;, &#39;Definite Integration&#39;, &#39;Vector Algebra&#39;, &#39;Trigonometry&#39;, &#39;Continuity and Differentiability&#39;, &#39;Binomial Theorem&#39;, &#39;Conic Sections - I&#39;, &#39;Conic Sections - I&#39;, &#39;Statistics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Permutations and Combinations&#39;, &#39;Conic Sections - II&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - I&#39;, &#39;Complex Numbers&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Sequence and Series&#39;, &#39;Trigonometry&#39;, &#39;Inverse Trigonometry &#39;, &#39;Binomial Theorem&#39;, &#39;Indefinite Integration&#39;, &#39;Quadratic Equations&#39;, &#39;Indefinite Integration&#39;, &#39;Functions 2&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Probability&#39;, &#39;Conic Sections - II&#39;, &#39;Indefinite Integration&#39;, &#39;Functions 2&#39;, &#39;Quadratic Equations&#39;, &#39;Permutations and Combinations&#39;, &#39;Complex Numbers&#39;, &#39;Complex Numbers&#39;, &#39;Complex Numbers&#39;, &#39;Sets, Relations and Functions&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Binomial Theorem&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Mathematical Reasoning&#39;, &#39;Conic Sections - II&#39;, &#39;Applications of Derivatives&#39;, &#39;Limits&#39;, &#39;Mathematical Reasoning&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Applications of Derivatives&#39;, &#39;Trigonometry&#39;, &#39;Binomial Theorem&#39;, &#39;Conic Sections - II&#39;, &#39;Straight Lines&#39;, &#39;Inequalities&#39;, &#39;Indefinite Integration&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - I&#39;, &#39;Straight Lines&#39;, &#39;Functions 2&#39;, &#39;Inequalities&#39;, &#39;Definite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Probability&#39;, &#39;Functions 2&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Continuity and Differentiability&#39;, &#39;Permutations and Combinations&#39;, &#39;Definite Integration&#39;, &#39;Continuity and Differentiability&#39;, &#39;Inverse Trigonometry &#39;, &#39;Vector Algebra&#39;, &#39;Matrices and Determinants&#39;, &#39;Differential Equations&#39;, &#39;Sequence and Series&#39;, &#39;Quadratic Equations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Quadratic Equations&#39;, &#39;Inequalities&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Trigonometry&#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Matrices and Determinants&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Applications of Derivatives&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Indefinite Integration&#39;, &#39;Continuity and Differentiability&#39;, &#39;Straight Lines&#39;, &#39;Sequence and Series&#39;, &#39;Inverse Trigonometry &#39;, &#39;Mathematical Reasoning&#39;, &#39;Quadratic Equations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Applications of Derivatives&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - II&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inequalities&#39;, &#39;Sequence and Series&#39;, &#39;Binomial Theorem&#39;, &#39;Limits&#39;, &#39;Indefinite Integration&#39;, &#39;Continuity and Differentiability&#39;, &#39;Binomial Theorem&#39;, &#39;Continuity and Differentiability&#39;, &#39;Indefinite Integration&#39;, &#39;Mathematical Reasoning&#39;, &#39;Complex Numbers&#39;, &#39;Straight Lines&#39;, &#39;Indefinite Integration&#39;, &#39;Statistics&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - II&#39;, &#39;Binomial Theorem&#39;, &#39;Limits&#39;, &#39;Quadratic Equations&#39;, &#39;Continuity and Differentiability&#39;, &#39;Limits&#39;, &#39;Statistics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Applications of Derivatives&#39;, &#39;Quadratic Equations&#39;, &#39;Conic Sections - II&#39;, &#39;Definite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Sequence and Series&#39;, &#39;Inverse Trigonometry &#39;, &#39;Applications of Derivatives&#39;, &#39;Continuity and Differentiability&#39;, &#39;Sequence and Series&#39;, &#39;Indefinite Integration&#39;, &#39;Inequalities&#39;, &#39;Statistics&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - I&#39;, &#39;Sequence and Series&#39;, &#39;Binomial Theorem&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Sequence and Series&#39;, &#39;Binomial Theorem&#39;, &#39;Limits&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Continuity and Differentiability&#39;, &#39;Binomial Theorem&#39;, &#39;Sequence and Series&#39;, &#39;Applications of Derivatives&#39;, &#39;Straight Lines&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Probability&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Permutations and Combinations&#39;, &#39;Quadratic Equations&#39;, &#39;Inequalities&#39;, &#39;Definite Integration&#39;, &#39;Complex Numbers&#39;, &#39;Matrices and Determinants&#39;, &#39;Statistics&#39;, &#39;Conic Sections - II&#39;, &#39;Quadratic Equations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inequalities&#39;, &#39;Straight Lines&#39;, &#39;Statistics&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Limits&#39;, &#39;Continuity and Differentiability&#39;, &#39;Trigonometry&#39;, &#39;Definite Integration&#39;, &#39;Sequence and Series&#39;, &#39;Trigonometry&#39;, &#39;Conic Sections - II&#39;, &#39;Continuity and Differentiability&#39;, &#39;Inequalities&#39;, &#39;Continuity and Differentiability&#39;, &#39;Mathematical Reasoning&#39;, &#39;Binomial Theorem&#39;, &#39;Limits&#39;, &#39;Conic Sections - I&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Binomial Theorem&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - I&#39;, &#39;Definite Integration&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Trigonometry&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Indefinite Integration&#39;, &#39;Trigonometry&#39;, &#39;Trigonometry&#39;, &#39;Sequence and Series&#39;, &#39;Complex Numbers&#39;, &#39;Limits&#39;, &#39;Conic Sections - II&#39;, &#39;Quadratic Equations&#39;, &#39;Complex Numbers&#39;, &#39;Sequence and Series&#39;, &#39;Conic Sections - II&#39;, &#39;Inequalities&#39;, &#39;Complex Numbers&#39;, &#39;Applications of Derivatives&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Quadratic Equations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Limits&#39;, &#39;Inverse Trigonometry &#39;, &#39;Sequence and Series&#39;, &#39;Straight Lines&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inequalities&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sequence and Series&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Permutations and Combinations&#39;, &#39;Limits&#39;, &#39;Limits&#39;, &#39;Conic Sections - II&#39;, &#39;Vector Algebra&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Trigonometry&#39;, &#39;Conic Sections - II&#39;, &#39;Vector Algebra&#39;, &#39;Conic Sections - II&#39;, &#39;Binomial Theorem&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - II&#39;, &#39;Statistics&#39;, &#39;Quadratic Equations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Definite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Straight Lines&#39;, &#39;Matrices and Determinants&#39;, &#39;Matrices and Determinants&#39;, &#39;Quadratic Equations&#39;, &#39;Differential Equations&#39;, &#39;Statistics&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inverse Trigonometry &#39;, &#39;Indefinite Integration&#39;, &#39;Inverse Trigonometry &#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Sequence and Series&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Continuity and Differentiability&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Conic Sections - II&#39;, &#39;Definite Integration&#39;, &#39;Differential Equations&#39;, &#39;Conic Sections - I&#39;, &#39;Conic Sections - II&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Limits&#39;, &#39;Binomial Theorem&#39;, &#39;Sequence and Series&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Indefinite Integration&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Sequence and Series&#39;, &#39;Trigonometry&#39;, &#39;Inequalities&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Complex Numbers&#39;, &#39;Continuity and Differentiability&#39;, &#39;Matrices and Determinants&#39;, &#39;Matrices and Determinants&#39;, &#39;Limits&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Matrices and Determinants&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - I&#39;, &#39;Definite Integration&#39;, &#39;Quadratic Equations&#39;, &#39;Limits&#39;, &#39;Permutations and Combinations&#39;, &#39;Permutations and Combinations&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Inverse Trigonometry &#39;, &#39;Differential Equations&#39;, &#39;Inequalities&#39;, &#39;Binomial Theorem&#39;, &#39;Mathematical Reasoning&#39;, &#39;Statistics&#39;, &#39;Inverse Trigonometry &#39;, &#39;Indefinite Integration&#39;, &#39;Probability&#39;, &#39;Conic Sections - I&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Straight Lines&#39;, &#39;Limits&#39;, &#39;Conic Sections - II&#39;, &#39;Binomial Theorem&#39;, &#39;Conic Sections - II&#39;, &#39;Indefinite Integration&#39;, &#39;Permutations and Combinations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Sequence and Series&#39;, &#39;Straight Lines&#39;, &#39;Sequence and Series&#39;, &#39;Binomial Theorem&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Quadratic Equations&#39;, &#39;Trigonometry&#39;, &#39;Mathematical Reasoning&#39;, &#39;Vector Algebra&#39;, &#39;Binomial Theorem&#39;, &#39;Applications of Derivatives&#39;, &#39;Straight Lines&#39;, &#39;Inequalities&#39;, &#39;Permutations and Combinations&#39;, &#39;Conic Sections - I&#39;, &#39;Permutations and Combinations&#39;, &#39;Conic Sections - II&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Straight Lines&#39;, &#39;Permutations and Combinations&#39;, &#39;Indefinite Integration&#39;, &#39;Permutations and Combinations&#39;, &#39;Limits&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Conic Sections - II&#39;, &#39;Trigonometry&#39;, &#39;Conic Sections - II&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Indefinite Integration&#39;, &#39;Sequence and Series&#39;, &#39;Indefinite Integration&#39;, &#39;Limits&#39;, &#39;Inverse Trigonometry &#39;, &#39;Indefinite Integration&#39;, &#39;Statistics&#39;, &#39;Applications of Derivatives&#39;, &#39;Applications of Derivatives&#39;, &#39;Matrices and Determinants&#39;, &#39;Complex Numbers&#39;, &#39;Indefinite Integration&#39;, &#39;Matrices and Determinants&#39;, &#39;Trigonometry&#39;, &#39;Statistics&#39;, &#39;Continuity and Differentiability&#39;, &#39;Sequence and Series&#39;, &#39;Complex Numbers&#39;, &#39;Trigonometry&#39;, &#39;Inverse Trigonometry &#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Applications of Derivatives&#39;, &#39;Conic Sections - I&#39;, &#39;Permutations and Combinations&#39;, &#39;Sequence and Series&#39;, &#39;Conic Sections - I&#39;, &#39;Differential Equations&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Inverse Trigonometry &#39;, &#39;Probability&#39;, &#39;Permutations and Combinations&#39;, &#39;Conic Sections - II&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Permutations and Combinations&#39;, &#39;Definite Integration&#39;, &#39;Complex Numbers&#39;, &#39;Quadratic Equations&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - II&#39;, &#39;Complex Numbers&#39;, &#39;Binomial Theorem&#39;, &#39;Trigonometry&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Continuity and Differentiability&#39;, &#39;Inequalities&#39;, &#39;Straight Lines&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Inequalities&#39;, &#39;Probability&#39;, &#39;Statistics&#39;, &#39;Straight Lines&#39;, &#39;Sequence and Series&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Inequalities&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Straight Lines&#39;, &#39;Applications of Derivatives&#39;, &#39;Complex Numbers&#39;, &#39;Inverse Trigonometry &#39;, &#39;Continuity and Differentiability&#39;, &#39;Limits&#39;, &#39;Conic Sections - I&#39;, &#39;Complex Numbers&#39;, &#39;Mathematical Reasoning&#39;, &#39;Mathematical Reasoning&#39;, &#39;Indefinite Integration&#39;, &#39;Statistics&#39;, &#39;Limits&#39;, &#39;Limits&#39;, &#39;Statistics&#39;, &#39;Trigonometry&#39;, &#39;Trigonometry&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - I&#39;, &#39;Definite Integration&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - I&#39;, &#39;Binomial Theorem&#39;, &#39;Complex Numbers&#39;, &#39;Continuity and Differentiability&#39;, &#39;Permutations and Combinations&#39;, &#39;Trigonometry&#39;, &#39;Permutations and Combinations&#39;, &#39;Permutations and Combinations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Binomial Theorem&#39;, &#39;Functions 2&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inequalities&#39;, &#39;Quadratic Equations&#39;, &#39;Applications of Derivatives&#39;, &#39;Quadratic Equations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Straight Lines&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Functions 2&#39;, &#39;Inverse Trigonometry &#39;, &#39;Straight Lines&#39;, &#39;Complex Numbers&#39;, &#39;Vector Algebra&#39;, &#39;Trigonometry&#39;, &#39;Sequence and Series&#39;, &#39;Straight Lines&#39;, &#39;Sets, Relations and Functions&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Quadratic Equations&#39;, &#39;Conic Sections - II&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Vector Algebra&#39;, &#39;Conic Sections - II&#39;, &#39;Sequence and Series&#39;, &#39;Applications of Derivatives&#39;, &#39;Indefinite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - I&#39;, &#39;Limits&#39;, &#39;Indefinite Integration&#39;, &#39;Sequence and Series&#39;, &#39;Indefinite Integration&#39;, &#39;Sequence and Series&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Mathematical Reasoning&#39;, &#39;Inequalities&#39;, &#39;Applications of Derivatives&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Binomial Theorem&#39;, &#39;Sets, Relations and Functions&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Limits&#39;, &#39;Mathematical Reasoning&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - I&#39;, &#39;Quadratic Equations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Continuity and Differentiability&#39;, &#39;Binomial Theorem&#39;, &#39;Vector Algebra&#39;, &#39;Sequence and Series&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Indefinite Integration&#39;, &#39;Indefinite Integration&#39;, &#39;Permutations and Combinations&#39;, &#39;Indefinite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Functions 2&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Definite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - I&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Sequence and Series&#39;, &#39;Conic Sections - I&#39;, &#39;Mathematical Reasoning&#39;, &#39;Quadratic Equations&#39;, &#39;Inequalities&#39;, &#39;Straight Lines&#39;, &#39;Quadratic Equations&#39;, &#39;Sequence and Series&#39;, &#39;Complex Numbers&#39;, &#39;Binomial Theorem&#39;, &#39;Continuity and Differentiability&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Probability&#39;, &#39;Conic Sections - II&#39;, &#39;Inequalities&#39;, &#39;Mathematical Reasoning&#39;, &#39;Binomial Theorem&#39;, &#39;Probability&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Permutations and Combinations&#39;, &#39;Matrices and Determinants&#39;, &#39;Vector Algebra&#39;, &#39;Probability&#39;, &#39;Binomial Theorem&#39;, &#39;Conic Sections - II&#39;, &#39;Quadratic Equations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Mathematical Reasoning&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Functions 2&#39;, &#39;Continuity and Differentiability&#39;, &#39;Vector Algebra&#39;, &#39;Differential Equations&#39;, &#39;Limits&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Inequalities&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sequence and Series&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - II&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - I&#39;, &#39;Inverse Trigonometry &#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inequalities&#39;, &#39;Indefinite Integration&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - I&#39;, &#39;Matrices and Determinants&#39;, &#39;Conic Sections - II&#39;, &#39;Mathematical Reasoning&#39;, &#39;Quadratic Equations&#39;, &#39;Complex Numbers&#39;, &#39;Matrices and Determinants&#39;, &#39;Limits&#39;, &#39;Continuity and Differentiability&#39;, &#39;Binomial Theorem&#39;, &#39;Differential Equations&#39;, &#39;Conic Sections - I&#39;, &#39;Mathematical Reasoning&#39;, &#39;Quadratic Equations&#39;, &#39;Probability&#39;, &#39;Definite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Applications of Derivatives&#39;, &#39;Binomial Theorem&#39;, &#39;Conic Sections - I&#39;, &#39;Quadratic Equations&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - II&#39;, &#39;Quadratic Equations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - II&#39;, &#39;Straight Lines&#39;, &#39;Sequence and Series&#39;, &#39;Quadratic Equations&#39;, &#39;Straight Lines&#39;, &#39;Sequence and Series&#39;, &#39;Trigonometry&#39;, &#39;Complex Numbers&#39;, &#39;Permutations and Combinations&#39;, &#39;Straight Lines&#39;, &#39;Quadratic Equations&#39;, &#39;Vector Algebra&#39;, &#39;Inequalities&#39;, &#39;Binomial Theorem&#39;, &#39;Sequence and Series&#39;, &#39;Complex Numbers&#39;, &#39;Straight Lines&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - I&#39;, &#39;Indefinite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Indefinite Integration&#39;, &#39;Quadratic Equations&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - I&#39;, &#39;Indefinite Integration&#39;, &#39;Limits&#39;, &#39;Binomial Theorem&#39;, &#39;Conic Sections - I&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Mathematical Reasoning&#39;, &#39;Conic Sections - II&#39;, &#39;Continuity and Differentiability&#39;, &#39;Binomial Theorem&#39;, &#39;Definite Integration&#39;, &#39;Straight Lines&#39;, &#39;Indefinite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Matrices and Determinants&#39;, &#39;Trigonometry&#39;, &#39;Trigonometry&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - II&#39;, &#39;Sequence and Series&#39;, &#39;Mathematical Reasoning&#39;, &#39;Quadratic Equations&#39;, &#39;Mathematical Reasoning&#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Straight Lines&#39;, &#39;Straight Lines&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Conic Sections - II&#39;, &#39;Permutations and Combinations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Limits&#39;, &#39;Sequence and Series&#39;, &#39;Binomial Theorem&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inverse Trigonometry &#39;, &#39;Definite Integration&#39;, &#39;Quadratic Equations&#39;, &#39;Probability&#39;, &#39;Applications of Derivatives&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Matrices and Determinants&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Inverse Trigonometry &#39;, &#39;Matrices and Determinants&#39;, &#39;Complex Numbers&#39;, &#39;Indefinite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inequalities&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Indefinite Integration&#39;, &#39;Indefinite Integration&#39;, &#39;Continuity and Differentiability&#39;, &#39;Mathematical Reasoning&#39;, &#39;Matrices and Determinants&#39;, &#39;Sequence and Series&#39;, &#39;Functions 2&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Quadratic Equations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Indefinite Integration&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Quadratic Equations&#39;, &#39;Binomial Theorem&#39;, &#39;Binomial Theorem&#39;, &#39;Sequence and Series&#39;, &#39;Vector Algebra&#39;, &#39;Inequalities&#39;, &#39;Conic Sections - I&#39;, &#39;Limits&#39;, &#39;Binomial Theorem&#39;, &#39;Mathematical Reasoning&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sequence and Series&#39;, &#39;Conic Sections - II&#39;, &#39;Trigonometry&#39;, &#39;Probability&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inequalities&#39;, &#39;Conic Sections - I&#39;, &#39;Inverse Trigonometry &#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Trigonometry&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Sequence and Series&#39;, &#39;Quadratic Equations&#39;, &#39;Quadratic Equations&#39;, &#39;Continuity and Differentiability&#39;, &#39;Permutations and Combinations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Quadratic Equations&#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Limits&#39;, &#39;Trigonometry&#39;, &#39;Inverse Trigonometry &#39;, &#39;Continuity and Differentiability&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Indefinite Integration&#39;, &#39;Trigonometry&#39;, &#39;Straight Lines&#39;, &#39;Vector Algebra&#39;, &#39;Permutations and Combinations&#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Complex Numbers&#39;, &#39;Functions 2&#39;, &#39;Limits&#39;, &#39;Applications of Derivatives&#39;, &#39;Continuity and Differentiability&#39;, &#39;Continuity and Differentiability&#39;, &#39;Limits&#39;, &#39;Conic Sections - I&#39;, &#39;Conic Sections - I&#39;, &#39;Conic Sections - I&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Quadratic Equations&#39;, &#39;Matrices and Determinants&#39;, &#39;Straight Lines&#39;, &#39;Quadratic Equations&#39;, &#39;Vector Algebra&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - I&#39;, &#39;Complex Numbers&#39;, &#39;Matrices and Determinants&#39;, &#39;Quadratic Equations&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Conic Sections - II&#39;, &#39;Indefinite Integration&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Continuity and Differentiability&#39;, &#39;Applications of Derivatives&#39;, &#39;Functions 2&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Probability&#39;, &#39;Continuity and Differentiability&#39;, &#39;Matrices and Determinants&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Permutations and Combinations&#39;, &#39;Sequence and Series&#39;, &#39;Continuity and Differentiability&#39;, &#39;Conic Sections - I&#39;, &#39;Complex Numbers&#39;, &#39;Vector Algebra&#39;, &#39;Conic Sections - II&#39;, &#39;Differential Equations&#39;, &#39;Inequalities&#39;, &#39;Functions 2&#39;, &#39;Mathematical Reasoning&#39;, &#39;Limits&#39;, &#39;Functions 2&#39;, &#39;Indefinite Integration&#39;, &#39;Quadratic Equations&#39;, &#39;Conic Sections - I&#39;, &#39;Inverse Trigonometry &#39;, &#39;Binomial Theorem&#39;, &#39;Straight Lines&#39;, &#39;Trigonometry&#39;, &#39;Permutations and Combinations&#39;, &#39;Straight Lines&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - II&#39;, &#39;Trigonometry&#39;, &#39;Complex Numbers&#39;, &#39;Sequence and Series&#39;, &#39;Vector Algebra&#39;, &#39;Inequalities&#39;, &#39;Quadratic Equations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sequence and Series&#39;, &#39;Sequence and Series&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - I&#39;, &#39;Trigonometry&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - I&#39;, &#39;Complex Numbers&#39;, &#39;Inverse Trigonometry &#39;, &#39;Limits&#39;, &#39;Complex Numbers&#39;, &#39;Functions 2&#39;, &#39;Conic Sections - I&#39;, &#39;Differential Equations&#39;, &#39;Applications of Derivatives&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - II&#39;, &#39;Straight Lines&#39;, &#39;Applications of Derivatives&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Conic Sections - I&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Indefinite Integration&#39;, &#39;Matrices and Determinants&#39;, &#39;Complex Numbers&#39;, &#39;Definite Integration&#39;, &#39;Statistics&#39;, &#39;Conic Sections - I&#39;, &#39;Inverse Trigonometry &#39;, &#39;Continuity and Differentiability&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Indefinite Integration&#39;, &#39;Permutations and Combinations&#39;, &#39;Sequence and Series&#39;, &#39;Conic Sections - II&#39;, &#39;Continuity and Differentiability&#39;, &#39;Straight Lines&#39;, &#39;Mathematical Reasoning&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Straight Lines&#39;, &#39;Indefinite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Permutations and Combinations&#39;, &#39;Conic Sections - II&#39;, &#39;Trigonometry&#39;, &#39;Continuity and Differentiability&#39;, &#39;Statistics&#39;, &#39;Quadratic Equations&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - II&#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Complex Numbers&#39;, &#39;Conic Sections - I&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - I&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Continuity and Differentiability&#39;, &#39;Probability&#39;, &#39;Differential Equations&#39;, &#39;Conic Sections - I&#39;, &#39;Vector Algebra&#39;, &#39;Straight Lines&#39;, &#39;Functions 2&#39;, &#39;Applications of Derivatives&#39;, &#39;Continuity and Differentiability&#39;, &#39;Conic Sections - II&#39;, &#39;Statistics&#39;, &#39;Conic Sections - II&#39;, &#39;Permutations and Combinations&#39;, &#39;Permutations and Combinations&#39;, &#39;Quadratic Equations&#39;, &#39;Mathematical Reasoning&#39;, &#39;Applications of Derivatives&#39;, &#39;Functions 2&#39;, &#39;Applications of Derivatives&#39;, &#39;Complex Numbers&#39;, &#39;Sequence and Series&#39;, &#39;Straight Lines&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Binomial Theorem&#39;, &#39;Functions 2&#39;, &#39;Conic Sections - II&#39;, &#39;Indefinite Integration&#39;, &#39;Probability&#39;, &#39;Applications of Derivatives&#39;, &#39;Sequence and Series&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Complex Numbers&#39;, &#39;Applications of Derivatives&#39;, &#39;Matrices and Determinants&#39;, &#39;Binomial Theorem&#39;, &#39;Indefinite Integration&#39;, &#39;Permutations and Combinations&#39;, &#39;Mathematical Reasoning&#39;, &#39;Inequalities&#39;, &#39;Quadratic Equations&#39;, &#39;Binomial Theorem&#39;, &#39;Statistics&#39;, &#39;Sequence and Series&#39;, &#39;Quadratic Equations&#39;, &#39;Complex Numbers&#39;, &#39;Complex Numbers&#39;, &#39;Trigonometry&#39;, &#39;Conic Sections - I&#39;, &#39;Statistics&#39;, &#39;Conic Sections - II&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - I&#39;, &#39;Indefinite Integration&#39;, &#39;Differential Equations&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Permutations and Combinations&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Permutations and Combinations&#39;, &#39;Binomial Theorem&#39;, &#39;Probability&#39;, &#39;Binomial Theorem&#39;, &#39;Mathematical Reasoning&#39;, &#39;Conic Sections - I&#39;, &#39;Quadratic Equations&#39;, &#39;Statistics&#39;, &#39;Limits&#39;, &#39;Binomial Theorem&#39;, &#39;Vector Algebra&#39;, &#39;Complex Numbers&#39;, &#39;Permutations and Combinations&#39;, &#39;Straight Lines&#39;, &#39;Indefinite Integration&#39;, &#39;Quadratic Equations&#39;, &#39;Trigonometry&#39;, &#39;Conic Sections - II&#39;, &#39;Inverse Trigonometry &#39;, &#39;Sequence and Series&#39;, &#39;Continuity and Differentiability&#39;, &#39;Sequence and Series&#39;, &#39;Probability&#39;, &#39;Continuity and Differentiability&#39;, &#39;Mathematical Reasoning&#39;, &#39;Continuity and Differentiability&#39;, &#39;Straight Lines&#39;, &#39;Vector Algebra&#39;, &#39;Binomial Theorem&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Continuity and Differentiability&#39;, &#39;Statistics&#39;, &#39;Inverse Trigonometry &#39;, &#39;3 Dimensional Geometry&#39;, &#39;Permutations and Combinations&#39;, &#39;Quadratic Equations&#39;, &#39;Inverse Trigonometry &#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Inequalities&#39;, &#39;Continuity and Differentiability&#39;, &#39;Functions 2&#39;, &#39;Permutations and Combinations&#39;, &#39;Conic Sections - II&#39;, &#39;Indefinite Integration&#39;, &#39;Inverse Trigonometry &#39;, &#39;Inverse Trigonometry &#39;, &#39;Applications of Derivatives&#39;, &#39;Mathematical Reasoning&#39;, &#39;Statistics&#39;, &#39;Quadratic Equations&#39;, &#39;Straight Lines&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - I&#39;, &#39;Permutations and Combinations&#39;, &#39;Permutations and Combinations&#39;, &#39;Statistics&#39;, &#39;Definite Integration&#39;, &#39;Straight Lines&#39;, &#39;Trigonometry&#39;, &#39;Applications of Derivatives&#39;, &#39;Binomial Theorem&#39;, &#39;Straight Lines&#39;, &#39;Quadratic Equations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Mathematical Reasoning&#39;, &#39;Conic Sections - I&#39;, &#39;Straight Lines&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - I&#39;, &#39;Conic Sections - I&#39;, &#39;Permutations and Combinations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Permutations and Combinations&#39;, &#39;Conic Sections - I&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Definite Integration&#39;, &#39;Binomial Theorem&#39;, &#39;Complex Numbers&#39;, &#39;Definite Integration&#39;, &#39;Quadratic Equations&#39;, &#39;Continuity and Differentiability&#39;, &#39;Limits&#39;, &#39;Indefinite Integration&#39;, &#39;Continuity and Differentiability&#39;, &#39;Limits&#39;, &#39;Conic Sections - II&#39;, &#39;Straight Lines&#39;, &#39;Inequalities&#39;, &#39;Binomial Theorem&#39;, &#39;Quadratic Equations&#39;, &#39;Inequalities&#39;, &#39;Permutations and Combinations&#39;, &#39;Continuity and Differentiability&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Applications of Derivatives&#39;, &#39;Matrices and Determinants&#39;, &#39;Sequence and Series&#39;, &#39;Straight Lines&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Binomial Theorem&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Applications of Derivatives&#39;, &#39;Inequalities&#39;, &#39;Permutations and Combinations&#39;, &#39;Limits&#39;, &#39;Applications of Derivatives&#39;, &#39;Conic Sections - I&#39;, &#39;Binomial Theorem&#39;, &#39;Statistics&#39;, &#39;Inverse Trigonometry &#39;, &#39;Conic Sections - II&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Straight Lines&#39;, &#39;Matrices and Determinants&#39;, &#39;Limits&#39;, &#39;Mathematical Reasoning&#39;, &#39;Differential Equations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Inequalities&#39;, &#39;Matrices and Determinants&#39;, &#39;Indefinite Integration&#39;, &#39;Mathematical Reasoning&#39;, &#39;Sequence and Series&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Trigonometry&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Limits&#39;, &#39;Differential Equations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Binomial Theorem&#39;, &#39;Permutations and Combinations&#39;, &#39;Binomial Theorem&#39;, &#39;Matrices and Determinants&#39;, &#39;Permutations and Combinations&#39;, &#39;Definite Integration&#39;, &#39;Matrices and Determinants&#39;, &#39;Continuity and Differentiability&#39;, &#39;Indefinite Integration&#39;, &#39;Limits&#39;, &#39;Probability&#39;, &#39;Vector Algebra&#39;, &#39;Binomial Theorem&#39;, &#39;Conic Sections - II&#39;, &#39;Vector Algebra&#39;, &#39;Permutations and Combinations&#39;, &#39;Trigonometry&#39;, &#39;Sequence and Series&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Applications of Derivatives&#39;, &#39;Conic Sections - II&#39;, &#39;Permutations and Combinations&#39;, &#39;Complex Numbers&#39;, &#39;Functions 2&#39;, &#39;Quadratic Equations&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - II&#39;, &#39;Matrices and Determinants&#39;, &#39;Quadratic Equations&#39;, &#39;Conic Sections - I&#39;, &#39;Conic Sections - I&#39;, &#39;Trigonometry&#39;, &#39;Functions 2&#39;, &#39;Inequalities&#39;, &#39;Straight Lines&#39;, &#39;Continuity and Differentiability&#39;, &#39;Conic Sections - I&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - I&#39;, &#39;Definite Integration&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Probability&#39;, &#39;Straight Lines&#39;, &#39;Mathematical Reasoning&#39;, &#39;Statistics&#39;, &#39;Inequalities&#39;, &#39;Sequence and Series&#39;, &#39;Limits&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - I&#39;, &#39;Quadratic Equations&#39;, &#39;Vector Algebra&#39;, &#39;Straight Lines&#39;, &#39;Vector Algebra&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Sequence and Series&#39;, &#39;Matrices and Determinants&#39;, &#39;Differential Equations&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Probability&#39;, &#39;Probability&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Applications of Derivatives&#39;, &#39;Probability&#39;, &#39;Conic Sections - I&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Statistics&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - I&#39;, &#39;Straight Lines&#39;, &#39;Probability&#39;, &#39;Straight Lines&#39;, &#39;Trigonometry&#39;, &#39;Conic Sections - I&#39;, &#39;Quadratic Equations&#39;, &#39;Indefinite Integration&#39;, &#39;Sequence and Series&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Straight Lines&#39;, &#39;Binomial Theorem&#39;, &#39;Conic Sections - II&#39;, &#39;Indefinite Integration&#39;, &#39;Inequalities&#39;, &#39;Applications of Derivatives&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Mathematical Reasoning&#39;, &#39;Trigonometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Vector Algebra&#39;, &#39;Limits&#39;, &#39;Applications of Derivatives&#39;, &#39;Quadratic Equations&#39;, &#39;Inequalities&#39;, &#39;Trigonometry&#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Limits&#39;, &#39;Complex Numbers&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - I&#39;, &#39;Conic Sections - II&#39;, &#39;Differential Equations&#39;, &#39;Inequalities&#39;, &#39;Quadratic Equations&#39;, &#39;Conic Sections - I&#39;, &#39;Straight Lines&#39;, &#39;Trigonometry&#39;, &#39;Straight Lines&#39;, &#39;Functions 2&#39;, &#39;Definite Integration&#39;, &#39;Straight Lines&#39;, &#39;Mathematical Reasoning&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Continuity and Differentiability&#39;, &#39;Trigonometry&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Quadratic Equations&#39;, &#39;Permutations and Combinations&#39;, &#39;Trigonometry&#39;, &#39;Inequalities&#39;, &#39;Inverse Trigonometry &#39;, &#39;Conic Sections - II&#39;, &#39;Sequence and Series&#39;, &#39;Inequalities&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Sequence and Series&#39;, &#39;Conic Sections - I&#39;, &#39;Inequalities&#39;, &#39;Permutations and Combinations&#39;, &#39;Sequence and Series&#39;, &#39;Quadratic Equations&#39;, &#39;Complex Numbers&#39;, &#39;Applications of Derivatives&#39;, &#39;Definite Integration&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Inequalities&#39;, &#39;Conic Sections - II&#39;, &#39;Continuity and Differentiability&#39;, &#39;Permutations and Combinations&#39;, &#39;Indefinite Integration&#39;, &#39;Complex Numbers&#39;, &#39;Straight Lines&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Vector Algebra&#39;, &#39;Complex Numbers&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Matrices and Determinants&#39;, &#39;Applications of Derivatives&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Complex Numbers&#39;, &#39;Inverse Trigonometry &#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Complex Numbers&#39;, &#39;Permutations and Combinations&#39;, &#39;Applications of Derivatives&#39;, &#39;Complex Numbers&#39;, &#39;Definite Integration&#39;, &#39;Binomial Theorem&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Sequence and Series&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - II&#39;, &#39;Sequence and Series&#39;, &#39;Indefinite Integration&#39;, &#39;Conic Sections - II&#39;, &#39;Complex Numbers&#39;, &#39;Functions 2&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - II&#39;, &#39;Permutations and Combinations&#39;, &#39;Complex Numbers&#39;, &#39;Straight Lines&#39;, &#39;Probability&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Indefinite Integration&#39;, &#39;Trigonometry&#39;, &#39;Conic Sections - I&#39;, &#39;Indefinite Integration&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - II&#39;, &#39;Conic Sections - I&#39;, &#39;Trigonometry&#39;, &#39;Sequence and Series&#39;, &#39;Continuity and Differentiability&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Straight Lines&#39;, &#39;Statistics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;3 Dimensional Geometry&#39;, &#39;Statistics&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Permutations and Combinations&#39;, &#39;Quadratic Equations&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Sequence and Series&#39;, &#39;Differential Equations&#39;, &#39;Permutations and Combinations&#39;, &#39;Quadratic Equations&#39;, &#39;Binomial Theorem&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;, &#39;Conic Sections - I&#39;, &#39;Limits&#39;, &#39;Applications of Derivatives&#39;, &#39;Sets, Relations and Functions&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Conic Sections - II&#39;, &#39;Sequence and Series&#39;, &#39;Mathematical Reasoning&#39;, &#39;Binomial Theorem&#39;, &#39;Straight Lines&#39;, &#39;Straight Lines&#39;, &#39;Conic Sections - II&#39;, &#39;Binomial Theorem&#39;, &#39;Statistics&#39;, &#39;Conic Sections - I&#39;, &#39;Fundamentals of Mathematics&#39;, &#39;Trigonometry&#39;]
+</code></pre>
+
+<pre><code class="r">### Writing to the DB
+
+  for (label in levels(text_test_labels)) {
+
+    groundTruth = which(text_test_labels == label)
+    predTruth = which(results == label)
+
+    falseNegatives = setDiff(groundTruth, predTruth)
+    falsePositives = setDiff(predTruth, groundTruth)
+    rowData &lt;- c(rowData,)
+    data_index = test_indices[i]
+
+    problem = repo[data_index]
+
+
+    # Get ground truth
+    true_value = true_values[i]
+
+    # Get top 5 predictions
+    predictions = names( head(sort(rawResults[1,], decreasing=TRUE), 5) )
+  }
+ }
+
+ top_five_stats = df.frame %&gt;% group_by(V2) %&gt;% summarize(n())
+ top_five_accuracy = top_five_stats[2,2] / (top_five_stats[1,2] + top_five_stats[2,2])
+</code></pre>
+
+</body>
+
+</html>
