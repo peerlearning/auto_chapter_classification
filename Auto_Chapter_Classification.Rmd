@@ -66,7 +66,7 @@ repo <- Qs_clean %>% filter(Curriculum =="JEE", Subject =="MTH")
 
 chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test','Tally Marks')
 
-chapters_with_no_data = c('Principle of Mathematical Induction')
+chapters_with_no_data = c('Static Electricity')
 
 repo <- repo %>% 
   filter(!chapter %in%  chapters_to_remove) %>%
@@ -117,7 +117,7 @@ lapply(text_corpus_clean[2:4], as.character)
 ```{r}
 
 # TF-IDF
-text_dtm <- DocumentTermMatrix(text_corpus_clean, control = list(weighting = weightingFunction, normalize = normalize))
+text_dtm <- DocumentTermMatrix(text_corpus_clean, control = list(stemming = TRUE, weighting = weightingFunction, normalize = normalize))
 
 # Add a dictionary to DTM ?
 ```
@@ -200,6 +200,7 @@ test_document <- repo[test_indices, ]$question_text
 
 ## Confusion Matrix
 ```{r}
+
 conf = confusionMatrix(results, text_test_labels)
 confusion_table = as.data.frame.matrix( conf$table  )
 conf_stats = as.data.frame(conf$byClass)
@@ -213,36 +214,30 @@ conf$overall
 ```
 
 ```{python}
-x = 1
-print(r.results)
+
 ```
 
 ```{r eval=FALSE}
+
+# Columns for category confusion dataframe
+# Category, Confused labels, sentences
+df = data.frame("Actual Chapter"=character(), "Accuracy"=integer(), "Wrong predicted chapters"=character(), stringsAsFactors = FALSE)
 ### Writing to the DB
 
-  for (label in levels(text_test_labels)) {
-    
-    groundTruth = which(text_test_labels == label)
-    predTruth = which(results == label)
-    
-    falseNegatives = setDiff(groundTruth, predTruth)
-    falsePositives = setDiff(predTruth, groundTruth)
-    rowData <- c(rowData,)
-    data_index = test_indices[i]
-    
-    problem = repo[data_index]
-    
-    
-    # Get ground truth
-    true_value = true_values[i]
-    
-    # Get top 5 predictions
-    predictions = names( head(sort(rawResults[1,], decreasing=TRUE), 5) )
-  }
- }
+for (label in levels(text_test_labels)) {
+  groundTruth = which(text_test_labels == label)
+  predTruth = which(results == label)
 
- top_five_stats = df.frame %>% group_by(V2) %>% summarize(n())
- top_five_accuracy = top_five_stats[2,2] / (top_five_stats[1,2] + top_five_stats[2,2])
+  falsePositives = setdiff(groundTruth, predTruth)
+  falseNegatives = setdiff(predTruth, groundTruth)
+  questionsFalsePos = repo[falsePositives, ]$question_text
+  
+  labelsFalsePos = paste(as.character(unique(results[falsePositives])), collapse = ", ")
+
+  df[nrow(df) + 1, ] <- list(label, confusion_table[[label]][nrow(confusion_table) - 1], labelsFalsePos) 
+
+}
+
 
 ```
 
