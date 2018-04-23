@@ -28,7 +28,7 @@ algorithm = naiveBayes
 
 # Categorical or not. Choices: TRUE or FALSE
 categorical = TRUE
-
+fo
 # Weighting function. Choices: weightTf, weightTfIdf
 # Whether to normalize terms of Document Matrix. Choices: TRUE, FALSE
 weightingFunction = weightTf
@@ -37,11 +37,12 @@ normalize = FALSE
 # Whether to write to db
 writeToDb = TRUE
 
-subject = "PHY"
+subject = "MTH"
 
-# MATH
 words_to_remove = vector(mode="list", length=3)
 names(words_to_remove) = c("PHY", "CHM", "MTH")
+
+# MATH
 words_to_remove[[1]] =  c("rightarrow", "hence", "frac", "text", "sqrt", "times", "value", "amp", "statement", "will", "equal", "number", "tan", "now", "can", "two", "get", "true", "lambda")
 
 # CHM
@@ -80,7 +81,7 @@ repo <- Qs_clean %>% filter(Curriculum =="JEE", Subject == subject)
 
 chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test','Tally Marks')
 
-chapters_with_no_data = c('Static Electricity', 'Experimental Skills')
+chapters_with_no_data = c('Static Electricity', 'Experimental Skills', 'Principle of Mathematical Induction')
 
 repo <- repo %>% 
   filter(!chapter %in%  chapters_to_remove) %>%
@@ -206,9 +207,9 @@ text_classifier <- algorithm(as.matrix(text_train), text_train_labels)
 ## PREDICTION
 ```{r}
 
-rawResults <- predict(text_classifier,as.matrix(text_test), "raw")
+rawResults <- predict(text_classifier,as.matrix(text_test))
 
-results <- as.factor( colnames(rawResults)[apply(rawResults, 1, which.max)] )
+# results <- as.factor( colnames(rawResults)[apply(rawResults, 1, which.max)] )
 
 true_values <- repo[test_indices, ]$chapter
 test_document <- repo[test_indices, ]$question_text
@@ -219,7 +220,7 @@ test_document <- repo[test_indices, ]$question_text
 ## Confusion Matrix
 ```{r}
 
-conf = confusionMatrix(results, text_test_labels)
+conf = confusionMatrix(rawResults, text_test_labels)
 confusion_table = as.data.frame.matrix( conf$table  )
 conf_stats = as.data.frame(conf$byClass)
 confusion_table[nrow(confusion_table) + 1, ] <- conf_stats$Sensitivity
