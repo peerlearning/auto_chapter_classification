@@ -37,6 +37,20 @@ normalize = FALSE
 # Whether to write to db
 writeToDb = TRUE
 
+subject = "PHY"
+
+# MATH
+words_to_remove = vector(mode="list", length=3)
+names(words_to_remove) = c("PHY", "CHM", "MTH")
+words_to_remove[[1]] =  c("rightarrow", "hence", "frac", "text", "sqrt", "times", "value", "amp", "statement", "will", "equal", "number", "tan", "now", "can", "two", "get", "true", "lambda")
+
+# CHM
+words_to_remove[[2]] = c("following", "can", "correct", "hence", "amp", "text", "will", "reaction", "given", "frac", "rightarrow", "circ", "number", "matrix", "mol", "compound", "true", "one", "group", "solution") 
+
+# # PHY
+words_to_remove[[3]] = c("frac", "given", "times", "will", "two", "rightarrow", "sqrt")
+
+subject_words_to_remove = get(subject, words_to_remove)
 ```
 
 ```{r}
@@ -62,15 +76,19 @@ Qs_clean <- Qs  %>%
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
 ```{r}
-repo <- Qs_clean %>% filter(Curriculum =="JEE", Subject =="MTH")
+repo <- Qs_clean %>% filter(Curriculum =="JEE", Subject == subject)
 
 chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test','Tally Marks')
 
-chapters_with_no_data = c('Static Electricity')
+chapters_with_no_data = c('Static Electricity', 'Experimental Skills')
 
 repo <- repo %>% 
   filter(!chapter %in%  chapters_to_remove) %>%
   filter(!chapter %in%  chapters_with_no_data)
+
+dummy_questions = which(grepl("DUMMY", repo$question_text))
+
+repo <- repo[-dummy_questions]
 
 repo %>% group_by(chapter) %>% summarize(count_qs =n())
 
@@ -105,7 +123,7 @@ text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(tolower))
 text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(gsub), pattern="\\b\\w{1,2}\\b", replacement = "")
 
 ## Add stopwords like left, right (frac ?)
-#text_corpus_clean <- tm_map(text_corpus_clean, removeWords, c(stopwords(), "left","right"))
+text_corpus_clean <- tm_map(text_corpus_clean, removeWords, subject_words_to_remove)
 text_corpus_clean <- tm_map(text_corpus_clean, removePunctuation)
 #text_corpus_clean <- tm_map(text_corpus_clean, stemDocument)
 text_corpus_clean <- tm_map(text_corpus_clean, stripWhitespace)
