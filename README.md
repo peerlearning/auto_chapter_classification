@@ -67,6 +67,8 @@ These are the choices we have to make while using this:
     2. Specificity, Sensitivity, Precision, Recall: All the fancy things
     3. F-Score: Major F-score and Minor F-score
     The problem with 2 and 3 above is that they deal only with binary data. In fact, Major and Minor F-scores are solutions to this problem, as far as I understand.
+    
+9. Hyperparameter Tuning : https://docs.google.com/spreadsheets/d/1wWhhZF8cgr7RbfdTaplosuqtOJAOpwzG-Y_LtEbWgro/edit?usp=sharing
 
 Sources: 
 
@@ -79,3 +81,5 @@ Sources:
 [4] Confusion Matrix - http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
 
 [5] Evaluation of text classification https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html
+
+[6] Python Implementation - https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/?utm_source=feedburner&utm_medium=email&utm_campaign=Feed%3A+AnalyticsVidhya+%28Analytics+Vidhya%29
