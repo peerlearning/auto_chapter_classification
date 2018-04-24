@@ -2,6 +2,8 @@
 
 Just a gathering place for notes.
 
+*  **Removing dummy Qs from the corpus**
+       Dummy Qs are present in every chapter and they make up a large portion of the false classification elements
 *  **Finding words that are not so useful**: This was the process:
     *  Find top occuring words across each chapter
     *  Find the top occurring words across those top occurring ones
