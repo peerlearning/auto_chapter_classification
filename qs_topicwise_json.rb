@@ -19,20 +19,30 @@ Syllabus.all.select{|s| s.curriculum.present?}.each do |s|
 					# p.options[3].present?
 					)
 
-				document_text = p.text
+					document_text = p.text
 
-				p.options.each do |op|
-					document_text = document_text + " " + op.text
-				end
+					options = ""
+					unless p.options[0].nil?
+						p.options.each do |op|
+							options = options + " " + op.text
+						end
+					end
 
-				unless p.solution.nil?
-					document_text = document_text + " " + p.solution					
-				end
+					solution = ""
+					unless p.solution.nil?
+						solution = solution + p.solution					
+					end
+
+				subj, grade, curr, ch_no, top_no = top.code.split('-')
 
 					row = Hash[
-						"topic_code" => top.code,
+						"subject" => subj,
+						"grade" => grade,
+						"curriculum" => curr,
 						"chapter" => c.name,
+						"chapter_no" => ch_no,
 						"topic" => top.name, 
+						"topic_no" => top_no,
 						# p.text.size,
 						# p.solution.size,
 						"difficulty" => p.difficulty_rating,
@@ -47,6 +57,8 @@ Syllabus.all.select{|s| s.curriculum.present?}.each do |s|
 						# "option_c" => Rails::Html::FullSanitizer.new.sanitize(p.options[2].text),
 						# "option_d" => Rails::Html::FullSanitizer.new.sanitize(p.options[3].text),
 						# "question_text" => Rails::Html::FullSanitizer.new.sanitize(p.solution),
+						"options" => Rails::Html::FullSanitizer.new.sanitize(options),
+						"solution" => Rails::Html::FullSanitizer.new.sanitize(solution),
 						"question_text" => Rails::Html::FullSanitizer.new.sanitize(document_text)
 						 ]
 				
