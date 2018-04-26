@@ -87,7 +87,7 @@ valid_y = encoder.fit_transform(valid_y)
 
 ## ----- FEATURE ENGINEERING -----
 # create a count vectorizer object 
-count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}', binary=True, max_features=3500)
+count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=3500)
 X = count_vect.fit_transform(trainDF['text'])
 
 # transform the training and validation data using count vectorizer object
@@ -100,7 +100,7 @@ xvalid_count =  count_vect.transform(valid_x)
 # xvalid_count_dense = xvalid_count.todense().astype('str')
 
 # word level tf-idf
-tfidf_vect = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=5000)
+tfidf_vect = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=3500)
 tfidf_vect.fit(trainDF['text'])
 xtrain_tfidf =  tfidf_vect.transform(train_x)
 xvalid_tfidf =  tfidf_vect.transform(valid_x)
@@ -134,7 +134,7 @@ def train_model(classifier, feature_vector_train, label, feature_vector_valid, i
     return metrics.accuracy_score(predictions, valid_y)
 
 # Naive Bayes on Count Vectors
-accuracy = train_model(naive_bayes.GaussianNB(), xtrain_count.todense(), train_y, xvalid_count.todense())
+accuracy = train_model(naive_bayes.MultinomialNB(), xtrain_count, train_y, xvalid_count)
 print("NB, Count Vectors: ", accuracy)
 
 # Naive Bayes on Word Level TF IDF Vectors
