@@ -70,15 +70,19 @@ These are the choices we have to make while using this:
     
 9. Hyperparameter Tuning : https://docs.google.com/spreadsheets/d/1wWhhZF8cgr7RbfdTaplosuqtOJAOpwzG-Y_LtEbWgro/edit?usp=sharing
 
-Sources: 
+## Useful links: 
 
-[1] tm, e1071 - http://blog.thedigitalgroup.com/rajendras/2015/05/28/supervised-learning-for-text-classification/
+[1] [tm, e1071](http://blog.thedigitalgroup.com/rajendras/2015/05/28/supervised-learning-for-text-classification/)
 
-[2] tm, e1071, wordcloud - https://rstudio-pubs-static.s3.amazonaws.com/194717_4639802819a342eaa274067c9dbb657e.html
+[2] [tm, e1071, wordcloud](https://rstudio-pubs-static.s3.amazonaws.com/194717_4639802819a342eaa274067c9dbb657e.html)
 
-[3] Python - http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html
+[3] [Python sklearn Naive Bayes](http://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html)
 
-[4] Confusion Matrix - http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
+[4] [Confusion Matrix](http://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/)
+
+[5] [Evaluation of text classification](https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html)
+
+[6] [Nice tutorial on text classification in Python](https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/). Includes a lot of methods and the libraries to use.
 
 [5] Evaluation of text classification https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html
 

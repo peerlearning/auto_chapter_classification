@@ -19,7 +19,7 @@ library('SnowballC')
 library('wordcloud')
 
 # Reading entire Qs repo
-Qs <- read_tsv("qs_topicwise_dump.tsv")
+Qs <- read_tsv("../data/qs_topicwise_dump.tsv")
 
 knitr::kable(head(Qs))
 ```

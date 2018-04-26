@@ -27,8 +27,8 @@ py_available(initialize = TRUE)
 algorithm = naiveBayes
 
 # Categorical or not. Choices: TRUE or FALSE
-categorical = TRUE
-fo
+categorical = FALSE
+
 # Weighting function. Choices: weightTf, weightTfIdf
 # Whether to normalize terms of Document Matrix. Choices: TRUE, FALSE
 weightingFunction = weightTf
@@ -37,7 +37,7 @@ normalize = FALSE
 # Whether to write to db
 writeToDb = TRUE
 
-subject = "MTH"
+subject = "PHY"
 
 words_to_remove = vector(mode="list", length=3)
 names(words_to_remove) = c("PHY", "CHM", "MTH")
@@ -51,12 +51,12 @@ words_to_remove[[2]] = c("following", "can", "correct", "hence", "amp", "text", 
 # # PHY
 words_to_remove[[3]] = c("frac", "given", "times", "will", "two", "rightarrow", "sqrt")
 
-subject_words_to_remove = get(subject, words_to_remove)
+subject_words_to_remove = c(stopwords(), get(subject, words_to_remove))
 ```
 
 ```{r}
 ## Reading data from CMS
-Qs <- jsonlite::fromJSON('qs_topicwise.json')
+Qs <- jsonlite::fromJSON('data/qs_topicwise.json')
 Qs <- flatten(Qs)
 
 #Qs <- read_tsv("qs_topicwise_dump.tsv")
@@ -136,7 +136,7 @@ lapply(text_corpus_clean[2:4], as.character)
 ```{r}
 
 # TF-IDF
-text_dtm <- DocumentTermMatrix(text_corpus_clean, control = list(stemming = TRUE, weighting = weightingFunction, normalize = normalize))
+text_dtm <- DocumentTermMatrix(text_corpus_clean, control = list(stemming = TRUE))
 
 # Add a dictionary to DTM ?
 ```
@@ -207,9 +207,9 @@ text_classifier <- algorithm(as.matrix(text_train), text_train_labels)
 ## PREDICTION
 ```{r}
 
-rawResults <- predict(text_classifier,as.matrix(text_test))
+rawResults <- predict(text_classifier,as.matrix(text_test), type="raw")
 
-# results <- as.factor( colnames(rawResults)[apply(rawResults, 1, which.max)] )
+results <- as.factor( colnames(rawResults)[apply(rawResults, 1, which.max)] )
 
 true_values <- repo[test_indices, ]$chapter
 test_document <- repo[test_indices, ]$question_text
