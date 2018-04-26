@@ -56,7 +56,7 @@ subject_words_to_remove = c(stopwords(), get(subject, words_to_remove))
 
 ```{r}
 ## Reading data from CMS
-Qs <- jsonlite::fromJSON('data/qs_topicwise.json')
+Qs <- jsonlite::fromJSON('../data/qs_topicwise.json')
 Qs <- flatten(Qs)
 
 #Qs <- read_tsv("qs_topicwise_dump.tsv")
@@ -71,7 +71,7 @@ head(Qs)
 Qs_clean <- Qs  %>%
   #dplyr::select(1:9) %>%                    # Keeping only the first 9 columns
   #dplyr::filter(!is.na(difficulty))  %>%    # No need to clean overflow
-  dplyr::mutate(Grade = str_sub(topic_code, 5, 6), Subject = str_sub(topic_code, 1, 3), Curriculum = str_sub(topic_code, 8, 10), Ch_No = str_sub(topic_code, 12, 13))
+  dplyr::mutate(Grade = grade, Subject = subject, Curriculum = curriculum, Ch_No = chapter_no)
 ```
 
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
