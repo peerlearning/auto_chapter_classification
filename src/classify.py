@@ -30,7 +30,9 @@ with open('data/qs_topicwise.json') as json_data:
     all_questions = json.load(json_data)
 
 words_to_remove = ["rightarrow", "hence", "frac", "text", "sqrt", "times", "value", "amp", "statement", "will", "equal", "number", "tan", "now", "can", "two", "get", "true", "lambda"]
-words_to_remove += stop
+# words_to_remove += stop
+
+chapters_to_remove = ['Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test','Tally Marks', 'Principle of Mathematical Induction']
 
 data_df = pd.DataFrame(columns=['curriculum', 'subject', 'question_text', 'chapter'])
 questions = []
@@ -48,11 +50,9 @@ for question in all_questions:
         
         question_text = pattern.sub(" ", question_text)
 
-
         # Remove extra whitespaces
         question_text = " ".join([word for word in question_text.split() if word not in words_to_remove])
-        question_text = " ".join(question_text.split())
-
+        question_text = " ".join(question_text.split()) 
         
         # Keep only alphanumeric characters
         
@@ -71,8 +71,11 @@ trainDF = pd.DataFrame(columns=['text', 'label'])
 trainDF['text'] = data_df['question_text']
 trainDF['label'] = data_df['chapter']
 
-# Split data into training and testing folds
+# Remove chapters that are included in the chapters to remove
+for chapter in chapters_to_remove:
+    trainDF = trainDF[trainDF['label'] != chapter]
 
+# Split data into training and testing folds
 train_x, valid_x, train_y, valid_y = model_selection.train_test_split(trainDF['text'], trainDF['label'], test_size=0.2)
 
 print(len(train_x), len(valid_x) )
@@ -87,7 +90,7 @@ valid_y = encoder.fit_transform(valid_y)
 
 ## ----- FEATURE ENGINEERING -----
 # create a count vectorizer object 
-count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=3500)
+count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=5000)
 X = count_vect.fit_transform(trainDF['text'])
 
 # transform the training and validation data using count vectorizer object
@@ -100,7 +103,7 @@ xvalid_count =  count_vect.transform(valid_x)
 # xvalid_count_dense = xvalid_count.todense().astype('str')
 
 # word level tf-idf
-tfidf_vect = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=3500)
+tfidf_vect = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=4000)
 tfidf_vect.fit(trainDF['text'])
 xtrain_tfidf =  tfidf_vect.transform(train_x)
 xvalid_tfidf =  tfidf_vect.transform(valid_x)
