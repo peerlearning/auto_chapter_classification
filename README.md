@@ -86,4 +86,5 @@ These are the choices we have to make while using this:
 
 [5] Evaluation of text classification https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html
 
-[6] Python Implementation - https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/?utm_source=feedburner&utm_medium=email&utm_campaign=Feed%3A+AnalyticsVidhya+%28Analytics+Vidhya%29
+[6] Python Implementation - https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/
+
