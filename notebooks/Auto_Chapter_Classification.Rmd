@@ -27,7 +27,7 @@ py_available(initialize = TRUE)
 algorithm = naiveBayes
 
 # Categorical or not. Choices: TRUE or FALSE
-categorical = FALSE
+categorical = TRUE
 
 # Weighting function. Choices: weightTf, weightTfIdf
 # Whether to normalize terms of Document Matrix. Choices: TRUE, FALSE
@@ -37,7 +37,7 @@ normalize = FALSE
 # Whether to write to db
 writeToDb = TRUE
 
-subject = "PHY"
+subject_used = "PHY"
 
 words_to_remove = vector(mode="list", length=3)
 names(words_to_remove) = c("PHY", "CHM", "MTH")
@@ -51,7 +51,7 @@ words_to_remove[[2]] = c("following", "can", "correct", "hence", "amp", "text", 
 # # PHY
 words_to_remove[[3]] = c("frac", "given", "times", "will", "two", "rightarrow", "sqrt")
 
-subject_words_to_remove = c(stopwords(), get(subject, words_to_remove))
+subject_words_to_remove = c(stopwords(), get(subject_used, words_to_remove))
 ```
 
 ```{r}
@@ -72,12 +72,13 @@ Qs_clean <- Qs  %>%
   #dplyr::select(1:9) %>%                    # Keeping only the first 9 columns
   #dplyr::filter(!is.na(difficulty))  %>%    # No need to clean overflow
   dplyr::mutate(Grade = grade, Subject = subject, Curriculum = curriculum, Ch_No = chapter_no)
+head(Qs_clean)
 ```
 
 ### Summarizing Chapter wise # Qs in the entire JEE dataset
 
 ```{r}
-repo <- Qs_clean %>% filter(Curriculum =="JEE", Subject == subject)
+repo <- Qs_clean %>% filter(curriculum =="JEE", subject == subject_used)
 
 chapters_to_remove = c('Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test','Tally Marks')
 
@@ -220,7 +221,7 @@ test_document <- repo[test_indices, ]$question_text
 ## Confusion Matrix
 ```{r}
 
-conf = confusionMatrix(rawResults, text_test_labels)
+conf = confusionMatrix(results, text_test_labels)
 confusion_table = as.data.frame.matrix( conf$table  )
 conf_stats = as.data.frame(conf$byClass)
 confusion_table[nrow(confusion_table) + 1, ] <- conf_stats$Sensitivity
