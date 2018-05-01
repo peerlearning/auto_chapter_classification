@@ -52,7 +52,7 @@ These are the choices we have to make while using this:
     1. [Term Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf#Term_frequency)
     2. [TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf#Term_frequency%E2%80%93Inverse_document_frequency)
     3. [Latent Symantic Analysis (LSA)](https://en.wikipedia.org/wiki/Latent_semantic_analysis): [Nice PDF link](lsa.colorado.edu/papers/dp1.LSAintro.pdf)
-    Also, see glove :
+    4. Also, see glove :
     [1] https://towardsdatascience.com/understanding-feature-engineering-part-4-deep-learning-methods-for-text-data-96c44370bbfa
     [2] https://github.com/stanfordnlp/GloVe#train-word-vectors-on-a-new-corpus
     4. Other questions we have to ask
