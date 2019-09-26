@@ -1,12 +1,11 @@
 require 'active_support/core_ext/object/try' 
 require 'action_view'
 
-results = Array.new
+results = []
 puts "Starting code...."
-allowedTypes = ["Test", "ConcepTest", "Spot Test", "Homework", "Pre-Reading Exercise", "In Class Test" , "Module Exercise", 
-				"Module Homework", "Pre-Class Exercise", "Pre Test", "In Class Exercise", "Homework", "Activity", 
-				"Recall Test","Miscellaneous", "Illustration", "Module Exercise"
-				]
+allowedTypes = ["Test", "ConcepTest", "Spot Test", "Homework", "Pre-Reading Exercise", "In Class Test" , 
+    "Module Exercise", "Module Homework", "Pre-Class Exercise", "Pre Test", "In Class Exercise", 
+    "Homework", "Activity", "Recall Test","Miscellaneous", "Illustration", "Module Exercise"]
 
 
 
@@ -46,7 +45,7 @@ Syllabus.all.select{|s| s.curriculum.present?}.each do |s|
 						# p.text.size,
 						# p.solution.size,
 						"difficulty" => p.difficulty_rating,
-						#p.answer,						# Q can have multiple correct answers leading to text overflow
+						#p.answer,				# Q can have multiple correct answers leading to text overflow
 						# p.tests.first.code,
 						"problem_code" => p.code,
 						"problem_status" => p.review_status,
@@ -72,7 +71,8 @@ Syllabus.all.select{|s| s.curriculum.present?}.each do |s|
 	end
 end
 
-puts results.to_json
-f = open('qs_topicwise.json', 'w')
-f.write(JSON.pretty_generate(results))
-f.close()
+data =  results.to_json
+puts data
+
+obj = aws_s3_client.bucket(Settings.s3_data_dump_bucket).object("dashboard-dumps/testlist/qs_topicwise.json")
+obj.put(body: data, acl: "public-read")
