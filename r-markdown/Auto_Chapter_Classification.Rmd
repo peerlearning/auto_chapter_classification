@@ -37,7 +37,7 @@ normalize = FALSE
 # Whether to write to db
 writeToDb = TRUE
 
-subject_used = "PHY"
+subject_used = "MTH"
 
 words_to_remove = vector(mode="list", length=3)
 names(words_to_remove) = c("PHY", "CHM", "MTH")
@@ -51,7 +51,7 @@ words_to_remove[[2]] = c("following", "can", "correct", "hence", "amp", "text", 
 # # PHY
 words_to_remove[[3]] = c("frac", "given", "times", "will", "two", "rightarrow", "sqrt")
 
-subject_words_to_remove = c(stopwords(), get(subject_used, words_to_remove))
+subject_words_to_remove = c(get(subject_used, words_to_remove))
 ```
 
 ```{r}
@@ -122,7 +122,7 @@ text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(gsub), patter
 text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(tolower))
 
 # Remove one letter words
-text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(gsub), pattern="\\b\\w{1,2}\\b", replacement = "")
+# text_corpus_clean <- tm_map(text_corpus_clean, content_transformer(gsub), pattern="\\b\\w{1,2}\\b", replacement = "")
 
 ## Add stopwords like left, right (frac ?)
 text_corpus_clean <- tm_map(text_corpus_clean, removeWords, subject_words_to_remove)

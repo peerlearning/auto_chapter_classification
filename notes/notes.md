@@ -2,6 +2,12 @@
 
 Just a gathering place for notes.
 
+* Differences between R and Python code (26/4/2018)
+    * Python seems to be automatically adding some stopwords in CountVectorizer (`count_vect.stop_words_`)
+    * Should check logic of splitting test and train
+    * `max_features` in python vs `find_freq_terms` in R
+    * List of vocabulary is different
+
 *  **Removing dummy Qs from the corpus**
        Dummy Qs are present in every chapter and they make up a large portion of the false classification elements
 *  **Finding words that are not so useful**: This was the process:

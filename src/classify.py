@@ -5,56 +5,80 @@ from sklearn import decomposition, ensemble
 
 import pandas as pd, xgboost, numpy, textblob, string
 
-# Keras stuff
-from keras.preprocessing import text, sequence
-from keras import layers, models, optimizers
+# Keras stuff -- Commented out as not used yet
+# from keras.preprocessing import text, sequence
+# from keras import layers, models, optimizers
 
+# Regex
+import re
+
+# Stopwords
+import nltk
+nltk.download('stopwords')
+stop = nltk.corpus.stopwords.words('english')
 import json
 
 from pylatexenc.latex2text import LatexNodes2Text
 
 ## ----- DATA PREPARATION -----
 
+
 subject_to_check = 'MTH'
 # Load the dataset
 labels, texts = [], []
-with open('../data/qs_topicwise.json') as json_data:
+with open('data/qs_topicwise.json') as json_data:
     all_questions = json.load(json_data)
 
 words_to_remove = ["rightarrow", "hence", "frac", "text", "sqrt", "times", "value", "amp", "statement", "will", "equal", "number", "tan", "now", "can", "two", "get", "true", "lambda"]
+# words_to_remove += stop
+
+chapters_to_remove = ['Selection Test', 'Repository', 'Bridge Intervention Curriculum', 'M1.1 Scaffold test','Tally Marks', 'Principle of Mathematical Induction']
 
 data_df = pd.DataFrame(columns=['curriculum', 'subject', 'question_text', 'chapter'])
 questions = []
 i = 0
+
+# Regex pattern for keeping only alphabets and numbers
+pattern = re.compile('[\W_]+')
+nonutf8pattern = re.compile('[\\u0080-\\uffff]')
+
+questions = all_questions[1:2]
+
 for question in all_questions:
-    topic_code = question['topic_code']
-    try: 
+    try: # So that python doesn't crash on individual question exceptions
         question_text = question['question_text'].lower()
-        question_text = " ".join(question_text.split())
-        for word in words_to_remove:
-            question_text.replace(word, "")
-        splits = topic_code.split("-")
-        subject = splits[0]
-        curriculum = splits[2]
-        grade = splits[1]
+        
+        question_text = pattern.sub(" ", question_text)
+
+        # Remove extra whitespaces
+        question_text = " ".join([word for word in question_text.split() if word not in words_to_remove])
+        question_text = " ".join(question_text.split()) 
+        
+        # Keep only alphanumeric characters
+        
+        subject = question['subject']
+        curriculum = question['curriculum']
+        grade = question['grade']
         curr_question = {}
-        if("JEE" in curriculum and grade in ["11", "12"] and subject in subject_to_check and "dummy" not in question_text):
+        if("JEE" in curriculum and subject in subject_to_check):
             data_df.loc[i] = [curriculum, subject, question_text, question['chapter']]
             i += 1
-    except:
-            pass
-
+    except Exception as e:
+        print(e)
 trainDF = pd.DataFrame(columns=['text', 'label'])
 
 # trainDF.replace(words_to_replace, "")
 trainDF['text'] = data_df['question_text']
 trainDF['label'] = data_df['chapter']
 
-# Split data into training and testing folds
+# Remove chapters that are included in the chapters to remove
+for chapter in chapters_to_remove:
+    trainDF = trainDF[trainDF['label'] != chapter]
 
+# Split data into training and testing folds
 train_x, valid_x, train_y, valid_y = model_selection.train_test_split(trainDF['text'], trainDF['label'], test_size=0.2)
 
-print(len(train_x), len(train_y) )
+print(len(train_x), len(valid_x) )
 
 # Label encode the target variable 
 encoder = preprocessing.LabelEncoder()
@@ -66,19 +90,20 @@ valid_y = encoder.fit_transform(valid_y)
 
 ## ----- FEATURE ENGINEERING -----
 # create a count vectorizer object 
-count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}')
-count_vect.fit(trainDF['text'])
+count_vect = CountVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=5000)
+X = count_vect.fit_transform(trainDF['text'])
 
 # transform the training and validation data using count vectorizer object
 xtrain_count =  count_vect.transform(train_x)
-xtrain_count[xtrain_count != 0] = 1
-print(xtrain_count)
+# xtrain_count[xtrain_count != 0] = 1
+# xtrain_count_dense = xtrain_count.todense().astype('str')
 
 xvalid_count =  count_vect.transform(valid_x)
-xvalid_count[xvalid_count != 0] = 1
+# xvalid_count[xvalid_count != 0] = 1
+# xvalid_count_dense = xvalid_count.todense().astype('str')
 
 # word level tf-idf
-tfidf_vect = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=5000)
+tfidf_vect = TfidfVectorizer(analyzer='word', token_pattern=r'\w{1,}', max_features=4000)
 tfidf_vect.fit(trainDF['text'])
 xtrain_tfidf =  tfidf_vect.transform(train_x)
 xvalid_tfidf =  tfidf_vect.transform(valid_x)
@@ -112,7 +137,7 @@ def train_model(classifier, feature_vector_train, label, feature_vector_valid, i
     return metrics.accuracy_score(predictions, valid_y)
 
 # Naive Bayes on Count Vectors
-accuracy = train_model(naive_bayes.GaussianNB(), xtrain_count.toarray(), train_y, xvalid_count.toarray())
+accuracy = train_model(naive_bayes.MultinomialNB(), xtrain_count, train_y, xvalid_count)
 print("NB, Count Vectors: ", accuracy)
 
 # Naive Bayes on Word Level TF IDF Vectors
