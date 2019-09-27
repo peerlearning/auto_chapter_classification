@@ -62,6 +62,11 @@ These are the choices we have to make while using this:
     5. ...
     6. ...
     7. Some form of **Deep Learning** using TensorFlow
+            - [Gluon](https://github.com/dmlc/gluon-nlp) : Deep Learning for NLP
+            - Also, see references for glove :
+                [7](https://towardsdatascience.com/understanding-feature-engineering-part-4-deep-learning-methods-for-text-data-96c44370bbfa)
+                [8](https://github.com/stanfordnlp/GloVe#train-word-vectors-on-a-new-corpus)
+
 8. **Measure of accuracy**: Some choices that we have:
     1. Confusion Matrix: Good because it tells us about the cross category performance. A little bad because it does not deal well with dataset imbalance, which we have a bit of.
     2. Specificity, Sensitivity, Precision, Recall: All the fancy things
@@ -87,4 +92,9 @@ These are the choices we have to make while using this:
 [5] Evaluation of text classification https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-text-classification-1.html
 
 [6] Python Implementation - https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand-and-implement-text-classification-in-python/
+
+[7] Text Features - https://towardsdatascience.com/understanding-feature-engineering-part-4-deep-learning-methods-for-text-data-96c44370bbfa
+
+[8] Glove on Github - https://github.com/stanfordnlp/GloVe#train-word-vectors-on-a-new-corpus
+
 
