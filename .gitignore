@@ -8,4 +8,5 @@ scratch.md
 data/.ipynb_checkpoints/*
 jupyter/.ipynb_checkpoints/*
 jupyter/*.csv
-
+jupyter/*.zip
+jupyter/*.txt
